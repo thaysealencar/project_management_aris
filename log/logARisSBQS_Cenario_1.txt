@@ -16,7 +16,7 @@ totalRiskExposure: 1.2
 ---------- Estado Interno do ARis ----------
 Colocar atibutos do Estado Interno.
 ---------- Mensagens ----------
-"Informa��es do Risco."
+"Informacoes do Risco."
 -----------------
 Risk(ID): 2
 Name: "Definicao do Escopo2"
@@ -31,7 +31,7 @@ totalRiskExposure: 2
 ---------- Estado Interno do ARis ----------
 Colocar atibutos do Estado Interno.
 ---------- Mensagens ----------
-"Informa��es do Risco."
+"Informacoes do Risco."
 -----------------
 Risk(ID): 3
 Name: "Definicao do Escopo3"
@@ -46,7 +46,7 @@ totalRiskExposure: 0.2
 ---------- Estado Interno do ARis ----------
 Colocar atibutos do Estado Interno.
 ---------- Mensagens ----------
-"Informa��es do Risco."
+"Informacoes do Risco."
 
 -------------------------------------------------
 ----------| Instante k: 1 |-------
@@ -65,7 +65,7 @@ totalRiskExposure: 1.2
 ---------- Estado Interno do ARis ----------
 Colocar atibutos do Estado Interno.
 ---------- Mensagens ----------
-"Informa��es do Risco."
+"Informacoes do Risco."
 -----------------
 Risk(ID): 2
 Name: "Definicao do Escopo2"
@@ -80,7 +80,7 @@ totalRiskExposure: 2
 ---------- Estado Interno do ARis ----------
 Colocar atibutos do Estado Interno.
 ---------- Mensagens ----------
-"Informa��es do Risco."
+"Informacoes do Risco."
 -----------------
 Risk(ID): 3
 Name: "Definicao do Escopo3"
@@ -95,4 +95,4 @@ totalRiskExposure: 0.2
 ---------- Estado Interno do ARis ----------
 Colocar atibutos do Estado Interno.
 ---------- Mensagens ----------
-"Informa��es do Risco."
+"Informacoes do Risco."

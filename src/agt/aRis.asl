@@ -26,6 +26,7 @@
 	<-	
 	makeArtifact("EnvRiskControl", "workspaces.EnvironmentRiskControl", [], AuxR);
 	.print("Criei!");
+	.print("Olá Mundo");
 	focus(AuxR).		
 
 -?myEnvironment(CRId) : true
