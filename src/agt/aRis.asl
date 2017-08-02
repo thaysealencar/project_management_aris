@@ -1,10 +1,12 @@
 // Agent aRis in project projectManagement
 
 /* Initial beliefs and rules */
+internalStateARis(null).
 
 /* Initial goals */
 !monitoring.
 !create.
+
 /* Plans */
 
 +!monitoring : true 	<-	
@@ -26,7 +28,7 @@
 	<-	
 	makeArtifact("EnvRiskControl", "workspaces.EnvironmentRiskControl", [], AuxR);
 	.print("Criei!");
-	.print("Olá Mundo");
+	.print("Olï¿½ Mundo");
 	focus(AuxR).		
 
 -?myEnvironment(CRId) : true
@@ -63,8 +65,8 @@
 			cartago.invoke_obj(RE, getScopeI, SI);
 			-+scopeI(SI);    	
 			!calculateRiskExposure(Id);
-			
-			!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, "Informações do Risco.");
+			!controllingRisks(RiskList);
+			!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, "Informaï¿½ï¿½es do Risco.");
 				
 		};
 	}.
@@ -78,15 +80,17 @@
 	.print("ARis observando o Projeto ", IdProject).
 
 +!calculateRiskExposure(Id): costP(CP) & costI(CI) & timeP(TP) & timeI(TI) & scopeP(SP) & scopeI(SI) <-
-//	.print(CP); 
-//	.print(CI); 
-//	.print(TP); 
-//	.print(TI); 
-//	.print(SP); 
-//	.print(SI); 
-	TotalRiskExposure = (CP*CI)+(TP*TI)+(SP*SI);	//COMO JOGAR ESSA (TRE) DENTRO DO RISCO NA VARIÁVEL TotalRiskExposure???
+
+	TotalRiskExposure = (CP*CI)+(TP*TI)+(SP*SI);	//COMO JOGAR ESSA (TRE) DENTRO DO RISCO NA VARIï¿½VEL TotalRiskExposure???
 	.print("Risk = ",Id," RE = ",TotalRiskExposure); 
 	-+totalRiskEsposure(TotalRiskExposure).	
+
++!controllingRisks : risks(RiskList) <-
+	if (RiskList \== null){
+		
+		iActions.internalStateARis(RiskList);
+	};   
+	-+internalStateARis(InternalState).
 	
 +!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, Msg): project(P) & instant(K) & cenario(Cenario) & totalRiskEsposure(TotalRiskExposure) <-
 	iActions.recordLogARis(P, Id, Cenario, K, Name, CP, CI, TP, TI, SP, SI, TotalRiskExposure, Msg).
