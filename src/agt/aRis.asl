@@ -45,27 +45,23 @@ internalStateARis(null).
 			-+risk(Risk);
 			cartago.invoke_obj(Risk, getId, Id);
 			cartago.invoke_obj(Risk, getName, Name);
-			cartago.invoke_obj(Risk, getRiskExposure, RE);
-			-+riskExposure(RE); //RiskExposure Object!
-		
-			cartago.invoke_obj(RE, getCostP, CP);
+			cartago.invoke_obj(Risk, getCostP, CP);
 			-+costP(CP);
-			cartago.invoke_obj(RE, getCostI, CI);
+			cartago.invoke_obj(Risk, getCostI, CI);
 			-+costI(CI);
-			cartago.invoke_obj(RE, getTimeP, TP);
+			cartago.invoke_obj(Risk, getTimeP, TP);
 			-+timeP(TP);
-			cartago.invoke_obj(RE, getCostP, TI);
+			cartago.invoke_obj(Risk, getCostP, TI);
 			-+timeI(TI);
-			cartago.invoke_obj(RE, getScopeP, SP);
+			cartago.invoke_obj(Risk, getScopeP, SP);
 			-+scopeP(SP);   
-			cartago.invoke_obj(RE, getScopeI, SI);
+			cartago.invoke_obj(Risk, getScopeI, SI);
 			-+scopeI(SI);    	
 			!calculateRiskExposure(Id);
 			!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, "Informacoes do Risco.");		
 		};
 		
-		//!controllingRisks(RiskList); Essa é a primeira opcao mas eh preciso descobrir como acessar a lista de riscos no java
-		//segunda opcao seria dar o foco no EnvironmentRiskControl e fazer essa ordenacao lá dentro
+		riskControl(RiskList);		
 	}.
 	
 +tick : instant(K) <-
@@ -76,17 +72,17 @@ internalStateARis(null).
 	setProject(P); //setando a propriedade observavel novamente
 	.print("ARis observando o Projeto ", IdProject).
 
-+!calculateRiskExposure(Id): costP(CP) & costI(CI) & timeP(TP) & timeI(TI) & scopeP(SP) & scopeI(SI)<-
-
-	TotalRiskExposure = (CP*CI)+(TP*TI)+(SP*SI);	//COMO JOGAR ESSA (TRE) DENTRO DO RISCO NA VARI�VEL TotalRiskExposure???
++!calculateRiskExposure(Id): costP(CP) & costI(CI) & timeP(TP) & timeI(TI) & scopeP(SP) & scopeI(SI) & risk(Risk)<-
+	TotalRiskExposure = (CP*CI)+(TP*TI)+(SP*SI);
+	cartago.invoke_obj(Risk, setTotalRiskExposure(TotalRiskExposure));
 	.print("Risk = ",Id," RE = ",TotalRiskExposure); 
 	-+totalRiskEsposure(TotalRiskExposure).	
-
-+!controllingRisks(RiskList) <-
-	if (RiskList \== null){
-		iActions.internalStateARis(RiskList);
-	};   
-	-+internalStateARis(InternalState).
 	
 +!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, Msg): project(P) & instant(K) & cenario(Cenario) & totalRiskEsposure(TotalRiskExposure) <-
 	iActions.recordLogARis(P, Id, Cenario, K, Name, CP, CI, TP, TI, SP, SI, TotalRiskExposure, Msg).
+
+//+!controllingRisks(RiskList) <-
+//	if (RiskList \== null){
+//		iActions.internalStateARis(RiskList);
+//	};   
+//	-+internalStateARis(InternalState).

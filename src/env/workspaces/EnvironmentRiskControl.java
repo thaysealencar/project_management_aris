@@ -2,22 +2,22 @@
 
 package workspaces;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import cartago.*;
+import cartago.Artifact;
+import cartago.OPERATION;
 import models.Project;
 import models.Risk;
-import simulations.Simulate;
 
 public class EnvironmentRiskControl extends Artifact {
 	
-	private List<Risk> risks = new LinkedList<Risk>();
+	private List<Risk> risks = new ArrayList<Risk>();
 	private Project project;
 	
 	void init() {
-		defineObsProperty("risks", risks);
-		//execInternalOp("riskControl");
+		
 	}
 	
 	@OPERATION
@@ -25,18 +25,18 @@ public class EnvironmentRiskControl extends Artifact {
 		this.project = p;
 	}
 	
-	@INTERNAL_OPERATION
-	public void riskControl()
+	@OPERATION
+	public void riskControl(ArrayList<Risk> aux )
 	{
-		ObsProperty projectRisks = getObsProperty("risks");
-		Object[] r = projectRisks.getValues();
-		Risk a = (Risk) r[0];
+		Collections.sort(aux);
 		
-		System.out.println(a.getName());
+		for (Risk risk : aux) {
+			System.out.println(risk.getId()+ " - "+risk.getTotalRiskExposure());
+			
+		}
 		
-		signal("tick");
-		await_time(2500);
-		//instant.updateValue(instant.intValue() + 1);
+		
 	}
+
 }
 

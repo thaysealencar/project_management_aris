@@ -75,9 +75,6 @@ public class Scenario1 extends Simulate
 		p.addActivity(M);	p.addActivity(N);
 		
 		
-		R1 = new Risk(1, "Definicao do Escopo", new RiskExposure(0, 0, 0, 0, 0.3, 3));
-		p.addRisk(R1);
-		
 		
 		ArrayList<Activity> activities = p.getActivities();
 		// Calcula todos os Tes e Tef das atividades.

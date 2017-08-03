@@ -74,12 +74,11 @@ public class Scenario1_SBQS extends Simulate
 				p.addActivity(K);	p.addActivity(L);
 				p.addActivity(M);	p.addActivity(N);
 				
-				R1 = new Risk(1, "Definicao do Escopo", new RiskExposure(0, 0, 0, 0, 0.3, 4));
+				R1 = new Risk(1, "Definicao do Escopo", 0, 0, 0, 0, 0.3, 4,0);
 				p.addRisk(R1);
-				System.out.println(R1.getRiskExposure().getCostI());
-				R2 = new Risk(2, "Definicao do Escopo2", new RiskExposure(0, 0, 0, 0, 0.4, 5));
+				R2 = new Risk(2, "Definicao do Escopo2", 0, 0, 0, 0, 0.4, 5,0);
 				p.addRisk(R2);
-				R3 = new Risk(3, "Definicao do Escopo3", new RiskExposure(0, 0, 0, 0, 0.2, 1));
+				R3 = new Risk(3, "Definicao do Escopo3", 0, 0, 0, 0, 0.2, 1,0);
 				p.addRisk(R3);
 				
 				
