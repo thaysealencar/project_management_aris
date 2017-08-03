@@ -5,16 +5,15 @@ package workspaces;
 import java.util.LinkedList;
 import java.util.List;
 
-import models.Activity;
-import models.Project;
-import models.Risk;
-import models.RiskExposure;
-import simulations.*;
 import cartago.Artifact;
 import cartago.INTERNAL_OPERATION;
 import cartago.OPERATION;
 import cartago.ObsProperty;
 import cartago.OpFeedbackParam;
+import models.Activity;
+import models.Project;
+import simulations.Scenario1_SBQS;
+import simulations.Simulate;
 
 public class EnvironmentProject extends Artifact
 {	
@@ -120,25 +119,5 @@ public class EnvironmentProject extends Artifact
 		tlf.set(a.getTlateFinish());
 		gap.set(a.getGAP());
 	}
-	
-//	@OPERATION
-//	void getDataRisks(int id, OpFeedbackParam<String> name, 
-//			OpFeedbackParam<Double> costP,  OpFeedbackParam<Integer> costI,
-//			OpFeedbackParam<Double> timeP,  OpFeedbackParam<Integer> timeI,
-//			OpFeedbackParam<Double> scopeP,  OpFeedbackParam<Integer> scopeI,
-//			OpFeedbackParam<Double> totalRiskExposure,
-//			OpFeedbackParam<RiskExposure> riskExposure)
-//	{	
-//		Risk r = p.getRiskById(id);
-//		
-//		name.set(r.getName());
-//		costP.set(r.getRiskExposure().getCostP());
-//		costI.set(r.getRiskExposure().getCostI());
-//		timeP.set(r.getRiskExposure().getTimeP());
-//		timeI.set(r.getRiskExposure().getTimeI());
-//		scopeP.set(r.getRiskExposure().getScopeP());
-//		scopeI.set(r.getRiskExposure().getScopeI());
-//		
-//	}
 	
 }

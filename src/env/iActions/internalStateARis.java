@@ -11,6 +11,7 @@ import jason.asSyntax.ListTermImpl;
 import jason.asSyntax.Term;
 import models.Risk;
 
+
 public class internalStateARis extends DefaultInternalAction
 {
 	private static final long serialVersionUID = 1L;
@@ -19,20 +20,26 @@ public class internalStateARis extends DefaultInternalAction
     @Override
     public Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception
     {
-    
-    	List<Risk> risks = new ArrayList<Risk>();
-    	risks =  (List<Risk>) args[0];
     	
-    	if(risks!=null){
-    		for (Risk risk : risks) {
-    			System.out.println(risk.getName());
-    	    	internalState.add(risk);
-
-    		}
-    	}else{
-    		System.out.println("Lista Vazia");
+    	System.out.println("cheguei aqui");
+    	if(args[0].isList()){
+    		
     	}
     	
+    	
+//    	List<Risk> risks = new ArrayList<Risk>();
+//    	risks =  (List<Risk>) args[0];
+//    	
+//    	if(risks!=null){
+//    		for (Risk risk : risks) {
+//    			System.out.println(risk.getName());
+//    	    	internalState.add(risk);
+//
+//    		}
+//    	}else{
+//    		System.out.println("Lista Vazia");
+//    	}
+//    	
     	
     	
    	ListTerm result = new ListTermImpl();

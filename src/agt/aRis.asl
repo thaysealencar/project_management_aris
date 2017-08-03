@@ -26,9 +26,8 @@ internalStateARis(null).
 
 +?myEnvironment(AuxR) : true
 	<-	
-	makeArtifact("EnvRiskControl", "workspaces.EnvironmentRiskControl", [], AuxR);
+	makeArtifact("EnvRiskControl", "workspaces.EnvironmentRiskControl", [], AuxR); //passar a lista de riscos como parametro
 	.print("Criei!");
-	.print("Ol� Mundo");
 	focus(AuxR).		
 
 -?myEnvironment(CRId) : true
@@ -48,10 +47,7 @@ internalStateARis(null).
 			cartago.invoke_obj(Risk, getName, Name);
 			cartago.invoke_obj(Risk, getRiskExposure, RE);
 			-+riskExposure(RE); //RiskExposure Object!
-			
-//			!calculateImpact(DRemTime, ImpactTime);
-//			!calculateUrgence(U);
-
+		
 			cartago.invoke_obj(RE, getCostP, CP);
 			-+costP(CP);
 			cartago.invoke_obj(RE, getCostI, CI);
@@ -65,10 +61,11 @@ internalStateARis(null).
 			cartago.invoke_obj(RE, getScopeI, SI);
 			-+scopeI(SI);    	
 			!calculateRiskExposure(Id);
-			!controllingRisks(RiskList);
-			!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, "Informa��es do Risco.");
-				
+			!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, "Informacoes do Risco.");		
 		};
+		
+		//!controllingRisks(RiskList); Essa é a primeira opcao mas eh preciso descobrir como acessar a lista de riscos no java
+		//segunda opcao seria dar o foco no EnvironmentRiskControl e fazer essa ordenacao lá dentro
 	}.
 	
 +tick : instant(K) <-
@@ -76,23 +73,20 @@ internalStateARis(null).
 	
 +project(P) <- 
 	cartago.invoke_obj(P, getId, IdProject);
-	setProject(P);
+	setProject(P); //setando a propriedade observavel novamente
 	.print("ARis observando o Projeto ", IdProject).
 
-+!calculateRiskExposure(Id): costP(CP) & costI(CI) & timeP(TP) & timeI(TI) & scopeP(SP) & scopeI(SI) <-
++!calculateRiskExposure(Id): costP(CP) & costI(CI) & timeP(TP) & timeI(TI) & scopeP(SP) & scopeI(SI)<-
 
 	TotalRiskExposure = (CP*CI)+(TP*TI)+(SP*SI);	//COMO JOGAR ESSA (TRE) DENTRO DO RISCO NA VARI�VEL TotalRiskExposure???
 	.print("Risk = ",Id," RE = ",TotalRiskExposure); 
 	-+totalRiskEsposure(TotalRiskExposure).	
 
-+!controllingRisks : risks(RiskList) <-
++!controllingRisks(RiskList) <-
 	if (RiskList \== null){
-		
 		iActions.internalStateARis(RiskList);
 	};   
 	-+internalStateARis(InternalState).
 	
 +!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, Msg): project(P) & instant(K) & cenario(Cenario) & totalRiskEsposure(TotalRiskExposure) <-
 	iActions.recordLogARis(P, Id, Cenario, K, Name, CP, CI, TP, TI, SP, SI, TotalRiskExposure, Msg).
-	//.concat(Str, ". Risk: ", Name);
-	//+msg(Msg).
