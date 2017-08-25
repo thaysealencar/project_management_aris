@@ -36,7 +36,6 @@ internalStateARis(null).
 		!create.	
 
 +!monitoringRisks : risks(RiskList) <-
-
 	if (RiskList \== null){
 		cartago.invoke_obj(RiskList, size, Size);
 		
@@ -59,9 +58,27 @@ internalStateARis(null).
 			-+scopeI(SI);    	
 			!calculateRiskExposure(Id);
 			!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, "Informacoes do Risco.");		
+			iActions.internalStateARis(Id);
 		};
 		
-		riskControl(RiskList);		
+		//SOLUÇÃO DE CONTROLE VIA ESTADO INTERNO DO AGENTE
+		iActions.internalStateARis(exit, InternalState);
+		-+internalStateARis(InternalState);
+		
+		//SOLUÇÃO DE CONTROLE VIA AMBIENTE DO ARIS
+		//riskControl(RiskList);
+		
+		if (InternalState \== null){
+			.length(InternalState, LengthRiksList);
+			.print("Recebi uma lista ordenada do meu estado interno. Ela contém  ", LengthRiksList," riscos.");
+			
+			for(.member(IdR, InternalState))
+			{
+				.print(IdR);
+			}	
+			
+		}	
+			
 	}.
 	
 +tick : instant(K) <-
@@ -69,16 +86,17 @@ internalStateARis(null).
 	
 +project(P) <- 
 	cartago.invoke_obj(P, getId, IdProject);
+	+idProject(IdProject);
 	setProject(P); //setando a propriedade observavel novamente
 	.print("ARis observando o Projeto ", IdProject).
 
 +!calculateRiskExposure(Id): costP(CP) & costI(CI) & timeP(TP) & timeI(TI) & scopeP(SP) & scopeI(SI) & risk(Risk)<-
 	TotalRiskExposure = (CP*CI)+(TP*TI)+(SP*SI);
 	cartago.invoke_obj(Risk, setTotalRiskExposure(TotalRiskExposure));
-	.print("Risk = ",Id," RE = ",TotalRiskExposure); 
+	//.print("Risk = ",Id," RE = ",TotalRiskExposure); 
 	-+totalRiskEsposure(TotalRiskExposure).	
 	
-+!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, Msg): project(P) & instant(K) & cenario(Cenario) & totalRiskEsposure(TotalRiskExposure) <-
++!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, Msg): instant(K) & cenario(Cenario) & totalRiskEsposure(TotalRiskExposure) <-
 	iActions.recordLogARis(P, Id, Cenario, K, Name, CP, CI, TP, TI, SP, SI, TotalRiskExposure, Msg).
 
 //+!controllingRisks(RiskList) <-

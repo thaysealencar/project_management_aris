@@ -20,9 +20,13 @@ import models.RiskExposure;
 
 public class Scenario1_SBQS extends Simulate
 {
+	
+	public static Project project;
+	
 	public Scenario1_SBQS(Project p, String name)
 	{
 		super(p, name);
+		project = p;
 	}
 
 	@Override

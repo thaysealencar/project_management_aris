@@ -4,7 +4,7 @@ import models.Project;
 
 public abstract class Simulate
 {	
-	protected Project p;	
+	static protected Project p;	
 	private String name;
 	
 	public Simulate(Project p, String name){
@@ -23,6 +23,16 @@ public abstract class Simulate
 		this.name = name;
 	}
 
+	
+
+	public static Project getProject() {
+		return p;
+	}
+
+
+	public static void setProject(Project p) {
+		Simulate.p = p;
+	}
 
 
 	/*
