@@ -5,11 +5,16 @@ import java.util.ArrayList;
 public class Project
 {	
 	private int id;
-	private int duration;
-	private int realDuration;
+	private double duration;
+	private double realDuration;
 	private float budget;
 	private int instant;
+	private double timeContingencyBudget;
+	private double costContingencyBudget;
+	private double scopContingencyBudget;
+	private double contingencyPercentage;
 	
+	private ArrayList< Employee > projectTeamList;
 	private ArrayList<Activity> activities = new ArrayList<Activity>();
 	private ArrayList<Risk> risks = new ArrayList<Risk>();
 	
@@ -19,16 +24,32 @@ public class Project
 		duration 	= 0;
 		budget		= 0.0f;
 		instant 	= 0;
+		contingencyPercentage = 0;
+		projectTeamList = null; // Array List inicializa zero como null;
+		
 	}
 	
-	public Project(int id, int duration, float budget)
+	
+
+	public Project(int id, int duration, float budget, double contingencyPercentege, ArrayList projectTeamList)
 	{
 		this.id			= id;
 		this.duration	= duration;
 		this.budget		= budget;
 		this.realDuration = this.duration;
+		this.contingencyPercentage = contingencyPercentege;
+		this.projectTeamList = new ArrayList<Employee>();
+		
 	}
 	
+	
+
+
+
+	
+
+
+
 	/*************************************************
 	  					ACTIVITIES
 	 **************************************************/
@@ -122,6 +143,32 @@ public class Project
 		}
 		return risk;
 	}
+
+	public void addEmployee(Employee e)
+	{
+		projectTeamList.add(e);
+	}
+	
+	public double calculateTimeContingencyBudget(double contingencyPercentage)
+	{
+		this.timeContingencyBudget = contingencyPercentage * this.duration;
+		
+		return this.timeContingencyBudget;
+		
+	}
+	
+	public double calculateCostContingencyBudget(double contingencyPercentage)
+	{
+		this.costContingencyBudget = contingencyPercentage * this.budget;
+		
+		return this.costContingencyBudget;
+		
+	}
+	
+	
+	
+	
+
 	
 	
 	/*************************************************
@@ -132,12 +179,12 @@ public class Project
 		return id;
 	}
 	
-	public int getDuration()
+	public double getDuration()
 	{
 		return duration;
 	}
 	
-	public int getRealDuration()
+	public double getRealDuration()
 	{
 		return realDuration;
 	}
@@ -161,7 +208,31 @@ public class Project
 	{
 		return risks;
 	}
-
+	
+	public double getTimeBudgetReserve() 
+	{
+		return timeContingencyBudget;
+	}
+	
+	public double getCostBudgetReserve()
+	{
+		return costContingencyBudget;
+	}
+	
+	public double getScopBudgetReserve() 
+	{
+		return scopContingencyBudget;
+	}
+	
+	public ArrayList<Employee> getProjectTeamList() 
+	{
+		return projectTeamList;
+	}
+	
+	public double getContingencyPercentage() 
+	{
+		return contingencyPercentage;
+	}
 	/**********************************************
 						SETS
 	 **********************************************/
@@ -185,5 +256,30 @@ public class Project
 
 	public void setBudget(float budget) {
 		this.budget = budget;
+	}
+	
+	public void setTimeBudgetReserve(double aux)
+	{
+		this.timeContingencyBudget = aux;
+	}
+	
+	public void setCostBudgetReserve(double costBudgetReserve)
+	{
+		this.costContingencyBudget = costBudgetReserve;
+	}
+
+	public void setScopBudgetReserve(double scopBudgetReserve) 
+	{
+		this.scopContingencyBudget = scopBudgetReserve;
+	}
+	
+	public void setProjectTeamList(ArrayList<Employee> projectTeamList) 
+	{
+		this.projectTeamList = projectTeamList;
+	}
+	
+	public void setContingencyPercentage(double contingencyPercentage) 
+	{
+		this.contingencyPercentage = contingencyPercentage;
 	}
 }

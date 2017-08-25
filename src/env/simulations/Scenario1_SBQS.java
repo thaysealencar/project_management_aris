@@ -5,6 +5,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 
 import models.Activity;
+import models.Employee;
 import models.Project;
 import models.Risk;
 import models.RiskExposure;
@@ -35,6 +36,7 @@ public class Scenario1_SBQS extends Simulate
 		// Atividades do Projeto.
 				Activity A, B, C, D, E, F, G, H, I, J, K, L, M, N;
 				Risk R1,R2,R3;
+				Employee E1, E2, E3;
 				
 				A = new Activity(1, "A", 10, 700.0f);	B = new Activity(2, "B", 5, 350.0f);
 				C = new Activity(3, "C", 5, 350.0f);	D = new Activity(4, "D", 15, 1050.0f);
@@ -85,7 +87,19 @@ public class Scenario1_SBQS extends Simulate
 				R3 = new Risk(3, "Definicao do Escopo3", 0, 0, 0, 0, 0.2, 1,0);
 				p.addRisk(R3);
 				
+				E1 = new Employee(1, "Asdrubal", "Tempo");
+				p.addEmployee(E1);
+				E2 = new Employee(2, "Fransisca" , "Gerenciamento");
+				p.addEmployee(E2);
+				E3 = new Employee(3, "Miller", "RH");
+				p.addEmployee(E3);
 				
+				double aux1 = p.calculateTimeContingencyBudget(p.getContingencyPercentage());
+				p.setTimeBudgetReserve(aux1);
+				
+				double aux2 = p.calculateCostContingencyBudget(p.getContingencyPercentage());
+				p.setCostBudgetReserve(aux2);
+			
 				ArrayList<Activity> activities = p.getActivities();
 				// Calcula todos os Tes e Tef das atividades.
 				for(int i = 0; i < activities.size(); i++)

@@ -2,6 +2,7 @@
 
 package workspaces;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,13 +12,16 @@ import cartago.OPERATION;
 import cartago.ObsProperty;
 import cartago.OpFeedbackParam;
 import models.Activity;
+import models.Employee;
 import models.Project;
 import simulations.Scenario1_SBQS;
 import simulations.Simulate;
 
 public class EnvironmentProject extends Artifact
 {	
-	private Project p = new Project(1, 160, 11200.0f);
+	private ArrayList< Employee > projectTeamList = new ArrayList<Employee>();
+	private Project p = new Project(1, 160, 11200.0f, 0.3, projectTeamList);
+	
 	//private Project p = new Project(1, 30, 150.0f);
 	
 	List<Simulate> scenarios = new LinkedList<Simulate>();
@@ -38,7 +42,11 @@ public class EnvironmentProject extends Artifact
 		
 		// Propriedades observaveis dos riscos do projeto.
 		defineObsProperty("risks", p.getRisks());
-
+		
+		defineObsProperty("projectTeamList", p.getProjectTeamList());
+		defineObsProperty("timeContingencyBudget", p.getTimeBudgetReserve());
+		defineObsProperty("costContingencyBudget", p.getCostBudgetReserve());
+		
 		defineObsProperty("idsActivitiesRunning", p.getIdsActivitiesRunning());
 		defineObsProperty("numActivitiesRunning", p.getNumActivitiesRunning());
 	}
@@ -61,6 +69,10 @@ public class EnvironmentProject extends Artifact
 			sl.prepare();
 			execInternalOp("environmentEvolution");
 		}
+		getObsProperty("timeContingencyBudget").updateValue(p.getTimeBudgetReserve());
+		getObsProperty("costContingencyBudget").updateValue(p.getCostBudgetReserve());
+		System.out.println("Teste = " +p.getCostBudgetReserve());
+		System.out.println("Teste = " +p.getTimeBudgetReserve());
 	}
 	
 	@INTERNAL_OPERATION

@@ -84,6 +84,7 @@ internalStateARis(null).
 +tick : instant(K) <-
 	!monitoringRisks.
 	
+	
 +project(P) <- 
 	cartago.invoke_obj(P, getId, IdProject);
 	+idProject(IdProject);
