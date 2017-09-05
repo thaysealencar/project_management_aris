@@ -194,7 +194,9 @@
 	cartago.invoke_obj(AR, getRequestValue(RemTime), DRemTime);
 	
 	.concat("Percebi uma nova solicitação para ", Title, " no instante ", K, " para a tarefa: ", Label, Str);	
-	println(Str);			
+	println(Str);
+	iActions.dataPackageAMud(Title, Id, State, AddCost, AddTime, RemCost, RemTime, DAddCost, DAddTime, DRemCost, DRemTime, DataPackage);
+	.send(aRis, tell, DataPackage);
 	
 	if (DAddCost > 0){
 		!calculateImpact(DAddCost, ImpactCost);

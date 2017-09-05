@@ -33,10 +33,10 @@ public class TypeChange {
 
 	public static String getDescription(int tc){
 		switch (tc){
-		case ADD_COST: return "Solicitação de acréscimo no custo";
-		case ADD_TIME: return "Solicitação de acréscimo no tempo";
-		case REM_COST: return "Solicitação de decréscimo no custo";
-		case REM_TIME: return "Solicitação de decréscimo no tempo";
+		case ADD_COST: return "Solicitacao de acrescimo no custo";
+		case ADD_TIME: return "Solicitacao de acrecimo no tempo";
+		case REM_COST: return "Solicitacao de decrescimo no custo";
+		case REM_TIME: return "Solicitacao de decrescimo no tempo";
 		default: return null;
 		}
 	}	

@@ -2,7 +2,7 @@
 
 /* Initial beliefs and rules */
 internalStateARis(null).
-
+internalStateAMud(null).
 /* Initial goals */
 !monitoring.
 !create.
@@ -34,7 +34,34 @@ internalStateARis(null).
 	<-	
 		.wait(100);
 		!create.	
+/*Message */
++!kqml_received(Sender, tell, Variables, Response) : true  <-
+ 		 
+ 	-+internalStateAMud(Variables);
+	!controllingRisks.
+	
++!controllingRisks: internalStateAMud(ISAMud) <-
 
+	.length(ISAMud, LengthISAMud);
+	.nth(LengthISAMud-11, ISAMud, Title);		
+	.nth(LengthISAMud-10, ISAMud, Id);
+	.nth(LengthISAMud-9, ISAMud, State);
+	.nth(LengthISAMud-8, ISAMud, AddCost);
+	.nth(LengthISAMud-7, ISAMud, AddTime);
+	.nth(LengthISAMud-6, ISAMud, RemCost);
+	.nth(LengthISAMud-5, ISAMud, RemTime);
+	.nth(LengthISAMud-4, ISAMud, DAddCost);
+	.nth(LengthISAMud-3, ISAMud, DAddTime);
+	.nth(LengthISAMud-2, ISAMud, DRemCost);
+	.nth(LengthISAMud-1, ISAMud, DRemTime);
+	
+	.print("Recebi informacoes de que uma mudança foi solicitada: ", Title, Id, State, DAddCost, DAddTime, DRemCost, DRemTime);
+	
+	//iActions.internalStateARis(Title, Id, State, DAddCost, DAddTime, DRemCost, DRemTime, InternalStateAMud);
+							   
+	-+internalStateAMud(InternalStateAMud).
+ 
+ 
 +!monitoringRisks : risks(RiskList) <-
 	if (RiskList \== null){
 		cartago.invoke_obj(RiskList, size, Size);
@@ -80,7 +107,7 @@ internalStateARis(null).
 		}	
 			
 	}.
-	
+
 +tick : instant(K) <-
 	!monitoringRisks.
 	
