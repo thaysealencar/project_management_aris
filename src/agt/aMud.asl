@@ -123,36 +123,36 @@
 					}
 					!calculateUrgence(U);
 					-+impactCost(ImpactCost);
-					-+impactTime(ImpactTime);                 //permitir que na mesma solicitação possa acontecer as duas mudanças !!		
+					-+impactTime(ImpactTime);                 //permitir que na mesma solicitaï¿½ï¿½o possa acontecer as duas mudanï¿½as !!		
 					!calculatePriority(P);
 					if (ImpactCost == 4){
-										!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State, "Impacto no custo é alto. Procure o Sponsor do projeto para negociar os custos.");
+										!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State, "Impacto no custo ï¿½ alto. Procure o Sponsor do projeto para negociar os custos.");
 					} else{
 								if (ImpactCost == 5){
-										!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State, "Impacto no custo é muito alto. Procure o Sponsor do projeto para negociar os custos.");								
+										!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State, "Impacto no custo ï¿½ muito alto. Procure o Sponsor do projeto para negociar os custos.");								
 								}
 						}
 					if (ImpactTime == 4){
-								!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State, "Impacto no tempo é alto. Verifique a possibilidade de paralelizar atividades.");
+								!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State, "Impacto no tempo ï¿½ alto. Verifique a possibilidade de paralelizar atividades.");
 					} else{
 							if (ImpactTime == 5){
-									!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State,"Impacto no tempo é muito alto. Verifique a possibilidade de paralelizar atividades.");
+									!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State,"Impacto no tempo ï¿½ muito alto. Verifique a possibilidade de paralelizar atividades.");
 							}
 					}
 					if (U == 4){
-						!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State, "A urgência da mudança é alta, em breve se tornará obsoleta.");
+						!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State, "A urgï¿½ncia da mudanï¿½a ï¿½ alta, em breve se tornarï¿½ obsoleta.");
 					} else {
 						if (U == 5){
-								!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State,"A urgência da mudança é muito alta, em breve se tornará obsoleta.");
+								!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State,"A urgï¿½ncia da mudanï¿½a ï¿½ muito alta, em breve se tornarï¿½ obsoleta.");
 						}
 					};
 					if (P > 27){
-							!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State, "Atenção! Existe solicitação de mudança com prioridade alta!");				
+							!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State, "Atenï¿½ï¿½o! Existe solicitaï¿½ï¿½o de mudanï¿½a com prioridade alta!");				
 					}					
 			}
 			else{
 					if (State == Obsolete){
-							!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State, "Solicitação está obsoleta.");
+							!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State, "Solicitaï¿½ï¿½o estï¿½ obsoleta.");
 					}
 			}					
 		};		//fim for
@@ -163,7 +163,7 @@
 	& urgence(U) & priority(P)  & activity(A) <-
 	cartago.invoke_obj(A, getLabel, Label);
 	iActions.recordLogAMud(Id, Cenario, K, Label, ValueAC, ValueRC, ValueAT, ValueRT, State, ImpactCost, ImpactTime, U, P, Str);
-	.concat(Str, ". Solicitação para a atividade: ", Label, Msg);
+	.concat(Str, ". Solicitaï¿½ï¿½o para a atividade: ", Label, Msg);
 	+msg(Msg).			
 
 //Perceptions
@@ -193,9 +193,9 @@
 	cartago.invoke_obj(AR, getRequestValue(RemCost), DRemCost);
 	cartago.invoke_obj(AR, getRequestValue(RemTime), DRemTime);
 	
-	.concat("Percebi uma nova solicitação para ", Title, " no instante ", K, " para a tarefa: ", Label, Str);	
+	.concat("Percebi uma nova solicitaï¿½ï¿½o para ", Title, " no instante ", K, " para a tarefa: ", Label, Str);	
 	println(Str);
-	iActions.dataPackageAMud(Title, Id, State, AddCost, AddTime, RemCost, RemTime, DAddCost, DAddTime, DRemCost, DRemTime, DataPackage);
+	iActions.dataPackageAMud(Title, Id, State, AddCost, AddTime, RemCost, RemTime, DAddCost, DAddTime, DRemCost, DRemTime, K, DataPackage);
 	.send(aRis, tell, DataPackage);
 	
 	if (DAddCost > 0){

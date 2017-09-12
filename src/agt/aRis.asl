@@ -35,33 +35,27 @@ internalStateAMud(null).
 		.wait(100);
 		!create.	
 /*Message */
-+!kqml_received(Sender, tell, Variables, Response) : true  <-
++!kqml_received(Sender, tell, Variables, Response) : instant(K) <-
  		 
  	-+internalStateAMud(Variables);
-	!controllingRisks.
-	
-+!controllingRisks: internalStateAMud(ISAMud) <-
+ 	
+	.nth(0, Variables, Title);		
+	.nth(1, Variables, Id);
+	.nth(2, Variables, State);
+	.nth(3, Variables, AddCost);
+	.nth(4, Variables, AddTime);
+	.nth(5, Variables, RemCost);
+	.nth(6, Variables, RemTime);
+	.nth(7, Variables, DAddCost);
+	.nth(8, Variables, DAddTime);
+	.nth(9, Variables, DRemCost);
+	.nth(10, Variables, DRemTime);
+ 	
+ 	iActions.internalRiskControl(Title, Id, State, AddCost, AddTime, RemCost, RemTime, DAddCost, DAddTime, DRemCost, DRemTime, K, R);
+ 	
+ 	-+internalStateAMud(R).
+ 	
 
-	.length(ISAMud, LengthISAMud);
-	.nth(LengthISAMud-11, ISAMud, Title);		
-	.nth(LengthISAMud-10, ISAMud, Id);
-	.nth(LengthISAMud-9, ISAMud, State);
-	.nth(LengthISAMud-8, ISAMud, AddCost);
-	.nth(LengthISAMud-7, ISAMud, AddTime);
-	.nth(LengthISAMud-6, ISAMud, RemCost);
-	.nth(LengthISAMud-5, ISAMud, RemTime);
-	.nth(LengthISAMud-4, ISAMud, DAddCost);
-	.nth(LengthISAMud-3, ISAMud, DAddTime);
-	.nth(LengthISAMud-2, ISAMud, DRemCost);
-	.nth(LengthISAMud-1, ISAMud, DRemTime);
-	
-	.print("Recebi informacoes de que uma mudança foi solicitada: ", Title, Id, State, DAddCost, DAddTime, DRemCost, DRemTime);
-	
-	//iActions.internalStateARis(Title, Id, State, DAddCost, DAddTime, DRemCost, DRemTime, InternalStateAMud);
-							   
-	-+internalStateAMud(InternalStateAMud).
- 
- 
 +!monitoringRisks : risks(RiskList) <-
 	if (RiskList \== null){
 		cartago.invoke_obj(RiskList, size, Size);

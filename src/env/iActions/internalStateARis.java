@@ -11,10 +11,7 @@ import jason.asSemantics.Unifier;
 import jason.asSyntax.ListTerm;
 import jason.asSyntax.ListTermImpl;
 import jason.asSyntax.NumberTermImpl;
-import jason.asSyntax.ObjectTerm;
-import jason.asSyntax.ObjectTermImpl;
 import jason.asSyntax.Term;
-import jason.asSyntax.VarTerm;
 import models.Project;
 import models.Risk;
 import simulations.Scenario1_SBQS;
@@ -46,8 +43,7 @@ public class internalStateARis extends DefaultInternalAction {
     		risks.clear();
     		return un.unifies(result, args[1]); //mandando a lista de id's de riscos ordenada de volta para o Aris
     		
-        }else{
-            
+        }
         	Risk risk = p.getRiskById(Integer.parseInt(id));
         	
             if(!risks.contains(risk)){
@@ -57,5 +53,5 @@ public class internalStateARis extends DefaultInternalAction {
             return true;
         }
         
+        
     }
-}
