@@ -35,6 +35,7 @@ public class EnvironmentProject extends Artifact
 		defineObsProperty("project", p);
 		defineObsProperty("idProject", p.getId());
 		defineObsProperty("durationProject", p.getRealDuration());
+		System.out.println("DurationProject = " +p.getRealDuration());
 		defineObsProperty("budgetProject", p.getBudget());
 
 		// Propriedades observaveis das atividades do projeto.

@@ -25,7 +25,8 @@ public class internalRiskControl extends DefaultInternalAction {
 	@Override
     public Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception {
     	Project p  = Scenario1_SBQS.getProject();
-    	
+    	double deltaTime, deltaCost;
+    	//Change c = new Change(Integer.parseInt(Id.toString()), Title.toString(), Integer.parseInt(instant.toString()), new Activity(),1);
     	StringTerm Title = (StringTerm) args[0];
 		NumberTerm Id	= (NumberTerm) args[1];
 		
@@ -46,14 +47,29 @@ public class internalRiskControl extends DefaultInternalAction {
 		NumberTerm DRemCost = (NumberTerm) args[9];
 		NumberTerm DRemTime = (NumberTerm) args[10];
 		NumberTerm instant = (NumberTerm) args[11];
+		NumberTerm activityId = (NumberTerm) args[12];
+		
+		
+	
 		
 		System.out.println(p.getTimeBudgetReserve());
 		System.out.println(p.getCostBudgetReserve());
 		
 		Activity a = new Activity();
-	
-		Change c = new Change(Integer.parseInt(Id.toString()), Title.toString(), Integer.parseInt(instant.toString()), new Activity(),1);
-		//System.out.println(c.getChange_id());
+		a = p.getActivityById(Integer.parseInt(activityId.toString()));
+		
+		
+//		if(Integer.parseInt(changeType.toString())==1){ //aumenta o custo da mudança
+//			
+//			deltaCost = a.getCurrentCost()-a.getEstimatedCost();
+//			
+//		}else if(Integer.parseInt(changeType.toString())==2){  //aumenta o tempo da mudança
+//			
+//			deltaTime = a.getCurrentTime()-a.getEstimatedTime();
+//			
+//		}
+		
+		
 		
 		ListTerm result = new ListTermImpl();
     	result.add(Title);
@@ -68,8 +84,10 @@ public class internalRiskControl extends DefaultInternalAction {
     	result.add(DRemCost);
     	result.add(DRemTime);
     	result.add(instant);
+    	result.add(activityId);
     	
     	
-		return un.unifies(result, args[12]);
+    	
+		return un.unifies(result, args[13]);
     }
 }

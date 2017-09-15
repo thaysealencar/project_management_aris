@@ -26,7 +26,7 @@ public class dataPackageAMud extends DefaultInternalAction {
 		 }else if (args[2].isLiteral()){
 			 State  = (StringTerm) args[2];
 		 }
-				  
+		System.out.println("eAE MEN ="+ args[2]);	  
 		NumberTerm AddCost = (NumberTerm) args[3];
 		NumberTerm AddTime = (NumberTerm) args[4];
 		NumberTerm RemCost = (NumberTerm) args[5];
@@ -36,23 +36,27 @@ public class dataPackageAMud extends DefaultInternalAction {
 		NumberTerm DRemCost = (NumberTerm) args[9];
 		NumberTerm DRemTime = (NumberTerm) args[10];
 		NumberTerm instant = (NumberTerm) args[11];
+		NumberTerm activityId = (NumberTerm) args[12];
 		
 		ListTerm result = new ListTermImpl();
     	result.add(Title);
     	result.add(Id);
     	result.add(State);
     	result.add(AddCost);
+    	System.out.println("Aqui eu 2 = "+ AddCost);
     	result.add(AddTime);
     	result.add(RemCost);
     	result.add(RemTime);
     	result.add(DAddCost);
+    	System.out.println("Aqui eu 2 DAddCost = "+ DAddCost);
     	result.add(DAddTime);
     	result.add(DRemCost);
     	result.add(DRemTime);
     	result.add(instant);
+    	result.add(activityId);
     	System.out.println("TEEEEEEEESTE 2 ="+ instant);
     	
-    	return un.unifies(result, args[12]);
+    	return un.unifies(result, args[13]);
 		
 	}
 	

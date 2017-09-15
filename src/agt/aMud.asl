@@ -178,6 +178,7 @@
 	
 +status(S): S == "newRequest"  & actualRequest(AR) & instant(K) <-
 	cartago.invoke_obj(AR, getActivity, A);
+	cartago.invoke_obj(A, getId, ActivityId);
 	-+activity(A);
 	cartago.invoke_obj(A, getLabel, Label);
 	cartago.invoke_obj(AR, getChange_title, Title);
@@ -193,9 +194,12 @@
 	cartago.invoke_obj(AR, getRequestValue(RemCost), DRemCost);
 	cartago.invoke_obj(AR, getRequestValue(RemTime), DRemTime);
 	
+	
 	.concat("Percebi uma nova solicita��o para ", Title, " no instante ", K, " para a tarefa: ", Label, Str);	
 	println(Str);
-	iActions.dataPackageAMud(Title, Id, State, AddCost, AddTime, RemCost, RemTime, DAddCost, DAddTime, DRemCost, DRemTime, K, DataPackage);
+	iActions.dataPackageAMud(Title, Id, State, AddCost, AddTime, RemCost, RemTime, DAddCost, DAddTime, DRemCost, DRemTime, K, ActivityId, DataPackage);
+	.nth(3, DataPackage, AddCostAux);
+	.print("Agora vai = ", AddCost, AddCostAux);
 	.send(aRis, tell, DataPackage);
 	
 	if (DAddCost > 0){

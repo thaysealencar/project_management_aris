@@ -8,8 +8,8 @@ public class Activity
 {
 	private int id;
 	private String label;
-	private int estimatedTime, currentTime;
-	private float estimatedCost, currentCost;
+	private int estimatedTime, currentTime; //tempo da atividade
+	private float estimatedCost, currentCost; // custo da atividade
 	private int tEarlyStart, tEarlyFinish, tLateStart, tLateFinish, GAP;
 	private int realTime;
 	private int timeStopped;

@@ -47,6 +47,6 @@
 		cartago.invoke_obj(C, addRequest(Cost, 15));
 		cartago.invoke_obj(C, addRequest(Time, 40));
 		cartago.invoke_obj(Task, getLabel, Label);
-		println("Solicitando no instante ", K, " um acréscimo de 15% no custo e de 40% no tempo para a atividade ", Label);		
+		println("Solicitando no instante ", K, " um acrescimo de 15% no custo e de 40% no tempo para a atividade ", Label);		
 		requestChange(C);
 	}.

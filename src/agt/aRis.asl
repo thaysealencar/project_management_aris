@@ -38,21 +38,29 @@ internalStateAMud(null).
 +!kqml_received(Sender, tell, Variables, Response) : instant(K) <-
  		 
  	-+internalStateAMud(Variables);
- 	
-	.nth(0, Variables, Title);		
-	.nth(1, Variables, Id);
-	.nth(2, Variables, State);
-	.nth(3, Variables, AddCost);
-	.nth(4, Variables, AddTime);
-	.nth(5, Variables, RemCost);
-	.nth(6, Variables, RemTime);
-	.nth(7, Variables, DAddCost);
-	.nth(8, Variables, DAddTime);
-	.nth(9, Variables, DRemCost);
-	.nth(10, Variables, DRemTime);
- 	
- 	iActions.internalRiskControl(Title, Id, State, AddCost, AddTime, RemCost, RemTime, DAddCost, DAddTime, DRemCost, DRemTime, K, R);
- 	
+ 	.length(Variables, VetorARis);
+	.nth(VetorARis-12, Variables, Title);
+	.print("Título" = Title);
+	.nth(VetorARis-11, Variables, Id);
+	.print("ID" = Id);
+	.nth(VetorARis-10, Variables, State);
+	.print("State" = State);
+	.nth(VetorARis-9, Variables, AddCost);
+	.print("AddCost" = AddCost);
+	.nth(VetorARis-8, Variables, AddTime);
+	.nth(VetorARis-7, Variables, RemCost);
+	.nth(VetorARis-6, Variables, RemTime);
+	.nth(VetorARis-5, Variables, DAddCost);
+	.nth(VetorARis-4, Variables, DAddTime);
+	.nth(VetorARis-3, Variables, DRemCost);
+	.nth(VetorARis-2, Variables, DRemTime);
+	.nth(VetorARis-1, Variables, instant);
+	.nth(VetorARis-0, Variables, activityId);
+	
+	.print("Título =", Title);		
+ 	iActions.internalRiskControl(Title, Id, State, AddCost, AddTime, RemCost, RemTime, DAddCost, DAddTime, DRemCost, DRemTime, K, ActivityId, R);
+ 
+ 	.print("Title =",Title,"Id = ", Id,"State  =", State,"AddCost =", AddCost,"AddTime =", AddTime,"RemCost =", RemCost,"RemTime =", RemTime,"DAddCost =", DAddCost,"DAddTime =", DAddTime,"DRemCost =", DRemCost,"DRemTime =", DRemTime,"ActivityId =", ActivityId,"Instant = ", K);
  	-+internalStateAMud(R).
  	
 
@@ -86,7 +94,7 @@ internalStateAMud(null).
 		iActions.internalStateARis(exit, InternalState);
 		-+internalStateARis(InternalState);
 		
-		//SOLUÃ‡ÃƒO DE CONTROLE VIA AMBIENTE DO ARIS
+		//SOLUCAO DE CONTROLE VIA AMBIENTE DO ARIS
 		//riskControl(RiskList);
 		
 		if (InternalState \== null){
