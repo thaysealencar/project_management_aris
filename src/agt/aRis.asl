@@ -35,8 +35,8 @@ internalStateAMud(null).
 		.wait(100);
 		!create.	
 /*Message */
-+!kqml_received(Sender, tell, Variables, Response) : instant(K) <-
- 		 
++!kqml_received(Sender, tell, Variables, Response) : instant(K)  & project(P) & timeContingencyBudget(TCB) & costContingencyBudget(CCB)<-
+ 		
  	-+internalStateAMud(Variables);
 	.nth(0, Variables, Title);
 	.nth(1, Variables, Id);
@@ -51,16 +51,62 @@ internalStateAMud(null).
 	.nth(10, Variables, DRemTime);
 	.nth(11, Variables, Instant);
 	.nth(12, Variables, ActivityId);
-
-//	for(.range(I, 0, 12)){
-//		.nth(I, Variables, X);
-//		.print("Posicao ",I, X);
-//	}
-//	
 	
- iActions.internalRiskControl(Title, Id, State, AddCost, AddTime, RemCost, RemTime, DAddCost, DAddTime, DRemCost, DRemTime, Instant, ActivityId, R);
+	getActivity(ActivityId, A);
+	
+	cartago.invoke_obj(A, getLabel, Label);
+	cartago.invoke_obj(A, getEstimatedTime, ETimeAP);
+	cartago.invoke_obj(A, getCurrentTime, CTimeAP);
+	cartago.invoke_obj(A, getEstimatedCost, ECostAP);
+	cartago.invoke_obj(A, getCurrentCost, CCostAP);
+	
+	
+	TimeAdd  = DAddTime/100;
+	CostAdd  = DAddCost/100;
+	CostRem  = RemCost/100;
+	TimeRem  = RemTime/100;
+	
+	
+		if(TimeAdd>0){ //aumenta o tempo de uma atividade
+			DeltaTime = ETimeAP*TimeAdd;
+			
+			NewTime = DeltaTime + ETimeAP;
+		}else{
+			if(TimeRem>0){ 
+				DeltaTime = ETimeAP*TimeRem;
+				
+				NewTime = ETimeAP - DeltaTime;
+			}
+			
+		}	
+		
+		
+		if(CostAdd>0){ //diminui o tempo de uma atividade
+				DeltaCost = ECostAP*CostAdd;
+				
+				NewCost = DeltaCost + ECostAP;
+		}else{
+				
+			if(CostRem>0){
+				DeltaCost = ECostAP*CostRem;
+				
+				NewCost =  ECostA - DeltaCost;
+			}
+			
+		}
+	
+	TimeReserve = TCB - DeltaTime;
+	CostReserve = CCB - DeltaCost;
+	-+timeContingencyBudget(TimeReserve);
+	-+costContingencyBudget(CostReserve);
+	
+	.print("Time Reserve = ",TimeReserve);
+	.print("CostReserve = ", CostReserve);
+	.print("ACTIVITY ", Label, " DELTA TIME ", DeltaTime, " NEW TIME ", NewTime);
+	.print("ACTIVITY ", Label, " DELTA COST ", DeltaCost, " NEW COST ", NewCost).
+	
+ //iActions.internalRiskControl(Title, Id, State, AddCost, AddTime, RemCost, RemTime, DAddCost, DAddTime, DRemCost, DRemTime, Instant, ActivityId, R);
  
- 	-+internalStateAMud(R).
  	
 
 +!monitoringRisks : risks(RiskList) <-

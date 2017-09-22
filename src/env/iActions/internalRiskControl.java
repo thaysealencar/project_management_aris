@@ -25,9 +25,7 @@ public class internalRiskControl extends DefaultInternalAction {
 	@Override
     public Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception {
     	Project p  = Scenario1_SBQS.getProject();
-    	double deltaTime, deltaCost;
-    	//Change c = new Change(Integer.parseInt(Id.toString()), Title.toString(), Integer.parseInt(instant.toString()), new Activity(),1);
-    	System.out.println("Internal Action Arisssssssssssssssssssssssssssssss");
+    	
     	StringTerm Title = (StringTerm) args[0];
     	NumberTerm Id	= (NumberTerm) args[1];
     	StringTerm State  = (StringTerm) args[2];
@@ -39,41 +37,12 @@ public class internalRiskControl extends DefaultInternalAction {
 		NumberTerm DAddTime = (NumberTerm) args[8];
 		NumberTerm DRemCost = (NumberTerm) args[9];
 		NumberTerm DRemTime = (NumberTerm) args[10];
-		NumberTerm instant = (NumberTerm) args[11];
-		NumberTerm activityId = (NumberTerm) args[12];
+		NumberTerm Instant = (NumberTerm) args[11];
+		NumberTerm ActivityId = (NumberTerm) args[12];
 	
-		System.out.println(Title);
-		System.out.println(Id);
-		System.out.println(State);
-		System.out.println(AddCost);
-		System.out.println(AddTime);
-		System.out.println(RemCost);
-		System.out.println(RemTime);
-		System.out.println(DAddCost);
-		System.out.println(DAddTime);
-		System.out.println(DRemCost);
-		System.out.println(DRemTime);
-		System.out.println(instant);
-		System.out.println(activityId);
-		
-//		System.out.println(p.getTimeBudgetReserve());
-//		System.out.println(p.getCostBudgetReserve());
-		
-//		Activity a = new Activity();
-//		a = p.getActivityById(Integer.parseInt(activityId.toString()));
-		
-		
-//		if(Integer.parseInt(changeType.toString())==1){ //aumenta o custo da mudança
-//			
-//			deltaCost = a.getCurrentCost()-a.getEstimatedCost();
-//			
-//		}else if(Integer.parseInt(changeType.toString())==2){  //aumenta o tempo da mudança
-//			
-//			deltaTime = a.getCurrentTime()-a.getEstimatedTime();
-//			
-//		}
-		
-		
+
+		System.out.println(p.getTimeBudgetReserve());
+		System.out.println(p.getCostBudgetReserve());
 		
 		ListTerm result = new ListTermImpl();
     	result.add(Title);
@@ -87,10 +56,8 @@ public class internalRiskControl extends DefaultInternalAction {
     	result.add(DAddTime);
     	result.add(DRemCost);
     	result.add(DRemTime);
-    	result.add(instant);
-    	result.add(activityId);
-    	
-    	
+    	result.add(Instant);
+    	result.add(ActivityId);
     	
 		return un.unifies(result, args[13]);
     }
