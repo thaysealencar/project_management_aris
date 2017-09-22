@@ -27,17 +27,10 @@ public class internalRiskControl extends DefaultInternalAction {
     	Project p  = Scenario1_SBQS.getProject();
     	double deltaTime, deltaCost;
     	//Change c = new Change(Integer.parseInt(Id.toString()), Title.toString(), Integer.parseInt(instant.toString()), new Activity(),1);
+    	System.out.println("Internal Action Arisssssssssssssssssssssssssssssss");
     	StringTerm Title = (StringTerm) args[0];
-		NumberTerm Id	= (NumberTerm) args[1];
-		
-		Term State = null;
-		
-		 if (args[2].isNumeric()){
-			 State  = (NumberTerm) args[2];
-		 }else if (args[2].isLiteral()){
-			 State  = (StringTerm) args[2];
-		 }
-
+    	NumberTerm Id	= (NumberTerm) args[1];
+    	StringTerm State  = (StringTerm) args[2];
 		NumberTerm AddCost = (NumberTerm) args[3];
 		NumberTerm AddTime = (NumberTerm) args[4];
 		NumberTerm RemCost = (NumberTerm) args[5];
@@ -48,15 +41,26 @@ public class internalRiskControl extends DefaultInternalAction {
 		NumberTerm DRemTime = (NumberTerm) args[10];
 		NumberTerm instant = (NumberTerm) args[11];
 		NumberTerm activityId = (NumberTerm) args[12];
-		
-		
 	
+		System.out.println(Title);
+		System.out.println(Id);
+		System.out.println(State);
+		System.out.println(AddCost);
+		System.out.println(AddTime);
+		System.out.println(RemCost);
+		System.out.println(RemTime);
+		System.out.println(DAddCost);
+		System.out.println(DAddTime);
+		System.out.println(DRemCost);
+		System.out.println(DRemTime);
+		System.out.println(instant);
+		System.out.println(activityId);
 		
-		System.out.println(p.getTimeBudgetReserve());
-		System.out.println(p.getCostBudgetReserve());
+//		System.out.println(p.getTimeBudgetReserve());
+//		System.out.println(p.getCostBudgetReserve());
 		
-		Activity a = new Activity();
-		a = p.getActivityById(Integer.parseInt(activityId.toString()));
+//		Activity a = new Activity();
+//		a = p.getActivityById(Integer.parseInt(activityId.toString()));
 		
 		
 //		if(Integer.parseInt(changeType.toString())==1){ //aumenta o custo da mudança

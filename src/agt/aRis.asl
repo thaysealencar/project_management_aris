@@ -38,29 +38,28 @@ internalStateAMud(null).
 +!kqml_received(Sender, tell, Variables, Response) : instant(K) <-
  		 
  	-+internalStateAMud(Variables);
- 	.length(Variables, VetorARis);
-	.nth(VetorARis-12, Variables, Title);
-	.print("Título" = Title);
-	.nth(VetorARis-11, Variables, Id);
-	.print("ID" = Id);
-	.nth(VetorARis-10, Variables, State);
-	.print("State" = State);
-	.nth(VetorARis-9, Variables, AddCost);
-	.print("AddCost" = AddCost);
-	.nth(VetorARis-8, Variables, AddTime);
-	.nth(VetorARis-7, Variables, RemCost);
-	.nth(VetorARis-6, Variables, RemTime);
-	.nth(VetorARis-5, Variables, DAddCost);
-	.nth(VetorARis-4, Variables, DAddTime);
-	.nth(VetorARis-3, Variables, DRemCost);
-	.nth(VetorARis-2, Variables, DRemTime);
-	.nth(VetorARis-1, Variables, instant);
-	.nth(VetorARis-0, Variables, activityId);
+	.nth(0, Variables, Title);
+	.nth(1, Variables, Id);
+	.nth(2, Variables, State);
+	.nth(3, Variables, AddCost);
+	.nth(4, Variables, AddTime);
+	.nth(5, Variables, RemCost);
+	.nth(6, Variables, RemTime);
+	.nth(7, Variables, DAddCost);
+	.nth(8, Variables, DAddTime);
+	.nth(9, Variables, DRemCost);
+	.nth(10, Variables, DRemTime);
+	.nth(11, Variables, Instant);
+	.nth(12, Variables, ActivityId);
+
+//	for(.range(I, 0, 12)){
+//		.nth(I, Variables, X);
+//		.print("Posicao ",I, X);
+//	}
+//	
 	
-	.print("Título =", Title);		
- 	iActions.internalRiskControl(Title, Id, State, AddCost, AddTime, RemCost, RemTime, DAddCost, DAddTime, DRemCost, DRemTime, K, ActivityId, R);
+ iActions.internalRiskControl(Title, Id, State, AddCost, AddTime, RemCost, RemTime, DAddCost, DAddTime, DRemCost, DRemTime, Instant, ActivityId, R);
  
- 	.print("Title =",Title,"Id = ", Id,"State  =", State,"AddCost =", AddCost,"AddTime =", AddTime,"RemCost =", RemCost,"RemTime =", RemTime,"DAddCost =", DAddCost,"DAddTime =", DAddTime,"DRemCost =", DRemCost,"DRemTime =", DRemTime,"ActivityId =", ActivityId,"Instant = ", K);
  	-+internalStateAMud(R).
  	
 
@@ -99,7 +98,7 @@ internalStateAMud(null).
 		
 		if (InternalState \== null){
 			.length(InternalState, LengthRiksList);
-			.print("Recebi uma lista ordenada do meu estado interno. Ela contÃ©m  ", LengthRiksList," riscos.");
+			.print("Recebi uma lista ordenada do meu estado interno. Ela contem  ", LengthRiksList," riscos.");
 			
 			for(.member(IdR, InternalState))
 			{

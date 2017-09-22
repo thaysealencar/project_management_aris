@@ -163,7 +163,7 @@
 	& urgence(U) & priority(P)  & activity(A) <-
 	cartago.invoke_obj(A, getLabel, Label);
 	iActions.recordLogAMud(Id, Cenario, K, Label, ValueAC, ValueRC, ValueAT, ValueRT, State, ImpactCost, ImpactTime, U, P, Str);
-	.concat(Str, ". Solicita��o para a atividade: ", Label, Msg);
+	.concat(Str, ". Solicitacao para a atividade: ", Label, Msg);
 	+msg(Msg).			
 
 //Perceptions
@@ -195,11 +195,12 @@
 	cartago.invoke_obj(AR, getRequestValue(RemTime), DRemTime);
 	
 	
-	.concat("Percebi uma nova solicita��o para ", Title, " no instante ", K, " para a tarefa: ", Label, Str);	
+	.concat("Percebi uma nova solicitacao para ", Title, " no instante ", K, " para a tarefa: ", Label, Str);	
 	println(Str);
 	iActions.dataPackageAMud(Title, Id, State, AddCost, AddTime, RemCost, RemTime, DAddCost, DAddTime, DRemCost, DRemTime, K, ActivityId, DataPackage);
-	.nth(3, DataPackage, AddCostAux);
-	.print("Agora vai = ", AddCost, AddCostAux);
+	
+	.nth(2, DataPackage, X);
+	.print("Posicao 2 datapackage = ", X);
 	.send(aRis, tell, DataPackage);
 	
 	if (DAddCost > 0){
