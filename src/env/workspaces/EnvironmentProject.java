@@ -35,7 +35,6 @@ public class EnvironmentProject extends Artifact
 		defineObsProperty("project", p);
 		defineObsProperty("idProject", p.getId());
 		defineObsProperty("durationProject", p.getRealDuration());
-		System.out.println("DurationProject = " +p.getRealDuration());
 		defineObsProperty("budgetProject", p.getBudget());
 
 		// Propriedades observaveis das atividades do projeto.
@@ -72,8 +71,8 @@ public class EnvironmentProject extends Artifact
 		}
 		getObsProperty("timeContingencyBudget").updateValue(p.getTimeBudgetReserve());
 		getObsProperty("costContingencyBudget").updateValue(p.getCostBudgetReserve());
-		System.out.println("Teste = " +p.getCostBudgetReserve());
-		System.out.println("Teste = " +p.getTimeBudgetReserve());
+		System.out.println("Reserva de Contingência de Custo = " +p.getCostBudgetReserve());
+		System.out.println("Reserva de Contingência de Tempo = " +p.getTimeBudgetReserve());
 	}
 	
 	@INTERNAL_OPERATION

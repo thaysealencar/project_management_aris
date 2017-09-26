@@ -97,14 +97,18 @@ internalStateAMud(null).
 	
 	TimeReserve = TCB - DeltaTime;
 	CostReserve = CCB - DeltaCost;
-	-+timeContingencyBudget(TimeReserve);
-	-+costContingencyBudget(CostReserve);
+	
 	
 	.print("Time Reserve = ",TimeReserve);
 	.print("CostReserve = ", CostReserve);
 	.print("ACTIVITY ", Label, " DELTA TIME ", DeltaTime, " NEW TIME ", NewTime);
-	.print("ACTIVITY ", Label, " DELTA COST ", DeltaCost, " NEW COST ", NewCost).
+	.print("ACTIVITY ", Label, " DELTA COST ", DeltaCost, " NEW COST ", NewCost);
 	
+	//DeltaTime = 0;
+//	DeltaCost = 0;
+	
+	-+timeContingencyBudget(TimeReserve);
+	-+costContingencyBudget(CostReserve).
  //iActions.internalRiskControl(Title, Id, State, AddCost, AddTime, RemCost, RemTime, DAddCost, DAddTime, DRemCost, DRemTime, Instant, ActivityId, R);
  
  	
@@ -135,7 +139,7 @@ internalStateAMud(null).
 			iActions.internalStateARis(Id);
 		};
 		
-		//SOLUÇÃO DE CONTROLE VIA ESTADO INTERNO DO AGENTE
+		//SOLUCAO DE CONTROLE VIA ESTADO INTERNO DO AGENTE
 		iActions.internalStateARis(exit, InternalState);
 		-+internalStateARis(InternalState);
 		

@@ -8,6 +8,7 @@ import models.Activity;
 import models.Employee;
 import models.Project;
 import models.Risk;
+import models.Risk.RiskArea;
 import models.RiskExposure;
 
 /*
@@ -80,19 +81,21 @@ public class Scenario1_SBQS extends Simulate
 				p.addActivity(K);	p.addActivity(L);
 				p.addActivity(M);	p.addActivity(N);
 				
-				R1 = new Risk(1, "Definicao do Escopo", 0, 0, 0, 0, 0.3, 4,0);
-				p.addRisk(R1);
-				R2 = new Risk(2, "Definicao do Escopo2", 0, 0, 0, 0, 0.4, 5,0);
-				p.addRisk(R2);
-				R3 = new Risk(3, "Definicao do Escopo3", 0, 0, 0, 0, 0.2, 1,0);
-				p.addRisk(R3);
-				
 				E1 = new Employee(1, "Asdrubal", "Tempo");
 				p.addEmployee(E1);
 				E2 = new Employee(2, "Fransisca" , "Gerenciamento");
 				p.addEmployee(E2);
 				E3 = new Employee(3, "Miller", "RH");
 				p.addEmployee(E3);
+				
+				R1 = new Risk(1, "Definicao do Escopo", 0, 0, 0, 0, 0.3, 4,0, RiskArea.COST, 1,1);
+				p.addRisk(R1);
+				R2 = new Risk(2, "Definicao do Escopo2", 0, 0, 0, 0, 0.4, 5,0, RiskArea.SCHEDULE, 1,1);
+				p.addRisk(R2);
+				R3 = new Risk(3, "Definicao do Escopo3", 0, 0, 0, 0, 0.2, 1,0, RiskArea.COST, 1,1);
+				p.addRisk(R3);
+				
+				
 				
 				double aux1 = p.calculateTimeContingencyBudget(p.getContingencyPercentage());
 				p.setTimeBudgetReserve(aux1);

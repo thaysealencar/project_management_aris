@@ -126,33 +126,33 @@
 					-+impactTime(ImpactTime);                 //permitir que na mesma solicita��o possa acontecer as duas mudan�as !!		
 					!calculatePriority(P);
 					if (ImpactCost == 4){
-										!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State, "Impacto no custo � alto. Procure o Sponsor do projeto para negociar os custos.");
+										!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State, "Impacto no custo e alto. Procure o Sponsor do projeto para negociar os custos.");
 					} else{
 								if (ImpactCost == 5){
-										!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State, "Impacto no custo � muito alto. Procure o Sponsor do projeto para negociar os custos.");								
+										!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State, "Impacto no custo e muito alto. Procure o Sponsor do projeto para negociar os custos.");								
 								}
 						}
 					if (ImpactTime == 4){
-								!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State, "Impacto no tempo � alto. Verifique a possibilidade de paralelizar atividades.");
+								!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State, "Impacto no tempo e alto. Verifique a possibilidade de paralelizar atividades.");
 					} else{
 							if (ImpactTime == 5){
-									!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State,"Impacto no tempo � muito alto. Verifique a possibilidade de paralelizar atividades.");
+									!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State,"Impacto no tempo e muito alto. Verifique a possibilidade de paralelizar atividades.");
 							}
 					}
 					if (U == 4){
-						!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State, "A urg�ncia da mudan�a � alta, em breve se tornar� obsoleta.");
+						!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State, "A urgencia da mudanca e alta, em breve se tornara obsoleta.");
 					} else {
 						if (U == 5){
-								!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State,"A urg�ncia da mudan�a � muito alta, em breve se tornar� obsoleta.");
+								!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State,"A urgencia da mudanca e muito alta, em breve se tornara obsoleta.");
 						}
 					};
 					if (P > 27){
-							!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State, "Aten��o! Existe solicita��o de mudan�a com prioridade alta!");				
+							!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State, "Atencao! Existe solicitacao de mudanca com prioridade alta!");				
 					}					
 			}
 			else{
 					if (State == Obsolete){
-							!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State, "Solicita��o est� obsoleta.");
+							!recordLog(Id, DAddCost, DRemCost, DAddTime, DRemTime, State, "Solicitacao esta obsoleta.");
 					}
 			}					
 		};		//fim for
@@ -199,8 +199,7 @@
 	println(Str);
 	iActions.dataPackageAMud(Title, Id, State, AddCost, AddTime, RemCost, RemTime, DAddCost, DAddTime, DRemCost, DRemTime, K, ActivityId, DataPackage);
 	
-	.nth(2, DataPackage, X);
-	.print("Posicao 2 datapackage = ", X);
+	
 	.send(aRis, tell, DataPackage);
 	
 	if (DAddCost > 0){

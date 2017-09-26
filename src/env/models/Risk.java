@@ -10,6 +10,9 @@ public class Risk implements Comparable<Risk> {
 	private int timeI; // time impact
 	private double scopeP; // scope probability
 	private int scopeI;  // scope impact
+	private RiskArea riskArea;
+	private int handlingAction; //1,2,3,4 (prevenir, aceitar, mitigar, transferir)
+	private int idEmployee;
 	
 	public Risk()
 	{
@@ -22,9 +25,11 @@ public class Risk implements Comparable<Risk> {
 		scopeP = 0;
 		scopeI = 0;
 		totalRiskExposure = 0;
+		handlingAction = 1;
+		idEmployee = 1; //gerente
 	}
 	
-	public Risk(int id, String name, double costP, int costI, double timeP, int timeI, double scopeP,int scopeI, double totalRiskExposure) {
+	public Risk(int id, String name, double costP, int costI, double timeP, int timeI, double scopeP,int scopeI, double totalRiskExposure, RiskArea riskArea, int handlingAction,int idEmployee) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -35,7 +40,11 @@ public class Risk implements Comparable<Risk> {
 		this.scopeP = scopeP;
 		this.scopeI = scopeI;
 		this.totalRiskExposure = totalRiskExposure;
+		this.riskArea = riskArea;
+		this.handlingAction = handlingAction;
+		this.idEmployee = idEmployee;
 	}
+	
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -114,6 +123,20 @@ public class Risk implements Comparable<Risk> {
             return -1;
         }
 		return 0;
+	}
+	public enum RiskArea {
+		SCOPE(1),
+		COST(2),
+		SCHEDULE(3),
+		TECNICAL(4),
+		STAFF(5),
+		COSTUMER(5);
+		
+		 public int areaType;
+		 RiskArea(int valor) {
+		    areaType = valor;
+		 }
+		
 	}
 
 }
