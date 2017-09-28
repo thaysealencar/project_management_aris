@@ -3,6 +3,8 @@
 /* Initial beliefs and rules */
 internalStateARis(null).
 internalStateAMud(null).
+useTimeContingencyBudget(0). //
+useCostContingencyBudget(0).
 /* Initial goals */
 !monitoring.
 !create.
@@ -35,7 +37,7 @@ internalStateAMud(null).
 		.wait(100);
 		!create.	
 /*Message */
-+!kqml_received(Sender, tell, Variables, Response) : instant(K)  & project(P) & timeContingencyBudget(TCB) & costContingencyBudget(CCB)<-
++!kqml_received(Sender, tell, Variables, Response) : instant(K)  & project(P) & risks(RiskList) & timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudget(UTCB) & useCostContingencyBudget(UCCB)<-
  		
  	-+internalStateAMud(Variables);
 	.nth(0, Variables, Title);
@@ -68,47 +70,74 @@ internalStateAMud(null).
 	
 	
 		if(TimeAdd>0){ //aumenta o tempo de uma atividade
-			DeltaTime = ETimeAP*TimeAdd;
+			DeltaTimeActivity = ETimeAP*TimeAdd;
 			
-			NewTime = DeltaTime + ETimeAP;
+			NewTimeActivity = DeltaTimeActivity + ETimeAP;
 		}else{
 			if(TimeRem>0){ 
-				DeltaTime = ETimeAP*TimeRem;
+				DeltaTimeActivity = ETimeAP*TimeRem;
 				
-				NewTime = ETimeAP - DeltaTime;
+				NewTimeActivity = ETimeAP - DeltaTimeActivity;
 			}
 			
 		}	
 		
 		
 		if(CostAdd>0){ //diminui o tempo de uma atividade
-				DeltaCost = ECostAP*CostAdd;
+				DeltaCostActivity = ECostAP*CostAdd;
 				
-				NewCost = DeltaCost + ECostAP;
+				NewCostActivity = DeltaCostActivity + ECostAP;
 		}else{
 				
 			if(CostRem>0){
-				DeltaCost = ECostAP*CostRem;
+				DeltaCostActivity = ECostAP*CostRem;
 				
-				NewCost =  ECostA - DeltaCost;
+				NewCostActivity =  ECostA - DeltaCostActivity;
 			}
 			
 		}
-	
-	TimeReserve = TCB - DeltaTime;
-	CostReserve = CCB - DeltaCost;
-	
-	
-	.print("Time Reserve = ",TimeReserve);
-	.print("CostReserve = ", CostReserve);
-	.print("ACTIVITY ", Label, " DELTA TIME ", DeltaTime, " NEW TIME ", NewTime);
-	.print("ACTIVITY ", Label, " DELTA COST ", DeltaCost, " NEW COST ", NewCost);
-	
-	//DeltaTime = 0;
-//	DeltaCost = 0;
-	
+	// ATRIBUINDO VALORES
+	TimeReserve = TCB - DeltaTimeActivity; // Atualizando o valor da Reserva de Tempo 
+	CostReserve = CCB - DeltaCostActivity;
+	UseTimeContingencyBudget = UTCB  + DeltaTimeActivity;
+	UseCostContingencyBudget = UCCB + DeltaCostActivity;
+	PURCT = UseTimeContingencyBudget/ TCB; // Porcentagem do uso da reserva de contingencia de tempo
+	PURCC = UseCostContingencyBudget/ CCB; // Porcentagem do uso da reserva de contingencia de custo
+	//
+	if (RiskList \== null){
+		cartago.invoke_obj(RiskList, size, Size);
+		for(.range(I, 0, Size-1)){
+			
+			cartago.invoke_obj(RiskList, get(I), Risk);
+			cartago.invoke_obj(Risk, getCostP, CostP);
+			cartago.invoke_obj(Risk, getCostI, CostI);
+			cartago.invoke_obj(Risk, getTimeP, TimeP);
+			cartago.invoke_obj(Risk, getTimeI, TimeI);
+			
+			if((CostAdd\==0 | CostRem\==0) & CostP \== 0 & CostI \== 0){
+				NewCostP = (PURCT*(1-CostP)) + CostP;
+			}
+			if((TimeAdd\== 0 | TimeRem\==0) & TimeP \== 0 & TimeI \==0){
+				NewTimeP = (PURCC*(1-TimeP)) + TimeP;
+			}
+		.print("CostP = ", CostP);
+		.print("NewCostP =", NewCostP);
+		//chamar calculateRiskExposure
+		}
+		//reordenar o vetor de riscos
+		
+	};
+	// ATUALIZANDO CRENÇAS
 	-+timeContingencyBudget(TimeReserve);
-	-+costContingencyBudget(CostReserve).
+	-+costContingencyBudget(CostReserve);
+	-+useTimeContingencyBudget(UseTimeContingencyBudget);
+	-+useCostContingencyBudget(UseCostContingencyBudget);
+	
+	.print("Actual Time Reserve = ",TimeReserve);
+	.print("Actual CostReserve = ", CostReserve);
+	.print("ACTIVITY ", Label, " DELTA TIME ", DeltaTimeActivity, " NEW TIME ", NewTimeActivity);
+	.print("ACTIVITY ", Label, " DELTA COST ", DeltaCostActivity, " NEW COST ", NewCostActivity).
+	
  //iActions.internalRiskControl(Title, Id, State, AddCost, AddTime, RemCost, RemTime, DAddCost, DAddTime, DRemCost, DRemTime, Instant, ActivityId, R);
  
  	
@@ -150,10 +179,6 @@ internalStateAMud(null).
 			.length(InternalState, LengthRiksList);
 			.print("Recebi uma lista ordenada do meu estado interno. Ela contem  ", LengthRiksList," riscos.");
 			
-			for(.member(IdR, InternalState))
-			{
-				.print(IdR);
-			}	
 			
 		}	
 			

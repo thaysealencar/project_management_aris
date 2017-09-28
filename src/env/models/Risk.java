@@ -16,8 +16,8 @@ public class Risk implements Comparable<Risk> {
 	
 	public Risk()
 	{
-		id				= 0;
-		name			= "-";
+		id	= 0;
+		name = "-";
 		costP = 0;
 		costI = 0;
 		timeP = 0;

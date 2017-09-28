@@ -199,7 +199,7 @@
 	println(Str);
 	iActions.dataPackageAMud(Title, Id, State, AddCost, AddTime, RemCost, RemTime, DAddCost, DAddTime, DRemCost, DRemTime, K, ActivityId, DataPackage);
 	
-	
+	.wait(1000);
 	.send(aRis, tell, DataPackage);
 	
 	if (DAddCost > 0){
