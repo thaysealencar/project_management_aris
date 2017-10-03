@@ -113,6 +113,7 @@ public class Project
 	public Object[] getActivitiesByInstant()
 	{
 		ArrayList<Activity> activs = new ArrayList<Activity>();
+		
 		for (Activity a : activities)
 		{
 			if(a.isRunning(instant))

@@ -37,21 +37,27 @@
 		!monitoringEnvChanges.		
 		
 
-+tick : instant(K) & activities(A) <-                                      //Solicitações de mudanças para o cenário 1 (SBQS) 
-	if (K == 50){		
-		cartago.invoke_obj(A, get(8), TaskI);
-		cartago.invoke_obj(A, get(7), TaskH);
-		cartago.invoke_obj("models.TypeChange", getAddCost, Cost);
++tick : instant(K) & activities(A) <-   
+    if (K == 40){
+    	cartago.invoke_obj(A, get(8), TaskI);
+    	cartago.invoke_obj("models.TypeChange", getAddCost, Cost);
 		cartago.invoke_obj("models.TypeChange", getAddTime, Time);
 		cartago.invoke_obj("models.StateOfChange", getRequested, State);
-				
+		
 		cartago.new_obj("models.Change", [1,"Mudanças no custo e no tempo", K, TaskI, State], Ci);		
 		cartago.invoke_obj(Ci, addRequest(Cost, 11.903));
 		cartago.invoke_obj(Ci, addRequest(Time, 11.8));
 		cartago.invoke_obj(TaskI, getLabel, LabelI);
 		println("Solicitando no instante ", K, " um acréscimo de 11,9% no custo e de 11,8% no tempo para a atividade ", LabelI);		
 		requestChange(Ci);
+    }
+	if (K == 50){		
 		
+		cartago.invoke_obj(A, get(7), TaskH);
+		cartago.invoke_obj("models.TypeChange", getAddCost, Cost);
+		cartago.invoke_obj("models.TypeChange", getAddTime, Time);
+		cartago.invoke_obj("models.StateOfChange", getRequested, State);
+				
 		cartago.new_obj("models.Change", [2,"Mudanças no custo e no tempo", K, TaskH, State], Ch);		
 		cartago.invoke_obj(Ch, addRequest(Cost, 5.95));
 		cartago.invoke_obj(Ch, addRequest(Time, 5.9));

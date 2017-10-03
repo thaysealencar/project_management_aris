@@ -97,12 +97,12 @@ useCostContingencyBudget(0).
 			
 		}
 	// ATRIBUINDO VALORES
-	TimeReserve = TCB - DeltaTimeActivity; // Atualizando o valor da Reserva de Tempo 
+	TimeReserve = TCB - DeltaTimeActivity; // Atualizando o valor da Reserva de Tempo, será atualizada quando esses valores da reserva forem descontados no projeto
 	CostReserve = CCB - DeltaCostActivity;
 	UseTimeContingencyBudget = UTCB  + DeltaTimeActivity;
 	UseCostContingencyBudget = UCCB + DeltaCostActivity;
-	PURCT = UseTimeContingencyBudget/ TCB; // Porcentagem do uso da reserva de contingencia de tempo
-	PURCC = UseCostContingencyBudget/ CCB; // Porcentagem do uso da reserva de contingencia de custo
+	PUTCB = UseTimeContingencyBudget/ TCB; // Porcentagem do uso da reserva de contingencia de tempo
+	PUCCB = UseCostContingencyBudget/ CCB; // Porcentagem do uso da reserva de contingencia de custo
 	//
 	if (RiskList \== null){
 		cartago.invoke_obj(RiskList, size, Size);
@@ -115,11 +115,14 @@ useCostContingencyBudget(0).
 			cartago.invoke_obj(Risk, getTimeI, TimeI);
 			
 			if((CostAdd\==0 | CostRem\==0) & CostP \== 0 & CostI \== 0){
-				NewCostP = (PURCT*(1-CostP)) + CostP;
+				NewCostP = (PUCCB*(1-CostP)) + CostP;
+				cartago.invoke_obj(Risk, setCostP(NewCostP)); //
 			}
 			if((TimeAdd\== 0 | TimeRem\==0) & TimeP \== 0 & TimeI \==0){
-				NewTimeP = (PURCC*(1-TimeP)) + TimeP;
+				NewTimeP = (PUTCB*(1-TimeP)) + TimeP;
+				cartago.invoke_obj(Risk, setTimeP(NewTimeP));
 			}
+			
 		.print("CostP = ", CostP);
 		.print("NewCostP =", NewCostP);
 		//chamar calculateRiskExposure
