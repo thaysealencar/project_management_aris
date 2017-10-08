@@ -3,8 +3,11 @@
 /* Initial beliefs and rules */
 internalStateARis(null).
 internalStateAMud(null).
-useTimeContingencyBudget(0). //
+useTimeContingencyBudget(0).
 useCostContingencyBudget(0).
+putcb(null).
+puccb(null).
+
 /* Initial goals */
 !monitoring.
 !create.
@@ -37,8 +40,9 @@ useCostContingencyBudget(0).
 		.wait(100);
 		!create.	
 /*Message */
-+!kqml_received(Sender, tell, Variables, Response) : instant(K)  & project(P) & risks(RiskList) & timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudget(UTCB) & useCostContingencyBudget(UCCB)<-
- 		
++!kqml_received(Sender, tell, Variables, Response) : instant(K)  & project(P) & risks(RiskList) & 
+timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudget(UTCB) & useCostContingencyBudget(UCCB) <-
+ 		//putcb(PUTCB) & puccb(PUCCB)
  	-+internalStateAMud(Variables);
 	.nth(0, Variables, Title);
 	.nth(1, Variables, Id);
@@ -70,14 +74,18 @@ useCostContingencyBudget(0).
 	
 	
 		if(TimeAdd>0){ //aumenta o tempo de uma atividade
-			DeltaTimeActivity = ETimeAP*TimeAdd;
+			DeltaTimeActivity = ETimeAP*TimeAdd; //percentual de variação
 			
-			NewTimeActivity = DeltaTimeActivity + ETimeAP;
+			NewTimeActivity = ETimeAP + DeltaTimeActivity; //novo tempo considerando o percentual de variação
+			
+			UseTimeContingencyBudget = UTCB  + DeltaTimeActivity;
 		}else{
 			if(TimeRem>0){ 
 				DeltaTimeActivity = ETimeAP*TimeRem;
 				
 				NewTimeActivity = ETimeAP - DeltaTimeActivity;
+				
+				UseTimeContingencyBudget = UTCB - DeltaTimeActivity;
 			}
 			
 		}	
@@ -87,20 +95,24 @@ useCostContingencyBudget(0).
 				DeltaCostActivity = ECostAP*CostAdd;
 				
 				NewCostActivity = DeltaCostActivity + ECostAP;
+				
+				UseCostContingencyBudget = UCCB + DeltaCostActivity;
 		}else{
 				
 			if(CostRem>0){
 				DeltaCostActivity = ECostAP*CostRem;
 				
 				NewCostActivity =  ECostA - DeltaCostActivity;
+				
+				UseCostContingencyBudget = UCCB - DeltaCostActivity;
 			}
 			
 		}
 	// ATRIBUINDO VALORES
-	TimeReserve = TCB - DeltaTimeActivity; // Atualizando o valor da Reserva de Tempo, ser� atualizada quando esses valores da reserva forem descontados no projeto
-	CostReserve = CCB - DeltaCostActivity;
-	UseTimeContingencyBudget = UTCB  + DeltaTimeActivity;
-	UseCostContingencyBudget = UCCB + DeltaCostActivity;
+	TimeReserve = TCB-DeltaTimeActivity; // Atualizando o valor da Reserva de Tempo, ser� atualizada quando esses valores da reserva forem descontados no projeto
+	CostReserve = CCB-DeltaCostActivity;
+	
+	//Incluir tratamento para o caso da UseTimeContingencyBudget=0
 	PUTCB = UseTimeContingencyBudget/ TCB; // Porcentagem do uso da reserva de contingencia de tempo
 	PUCCB = UseCostContingencyBudget/ CCB; // Porcentagem do uso da reserva de contingencia de custo
 	//
@@ -116,7 +128,7 @@ useCostContingencyBudget(0).
 			
 			if((CostAdd\==0 | CostRem\==0) & CostP \== 0 & CostI \== 0){
 				NewCostP = (PUCCB*(1-CostP)) + CostP;
-				cartago.invoke_obj(Risk, setCostP(NewCostP)); //
+				cartago.invoke_obj(Risk, setCostP(NewCostP));
 			}
 			if((TimeAdd\== 0 | TimeRem\==0) & TimeP \== 0 & TimeI \==0){
 				NewTimeP = (PUTCB*(1-TimeP)) + TimeP;
@@ -130,14 +142,21 @@ useCostContingencyBudget(0).
 		//reordenar o vetor de riscos
 		
 	};
-	// ATUALIZANDO CREN�AS
+	// ATUALIZANDO CREN�AS
 	-+timeContingencyBudget(TimeReserve);
 	-+costContingencyBudget(CostReserve);
 	-+useTimeContingencyBudget(UseTimeContingencyBudget);
 	-+useCostContingencyBudget(UseCostContingencyBudget);
-	
+
 	.print("Actual Time Reserve = ",TimeReserve);
 	.print("Actual CostReserve = ", CostReserve);
+	
+	.print("Actual PUTCB = ", PUTCB);
+	.print("Actual PUCCB = ", PUCCB);
+	
+	-+putcb(PUTCB);
+	-+puccb(PUCCB);
+	
 	.print("ACTIVITY ", Label, " DELTA TIME ", DeltaTimeActivity, " NEW TIME ", NewTimeActivity);
 	.print("ACTIVITY ", Label, " DELTA COST ", DeltaCostActivity, " NEW COST ", NewCostActivity).
 	
@@ -181,8 +200,6 @@ useCostContingencyBudget(0).
 		if (InternalState \== null){
 			.length(InternalState, LengthRiksList);
 			.print("Recebi uma lista ordenada do meu estado interno. Ela contem  ", LengthRiksList," riscos.");
-			
-			
 		}	
 			
 	}.
