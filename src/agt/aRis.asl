@@ -5,8 +5,6 @@ internalStateARis(null).
 internalStateAMud(null).
 useTimeContingencyBudget(0).
 useCostContingencyBudget(0).
-putcb(null).
-puccb(null).
 
 /* Initial goals */
 !monitoring.
@@ -41,8 +39,8 @@ puccb(null).
 		!create.	
 /*Message */
 +!kqml_received(Sender, tell, Variables, Response) : instant(K)  & project(P) & risks(RiskList) & 
-timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudget(UTCB) & useCostContingencyBudget(UCCB) <-
- 		//putcb(PUTCB) & puccb(PUCCB)
+timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudget(UTCB) & useCostContingencyBudget(UCCB)<-
+
  	-+internalStateAMud(Variables);
 	.nth(0, Variables, Title);
 	.nth(1, Variables, Id);
@@ -112,12 +110,19 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	TimeReserve = TCB-DeltaTimeActivity; // Atualizando o valor da Reserva de Tempo, ser� atualizada quando esses valores da reserva forem descontados no projeto
 	CostReserve = CCB-DeltaCostActivity;
 	
-	//Incluir tratamento para o caso da UseTimeContingencyBudget=0
-	PUTCB = UseTimeContingencyBudget/ TCB; // Porcentagem do uso da reserva de contingencia de tempo
-	PUCCB = UseCostContingencyBudget/ CCB; // Porcentagem do uso da reserva de contingencia de custo
-	//
+	setPuccb(UseCostContingencyBudget/CCB);
+	
+	setPutcb(UseTimeContingencyBudget/TCB);
+
+
 	if (RiskList \== null){
 		cartago.invoke_obj(RiskList, size, Size);
+		
+		getPuccb(Puccb);
+		.print("New PUCCB", Puccb);
+		getPutcb(Putcb);
+	   .print("New PUTCB", Putcb);
+	
 		for(.range(I, 0, Size-1)){
 			
 			cartago.invoke_obj(RiskList, get(I), Risk);
@@ -127,42 +132,42 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 			cartago.invoke_obj(Risk, getTimeI, TimeI);
 			
 			if((CostAdd\==0 | CostRem\==0) & CostP \== 0 & CostI \== 0){
-				NewCostP = (PUCCB*(1-CostP)) + CostP;
+				setNewCostP(Puccb*(1-CostP) + CostP);
+				getNewCostP(NewCostP);
+				
 				cartago.invoke_obj(Risk, setCostP(NewCostP));
+				setNewCostP(0.0);
 			}
 			if((TimeAdd\== 0 | TimeRem\==0) & TimeP \== 0 & TimeI \==0){
-				NewTimeP = (PUTCB*(1-TimeP)) + TimeP;
+				setNewTimeP(Putcb*(1-TimeP) + TimeP);
+				getNewTimeP(NewTimeP);
+				
 				cartago.invoke_obj(Risk, setTimeP(NewTimeP));
+				setNewTimeP(0.0);
 			}
 			
 		.print("CostP = ", CostP);
 		.print("NewCostP =", NewCostP);
+		
 		//chamar calculateRiskExposure
 		}
 		//reordenar o vetor de riscos
 		
 	};
-	// ATUALIZANDO CREN�AS
+	
+	setPuccb(null);
+	setPutcb(null);
+	
+	.print("Actual CostReserve = ", CostReserve);
+	.print("Actual Time Reserve = ",TimeReserve);
+	.print("ACTIVITY ", Label, " DELTA COST ", DeltaCostActivity, " NEW COST ", NewCostActivity);
+	.print("ACTIVITY ", Label, " DELTA TIME ", DeltaTimeActivity, " NEW TIME ", NewTimeActivity);
+	
 	-+timeContingencyBudget(TimeReserve);
 	-+costContingencyBudget(CostReserve);
 	-+useTimeContingencyBudget(UseTimeContingencyBudget);
-	-+useCostContingencyBudget(UseCostContingencyBudget);
-
-	.print("Actual Time Reserve = ",TimeReserve);
-	.print("Actual CostReserve = ", CostReserve);
+	-+useCostContingencyBudget(UseCostContingencyBudget).
 	
-	.print("Actual PUTCB = ", PUTCB);
-	.print("Actual PUCCB = ", PUCCB);
-	
-	-+putcb(PUTCB);
-	-+puccb(PUCCB);
-	
-	.print("ACTIVITY ", Label, " DELTA TIME ", DeltaTimeActivity, " NEW TIME ", NewTimeActivity);
-	.print("ACTIVITY ", Label, " DELTA COST ", DeltaCostActivity, " NEW COST ", NewCostActivity).
-	
- //iActions.internalRiskControl(Title, Id, State, AddCost, AddTime, RemCost, RemTime, DAddCost, DAddTime, DRemCost, DRemTime, Instant, ActivityId, R);
- 
- 	
 
 +!monitoringRisks : risks(RiskList) <-
 	if (RiskList \== null){
