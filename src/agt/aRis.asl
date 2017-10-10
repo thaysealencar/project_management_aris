@@ -5,6 +5,7 @@ internalStateARis(null).
 internalStateAMud(null).
 useTimeContingencyBudget(0).
 useCostContingencyBudget(0).
+x(Null).
 
 /* Initial goals */
 !monitoring.
@@ -39,7 +40,7 @@ useCostContingencyBudget(0).
 		!create.	
 /*Message */
 +!kqml_received(Sender, tell, Variables, Response) : instant(K)  & project(P) & risks(RiskList) & 
-timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudget(UTCB) & useCostContingencyBudget(UCCB)<-
+timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudget(UTCB) & useCostContingencyBudget(UCCB) & x(X)<-
 
  	-+internalStateAMud(Variables);
 	.nth(0, Variables, Title);
@@ -119,7 +120,7 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 		cartago.invoke_obj(RiskList, size, Size);
 		
 		getPuccb(Puccb);
-		.print("New PUCCB", Puccb);
+	   .print("New PUCCB", Puccb);
 		getPutcb(Putcb);
 	   .print("New PUTCB", Putcb);
 	
@@ -151,12 +152,12 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 		
 		//chamar calculateRiskExposure
 		}
-		//reordenar o vetor de riscos
 		
+		//reordenar o vetor de riscos
+		.print(X);
+		setPuccbToZero(X);
+		setPutcbToZero(X);
 	};
-	
-	setPuccb(null);
-	setPutcb(null);
 	
 	.print("Actual CostReserve = ", CostReserve);
 	.print("Actual Time Reserve = ",TimeReserve);

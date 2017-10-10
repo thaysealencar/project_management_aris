@@ -19,8 +19,8 @@ public class EnvironmentRiskControl extends Artifact {
 	void init() {
 		defineObsProperty("puccb", 0.0);
 		defineObsProperty("putcb", 0.0);
-		//defineObsProperty("newCostP", 0.0);
-		//defineObsProperty("newTimeP", 0.0);
+		defineObsProperty("newCostP", 0.0);
+		defineObsProperty("newTimeP", 0.0);
 	}
 	
 	@OPERATION
@@ -31,6 +31,11 @@ public class EnvironmentRiskControl extends Artifact {
 	@OPERATION
 	void setPuccb(double puccb) {
 		this.puccb = puccb;
+		getObsProperty("puccb").updateValue(puccb);
+	}
+	@OPERATION
+	void setPuccbToZero(OpFeedbackParam<Double> puccb) {
+		this.puccb = (Double) null;
 		getObsProperty("puccb").updateValue(puccb);
 	}
 	
@@ -48,6 +53,11 @@ public class EnvironmentRiskControl extends Artifact {
 	}
 	
 	@OPERATION
+	void setPutcbToZero(OpFeedbackParam<Double> putcb) {
+		this.putcb = (Double) null;
+		getObsProperty("putcb").updateValue(putcb);
+	}
+	@OPERATION
 	void getPutcb(OpFeedbackParam<Double> putcbAux)
 	{
 		putcbAux.set(this.putcb);
@@ -57,6 +67,7 @@ public class EnvironmentRiskControl extends Artifact {
 	@OPERATION
 	void setNewCostP(double newCostP) {
 		this.newCostP = newCostP;
+		getObsProperty("newCostP").updateValue(newCostP);
 	}
 	
 	@OPERATION
@@ -69,6 +80,7 @@ public class EnvironmentRiskControl extends Artifact {
 	@OPERATION
 	void setNewTimeP(double newTimeP) {
 		this.newTimeP = newTimeP;
+		getObsProperty("newTimeP").updateValue(newTimeP);
 	}
 	
 	@OPERATION
