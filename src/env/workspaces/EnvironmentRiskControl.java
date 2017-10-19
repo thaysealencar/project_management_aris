@@ -14,7 +14,8 @@ import models.Risk;
 public class EnvironmentRiskControl extends Artifact {
 	
 	private Project project;
-	double puccb, putcb , newCostP, newTimeP;
+	double newCostP, newTimeP;
+	Double puccb, putcb;
 	
 	void init() {
 		defineObsProperty("puccb", 0.0);
@@ -29,16 +30,16 @@ public class EnvironmentRiskControl extends Artifact {
 	}
 	
 	@OPERATION
-	void setPuccb(double puccb) {
+	void setPuccb(Double puccb) {
 		this.puccb = puccb;
 		getObsProperty("puccb").updateValue(puccb);
 	}
 	@OPERATION
-	void setPuccbToZero(OpFeedbackParam<Double> puccb) {
-		this.puccb = (Double) null;
+	void setPuccbToZero(Double puccb) {
+		this.puccb = puccb;
 		getObsProperty("puccb").updateValue(puccb);
 	}
-	
+
 	@OPERATION
 	void getPuccb(OpFeedbackParam<Double> puccbAux)
 	{
@@ -47,14 +48,14 @@ public class EnvironmentRiskControl extends Artifact {
 	
 	
 	@OPERATION
-	void setPutcb(double putcb) {
+	void setPutcb(Double putcb) {
 		this.putcb = putcb;
 		getObsProperty("putcb").updateValue(putcb);
 	}
 	
 	@OPERATION
-	void setPutcbToZero(OpFeedbackParam<Double> putcb) {
-		this.putcb = (Double) null;
+	void setPutcbToZero(Double putcb) {
+		this.putcb = putcb;
 		getObsProperty("putcb").updateValue(putcb);
 	}
 	@OPERATION

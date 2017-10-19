@@ -85,14 +85,14 @@ public class Scenario1_SBQS extends Simulate
 				p.addEmployee(E1);
 				E2 = new Employee(2, "Fransisca" , "Gerenciamento");
 				p.addEmployee(E2);
-				E3 = new Employee(3, "Miller", "RH");
+				E3 = new Employee(3, "Muller", "RH");
 				p.addEmployee(E3);
 				
-				R1 = new Risk(1, "Definicao do Custo", 0.3, 4, 0, 0, 0, 0,0, RiskArea.COST, 1,1);
+				R1 = new Risk(1, "Definicao do Custo", 0.3, 4, 0.3, 4, 0, 0, 0, RiskArea.COST, 1,1);
 				p.addRisk(R1);
-				R2 = new Risk(2, "Definicao do Custo2", 0.4, 5, 0, 0, 0, 0,0, RiskArea.SCHEDULE, 1,1);
+				R2 = new Risk(2, "Definicao do Custo2", 0.4, 5, 0, 0, 0, 0, 0, RiskArea.SCHEDULE, 1,1);
 				p.addRisk(R2);
-				R3 = new Risk(3, "Definicao do Custo3", 0.2, 1, 0, 0, 0, 0,0, RiskArea.COST, 1,1);
+				R3 = new Risk(3, "Definicao do Custo3", 0.2, 1, 0, 0, 0, 0, 0, RiskArea.COST, 1,1);
 				p.addRisk(R3);
 				
 				

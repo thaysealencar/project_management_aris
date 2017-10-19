@@ -5,8 +5,8 @@ internalStateARis(null).
 internalStateAMud(null).
 useTimeContingencyBudget(0).
 useCostContingencyBudget(0).
-x(Null).
-
+x(null).
+changeRequest(false).
 /* Initial goals */
 !monitoring.
 !create.
@@ -40,8 +40,11 @@ x(Null).
 		!create.	
 /*Message */
 +!kqml_received(Sender, tell, Variables, Response) : instant(K)  & project(P) & risks(RiskList) & 
-timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudget(UTCB) & useCostContingencyBudget(UCCB) & x(X)<-
+timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudget(UTCB) & useCostContingencyBudget(UCCB) & x(X) & changeRequest(CR)<-
 
+	-+changeRequest(true);
+	.print("Change Request = ", CR);
+	
 	.print("Irei avaliar o impacto desta solicitcao de mudanca nos riscos do projeto!");
  	-+internalStateAMud(Variables);
 	.nth(0, Variables, Title);
@@ -58,6 +61,20 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	.nth(11, Variables, Instant);
 	.nth(12, Variables, ActivityId);
 	
+//	.print("Titulo = ", title);
+//	.print("Id = ", Id);
+//	.print("State = ", State);
+//	.print("AddCost = ", AddCost);
+//	.print("AddTime = ", AddTime);
+//	.print("RemCost = ", RemCost);
+//	.print("RemTime = ", RemTime);
+//	.print("DAddCost = ", DAddCost);
+//	.print("DAddTime = ", DAddTime);
+//	.print("DRemCost = ", DRemCost);
+//	.print("DRemTime = ", DRemTime);
+//	.print("Instant = ", Instant);
+//	.print("ActivityId = ", ActivityId);
+	
 	getActivity(ActivityId, A);
 	
 	cartago.invoke_obj(A, getLabel, Label);
@@ -69,14 +86,14 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	
 	TimeAdd  = DAddTime/100;
 	CostAdd  = DAddCost/100;
-	CostRem  = RemCost/100;
-	TimeRem  = RemTime/100;
+	CostRem  = DRemCost/100;
+	TimeRem  = DRemTime/100;
 	
 	
 		if(TimeAdd>0){ //aumenta o tempo de uma atividade
-			DeltaTimeActivity = ETimeAP*TimeAdd; //percentual de variação
+			DeltaTimeActivity = ETimeAP*TimeAdd; //percentual de variacao
 			
-			NewTimeActivity = ETimeAP + DeltaTimeActivity; //novo tempo considerando o percentual de variação
+			NewTimeActivity = ETimeAP + DeltaTimeActivity; //novo tempo considerando o percentual de variacao
 			
 			UseTimeContingencyBudget = UTCB  + DeltaTimeActivity;
 		}else{
@@ -139,24 +156,24 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 			if((CostAdd\==0 | CostRem\==0) & CostP \== 0 & CostI \== 0){
 				setNewCostP(Puccb*(1-CostP) + CostP);
 				getNewCostP(NewCostP);
-				.print("Risco ",RiskId,", PC inicial = ", CostP,", PC após mudança =", NewCostP);
+				.print("Risco ",RiskId,", PC inicial = ", CostP,", PC ap�s mudanca =", NewCostP);
 				cartago.invoke_obj(Risk, setCostP(NewCostP));
 				setNewCostP(0.0);
 			}
-			if((TimeAdd\== 0 | TimeRem\==0) & TimeP \== 0 & TimeI \==0){ //NAO ESTÁ ENTRANDO AQUI MESMO QUANDO A MUDANÇA ALTERA O TEMPO!!!!
+			
+			if((TimeAdd\== 0 | TimeRem\==0) & TimeP \== 0 & TimeI \==0){ //NAO ESTAO ENTRANDO AQUI MESMO QUANDO A MUDANCA ALTERA O TEMPO!!!!
 				setNewTimeP(Putcb*(1-TimeP) + TimeP);
 				getNewTimeP(NewTimeP);
-				.print("Risco ",RiskId,", PT inicial = ", TimeP,", PT após mudança =", NewTimeP);
+				.print("Risco ",RiskId,", PT inicial = ", TimeP,", PT ap�s mudanca =", NewTimeP);
 		
 				cartago.invoke_obj(Risk, setTimeP(NewTimeP));
 				setNewTimeP(0.0);
 			}
 		
-		//chamar calculateRiskExposure
 		}
+		-+changeRequest(false);
 		.print("Percentual de reserva de contingencia de custo que sera usado= ", Puccb);
 		.print("Percentual de reserva de contingencia de tempo que sera usada=", Putcb);
-		//reordenar o vetor de riscos
 		.print(X);
 		setPuccbToZero(X);
 		setPutcbToZero(X);
@@ -168,7 +185,6 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	-+costContingencyBudget(CostReserve);
 	-+useTimeContingencyBudget(UseTimeContingencyBudget);
 	-+useCostContingencyBudget(UseCostContingencyBudget).
-	
 
 +!monitoringRisks : risks(RiskList) <-
 	if (RiskList \== null){
@@ -185,7 +201,7 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 			-+costI(CI);
 			cartago.invoke_obj(Risk, getTimeP, TP);
 			-+timeP(TP);
-			cartago.invoke_obj(Risk, getCostP, TI);
+			cartago.invoke_obj(Risk, getTimeI, TI);
 			-+timeI(TI);
 			cartago.invoke_obj(Risk, getScopeP, SP);
 			-+scopeP(SP);   
@@ -210,8 +226,11 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 			
 	}.
 
-+tick : instant(K) <-
-	!monitoringRisks.
++tick : instant(K) & changeRequest(CR) <-
+	if(CR == false){
+		!monitoringRisks;
+	}.
+		
 	
 	
 +project(P) <- 
@@ -221,7 +240,11 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	.print("ARis observando o Projeto ", IdProject).
 
 +!calculateRiskExposure(Id): costP(CP) & costI(CI) & timeP(TP) & timeI(TI) & scopeP(SP) & scopeI(SI) & risk(Risk)<-
-	TotalRiskExposure = (CP*CI)+(TP*TI)+(SP*SI);
+	TotalRiskExposure = CP*CI+TP*TI+SP*SI;
+//	.print("CP = ", CP);
+//	.print("CI = ", CI);
+//	.print("TP = ", TP);
+//	.print("TI = ", TI);
 	cartago.invoke_obj(Risk, setTotalRiskExposure(TotalRiskExposure));
 	//.print("Risk = ",Id," RE = ",TotalRiskExposure); 
 	-+totalRiskEsposure(TotalRiskExposure).	
