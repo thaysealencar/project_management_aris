@@ -7,89 +7,40 @@ import java.util.Collections;
 
 import cartago.Artifact;
 import cartago.OPERATION;
-import cartago.OpFeedbackParam;
+import models.EnvironmentProperties;
 import models.Project;
 import models.Risk;
 
 public class EnvironmentRiskControl extends Artifact {
 	
 	private Project project;
-	double newCostP, newTimeP;
-	Double puccb, putcb;
+	private EnvironmentProperties environmentProperties = new EnvironmentProperties(0.0,0.0,0.0,0.0);
 	
 	void init() {
-		defineObsProperty("puccb", 0.0);
-		defineObsProperty("putcb", 0.0);
-		defineObsProperty("newCostP", 0.0);
-		defineObsProperty("newTimeP", 0.0);
-	}
-	
-	@OPERATION
-	void setProject(Project p) {
-		this.project = p;
-	}
-	
-	@OPERATION
-	void setPuccb(Double puccb) {
-		this.puccb = puccb;
-		getObsProperty("puccb").updateValue(puccb);
-	}
-	@OPERATION
-	void setPuccbToZero(Double puccb) {
-		this.puccb = puccb;
-		getObsProperty("puccb").updateValue(puccb);
+		defineObsProperty("environmentProperties", environmentProperties);
 	}
 
 	@OPERATION
-	void getPuccb(OpFeedbackParam<Double> puccbAux)
-	{
-		puccbAux.set(this.puccb);
+	public Project getProject() {
+		return project;
 	}
-	
-	
+
 	@OPERATION
-	void setPutcb(Double putcb) {
-		this.putcb = putcb;
-		getObsProperty("putcb").updateValue(putcb);
+	public void setProject(Project project) {
+		this.project = project;
 	}
-	
+
 	@OPERATION
-	void setPutcbToZero(Double putcb) {
-		this.putcb = putcb;
-		getObsProperty("putcb").updateValue(putcb);
+	public EnvironmentProperties getEnvironmentProperties() {
+		return environmentProperties;
 	}
+
 	@OPERATION
-	void getPutcb(OpFeedbackParam<Double> putcbAux)
-	{
-		putcbAux.set(this.putcb);
+	public void setEnvironmentProperties(EnvironmentProperties environmentProperties) {
+		this.environmentProperties = environmentProperties;
 	}
-	
-	
-	@OPERATION
-	void setNewCostP(double newCostP) {
-		this.newCostP = newCostP;
-		getObsProperty("newCostP").updateValue(newCostP);
-	}
-	
-	@OPERATION
-	void getNewCostP(OpFeedbackParam<Double> newCostPAux)
-	{
-		newCostPAux.set(this.newCostP);
-	}
-	
-	
-	@OPERATION
-	void setNewTimeP(double newTimeP) {
-		this.newTimeP = newTimeP;
-		getObsProperty("newTimeP").updateValue(newTimeP);
-	}
-	
-	@OPERATION
-	void getNewTimeP(OpFeedbackParam<Double> newTimePAux)
-	{
-		newTimePAux.set(this.newTimeP);
-	}
-	
+
+
 	@OPERATION
 	public void riskControl(ArrayList<Risk> aux )
 	{
@@ -99,7 +50,6 @@ public class EnvironmentRiskControl extends Artifact {
 			System.out.println(risk.getId()+ " - "+risk.getTotalRiskExposure());
 			
 		}
-		
 		
 	}
 
