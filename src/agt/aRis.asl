@@ -38,6 +38,55 @@ changeRequest(false).
 		.wait(100);
 		!create.	
 /*Message */
++!probabilityUpdate(RiskList, EnvironmentProperties) : true <-
+
+	if (RiskList \== null){
+		cartago.invoke_obj(RiskList, size, Size);
+		.print("aqui po!!!");
+		cartago.invoke_obj(EnvironmentProperties, getPuccb, Puccb);
+		cartago.invoke_obj(EnvironmentProperties, getPutcb, Putcb);
+
+		for(.range(I, 0, Size-1)){
+			
+			cartago.invoke_obj(RiskList, get(I), Risk);
+			cartago.invoke_obj(Risk, getId, RiskId);
+			cartago.invoke_obj(Risk, getCostP, CostP);
+			cartago.invoke_obj(Risk, getCostI, CostI);
+			cartago.invoke_obj(Risk, getTimeP, TimeP);
+			cartago.invoke_obj(Risk, getTimeI, TimeI);
+			
+			if((CostAdd\==0 | CostRem\==0) & CostP \== 0 & CostI \== 0){
+				cartago.invoke_obj(EnvironmentProperties, setNewCostP(Puccb*(1-CostP) + CostP));
+				cartago.invoke_obj(EnvironmentProperties, getNewCostP, NewCostP );
+				
+				.print("Risco ",RiskId,", PC inicial = ", CostP,", PC apos mudanca =", NewCostP);
+				cartago.invoke_obj(Risk, setCostP(NewCostP));
+				
+				
+				cartago.invoke_obj(EnvironmentProperties, getEnvironmentProperties, EnvironmentProperties);
+				cartago.invoke_obj(EnvironmentProperties, setNewCostP(0.0));
+			}
+			
+			if((TimeAdd\== 0 | TimeRem\==0) & TimeP \== 0 & TimeI \==0){
+				cartago.invoke_obj(EnvironmentProperties, setNewTimeP(Putcb*(1-TimeP) + TimeP));
+				cartago.invoke_obj(EnvironmentProperties, getNewTimeP, NewTimeP);
+				
+				.print("Risco ",RiskId,", PT inicial = ", TimeP,", PT apos mudanca =", NewTimeP);
+				cartago.invoke_obj(Risk, setTimeP(NewTimeP));
+
+				cartago.invoke_obj(EnvironmentProperties, getEnvironmentProperties, EnvironmentProperties);
+				cartago.invoke_obj(EnvironmentProperties, setNewTimeP(0.0));
+			}
+		
+		}
+		-+changeRequest(false);
+		.print("Percentual de reserva de contingencia de custo que sera usado= ", Puccb);
+		.print("Percentual de reserva de contingencia de tempo que sera usada=", Putcb);
+		
+	}else{
+		.print("Nenhum risco foi afetado.");
+	}.
+
 +!kqml_received(Sender, tell, Variables, Response) : instant(K)  & project(P) & risks(RiskList) & 
 timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudget(UTCB) & useCostContingencyBudget(UCCB) & changeRequest(CR) & environmentProperties(EnvironmentProperties)<-
 
@@ -123,59 +172,21 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	.print("Quantidadede de reserva de custo apos a mudanca= ", CostReserve);
 	.print("Quantidadede de reserva de tempo apos a mudanca= ",TimeReserve);	
 	.print("Gerente, se você aplicar esta mudança, os riscos abaixo serão afetados:");
-
-	if (RiskList \== null){
-		cartago.invoke_obj(RiskList, size, Size);
-		cartago.invoke_obj(EnvironmentProperties, getPuccb, Puccb);
-		cartago.invoke_obj(EnvironmentProperties, getPutcb, Putcb);
-
-		for(.range(I, 0, Size-1)){
-			
-			cartago.invoke_obj(RiskList, get(I), Risk);
-			cartago.invoke_obj(Risk, getId, RiskId);
-			cartago.invoke_obj(Risk, getCostP, CostP);
-			cartago.invoke_obj(Risk, getCostI, CostI);
-			cartago.invoke_obj(Risk, getTimeP, TimeP);
-			cartago.invoke_obj(Risk, getTimeI, TimeI);
-			
-			if((CostAdd\==0 | CostRem\==0) & CostP \== 0 & CostI \== 0){
-				cartago.invoke_obj(EnvironmentProperties, setNewCostP(Puccb*(1-CostP) + CostP));
-				cartago.invoke_obj(EnvironmentProperties, getNewCostP, NewCostP );
-				
-				.print("Risco ",RiskId,", PC inicial = ", CostP,", PC ap�s mudanca =", NewCostP);
-				cartago.invoke_obj(Risk, setCostP(NewCostP));
-				cartago.invoke_obj(EnvironmentProperties, setNewCostP(0));
-				
-				
-			}
-			
-			if((TimeAdd\== 0 | TimeRem\==0) & TimeP \== 0 & TimeI \==0){
-				cartago.invoke_obj(EnvironmentProperties, setNewTimeP(Putcb*(1-TimeP) + TimeP));
-				cartago.invoke_obj(EnvironmentProperties, getNewTimeP, NewTimeP);
-				
-				.print("Risco ",RiskId,", PT inicial = ", TimeP,", PT ap�s mudanca =", NewTimeP);
-		
-				cartago.invoke_obj(Risk, setTimeP(NewTimeP));
-				cartago.invoke_obj(EnvironmentProperties, setNewTimeP(0));
-			}
-		
-		}
-		-+changeRequest(false);
-		.print("Percentual de reserva de contingencia de custo que sera usado= ", Puccb);
-		.print("Percentual de reserva de contingencia de tempo que sera usada=", Putcb);
-		
-		//cartago.invoke_obj(EnvironmentProperties, setPuccb(0/1));
+	
+	!probabilityUpdate(RiskList, EnvironmentProperties); 
+	
+	//cartago.invoke_obj(EnvironmentProperties, setPuccb(0/1));
 		//cartago.invoke_obj(EnvironmentProperties, setPutcb(0/1));
-		cartago.new_obj("models.EnvironmentProperties", [0,0,0,0], NewEnvironmentProperties);
+	cartago.new_obj("models.EnvironmentProperties", [0.0,0.0,0.0,0.0], NewEnvironmentProperties);
 		
-	}else{
-		.print("Nenhum risco foi afetado.");
-	};
 	-+environmentProperties(NewEnvironmentProperties);
 	-+timeContingencyBudget(TimeReserve);
 	-+costContingencyBudget(CostReserve);
 	-+useTimeContingencyBudget(UseTimeContingencyBudget);
 	-+useCostContingencyBudget(UseCostContingencyBudget).
+
+
+
 
 +!monitoringRisks : risks(RiskList) <-
 	if (RiskList \== null){

@@ -14,9 +14,10 @@ import models.Risk;
 public class EnvironmentRiskControl extends Artifact {
 	
 	private Project project;
-	private EnvironmentProperties environmentProperties = new EnvironmentProperties(0.0,0.0,0.0,0.0);
+	private EnvironmentProperties environmentProperties;
 	
 	void init() {
+		environmentProperties = new EnvironmentProperties(0.0,0.0,0.0,0.0);
 		defineObsProperty("environmentProperties", environmentProperties);
 	}
 
