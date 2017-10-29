@@ -163,14 +163,14 @@
 	& urgence(U) & priority(P)  & activity(A) <-
 	cartago.invoke_obj(A, getLabel, Label);
 	iActions.recordLogAMud(Id, Cenario, K, Label, ValueAC, ValueRC, ValueAT, ValueRT, State, ImpactCost, ImpactTime, U, P, Str);
-	.concat(Str, ". Solicitacao para a atividade: ", Label, Msg);
+	.concat(Str, ". Request for activity: ", Label, Msg);
 	+msg(Msg).			
 
 //Perceptions
 +project(P) <- 
 	cartago.invoke_obj(P, getId, IdProject);
 	setProject(P);
-	.print("AMud observando o Projeto ", IdProject).
+	.print("AMud observing Project ", IdProject).
 
 +tick : instant(K) & activities(A)<-
 	setActivities(A, K);
@@ -195,7 +195,7 @@
 	cartago.invoke_obj(AR, getRequestValue(RemTime), DRemTime);
 	
 	
-	.concat("Percebi uma nova solicitacao para ", Title, " no instante ", K, " para a tarefa: ", Label, Str);	
+	.concat("I noticed a new request for ", Title, " at the instant ", K, " for the task: ", Label, Str);	
 	println(Str);
 	iActions.dataPackageAMud(Title, Id, State, AddCost, AddTime, RemCost, RemTime, DAddCost, DAddTime, DRemCost, DRemTime, K, ActivityId, DataPackage);
 	
@@ -230,8 +230,8 @@
 	
 	
 +statusSolicitacao(SS): instant(K) & msg(S) & impactCost(ImpactCost) &impactTime(ImpactTime) & urgence(U) & priority(P) <- 
-	println("Instante: ", K,  " Mensagem: ", S);
-	println("IC=", ImpactCost, " IT=", ImpactTime, " U=",U, " Prioridade=",P).	
+	println("Instant: ", K,  " Message: ", S);
+	println("IC=", ImpactCost, " IT=", ImpactTime, " U=",U, " Priority=",P).	
 	
 /*+urgence(U): statusSolicitacao(SS)& instant(K) & msg(S) & impactCost(ImpactCost) &impactTime(ImpactTime) <-
 	println("Instante: ", K,  " Mensagem: ", S);

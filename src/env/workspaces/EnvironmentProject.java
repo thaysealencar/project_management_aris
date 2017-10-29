@@ -71,8 +71,8 @@ public class EnvironmentProject extends Artifact
 		}
 		getObsProperty("timeContingencyBudget").updateValue(p.getTimeBudgetReserve());
 		getObsProperty("costContingencyBudget").updateValue(p.getCostBudgetReserve());
-		System.out.println("Reserva de Contingencia de Custo do Projeto = " +p.getCostBudgetReserve());
-		System.out.println("Reserva de Contingencia de Tempo do Projeto = " +p.getTimeBudgetReserve());
+		System.out.println("Project Cost Contingency Reserve = " +p.getCostBudgetReserve());
+		System.out.println("Project Time Contingency Reserve = " +p.getTimeBudgetReserve());
 	}
 	
 	@INTERNAL_OPERATION

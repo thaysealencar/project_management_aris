@@ -16,7 +16,7 @@
 	<-	
 		makeArtifact("EnvProject", "workspaces.EnvironmentProject", [], Id);
 		focus(Id);
-		.println("Artefato criado!").
+		.println("Artifact created!").
 
 -?artifactSetup(Id) : true
 	<-	
@@ -44,11 +44,11 @@
 		cartago.invoke_obj("models.TypeChange", getAddTime, Time);
 		cartago.invoke_obj("models.StateOfChange", getRequested, State);
 		
-		cartago.new_obj("models.Change", [1,"Mudanças no custo e no tempo", K, TaskI, State], Ci);		
+		cartago.new_obj("models.Change", [1,"Changes in cost and time", K, TaskI, State], Ci);		
 		cartago.invoke_obj(Ci, addRequest(Cost, 11.903));
 		cartago.invoke_obj(Ci, addRequest(Time, 11.8));
 		cartago.invoke_obj(TaskI, getLabel, LabelI);
-		println("Solicitando no instante ", K, " um acréscimo de 11,9% no custo e de 11,8% no tempo para a atividade ", LabelI);		
+		println("Ordering instantly ", K, " an increase of 11.9% in cost and 11.8% in time for the activity ", LabelI);		
 		requestChange(Ci);
     }
 	if (K == 50){		
@@ -58,11 +58,11 @@
 		cartago.invoke_obj("models.TypeChange", getAddTime, Time);
 		cartago.invoke_obj("models.StateOfChange", getRequested, State);
 				
-		cartago.new_obj("models.Change", [2,"Mudanças no custo e no tempo", K, TaskH, State], Ch);		
+		cartago.new_obj("models.Change", [2,"Changes in cost and time", K, TaskH, State], Ch);		
 		cartago.invoke_obj(Ch, addRequest(Cost, 5.95));
 		cartago.invoke_obj(Ch, addRequest(Time, 5.9));
 		cartago.invoke_obj(TaskH, getLabel, LabelH);
-		println("Solicitando no instante ", K, " um acréscimo de 5.9% no custo e de 5.9% no tempo para a atividade ", LabelH);		
+		println("Ordering instantly ", K, " an increase of 5.9% in cost and of 5.9% in time for the activity ", LabelH);		
 		requestChange(Ch);		
 	}. /*
 	

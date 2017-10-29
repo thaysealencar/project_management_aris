@@ -34,7 +34,7 @@ public class internalStateARis extends DefaultInternalAction {
         	
         	Collections.sort(risks);
         	
-        	System.out.println("Riscos Ordenados");
+        	System.out.println("Risks Ordered");
     		for (Risk r : risks) {
     			System.out.println("Risk ID "+ r.getId()+ " - RE= "+r.getTotalRiskExposure());
     			Term t = new NumberTermImpl(r.getId());
@@ -48,7 +48,7 @@ public class internalStateARis extends DefaultInternalAction {
         	
             if(!risks.contains(risk)){
             	risks.add(risk);
-                System.out.println("Adicionei o risco= "+ id +" O tamanho da lista agora é=" + risks.size());
+                System.out.println("I added the risk= "+ id +" The size of the list is now=" + risks.size());
             }
             return true;
         }

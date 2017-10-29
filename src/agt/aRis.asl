@@ -30,7 +30,7 @@ changeRequest(false).
 +?myEnvironment(AuxR) : true
 	<-	
 	makeArtifact("EnvRiskControl", "workspaces.EnvironmentRiskControl", [], AuxR); //passar a lista de riscos como parametro
-	.print("Criei!");
+	.print("I created it!!");
 	focus(AuxR).		
 
 -?myEnvironment(CRId) : true
@@ -42,7 +42,6 @@ changeRequest(false).
 
 	if (RiskList \== null){
 		cartago.invoke_obj(RiskList, size, Size);
-		.print("aqui po!!!");
 		cartago.invoke_obj(EnvironmentProperties, getPuccb, Puccb);
 		cartago.invoke_obj(EnvironmentProperties, getPutcb, Putcb);
 
@@ -59,7 +58,7 @@ changeRequest(false).
 				cartago.invoke_obj(EnvironmentProperties, setNewCostP(Puccb*(1-CostP) + CostP));
 				cartago.invoke_obj(EnvironmentProperties, getNewCostP, NewCostP );
 				
-				.print("Risco ",RiskId,", PC inicial = ", CostP,", PC apos mudanca =", NewCostP);
+				.print("Risk ",RiskId,", Initial PC  = ", CostP,", After change PC  =", NewCostP);
 				cartago.invoke_obj(Risk, setCostP(NewCostP));
 				
 				
@@ -71,7 +70,7 @@ changeRequest(false).
 				cartago.invoke_obj(EnvironmentProperties, setNewTimeP(Putcb*(1-TimeP) + TimeP));
 				cartago.invoke_obj(EnvironmentProperties, getNewTimeP, NewTimeP);
 				
-				.print("Risco ",RiskId,", PT inicial = ", TimeP,", PT apos mudanca =", NewTimeP);
+				.print("Risk ",RiskId,", Initial PT  = ", TimeP,", After Change PT  =", NewTimeP);
 				cartago.invoke_obj(Risk, setTimeP(NewTimeP));
 
 				cartago.invoke_obj(EnvironmentProperties, getEnvironmentProperties, EnvironmentProperties);
@@ -80,11 +79,11 @@ changeRequest(false).
 		
 		}
 		-+changeRequest(false);
-		.print("Percentual de reserva de contingencia de custo que sera usado= ", Puccb);
-		.print("Percentual de reserva de contingencia de tempo que sera usada=", Putcb);
+		.print("Percentage of cost contingency reserve to be used = ", Puccb);
+		.print("Percentage of contingency reserve of time to be used =", Putcb);
 		
 	}else{
-		.print("Nenhum risco foi afetado.");
+		.print("No risk was affected.");
 	}.
 
 +!kqml_received(Sender, tell, Variables, Response) : instant(K)  & project(P) & risks(RiskList) & 
@@ -93,7 +92,7 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	-+changeRequest(true);
 	.print("Change Request = ", CR);
 	
-	.print("Irei avaliar o impacto desta solicitcao de mudanca nos riscos do projeto!");
+	.print("I will evaluate the impact of this change request on project risks!");
  	-+internalStateAMud(Variables);
 	.nth(0, Variables, Title);
 	.nth(1, Variables, Id);
@@ -167,11 +166,11 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	cartago.invoke_obj(EnvironmentProperties, setPuccb(UseCostContingencyBudget/CCB));
 	cartago.invoke_obj(EnvironmentProperties, setPutcb(UseTimeContingencyBudget/TCB));
 	
-    .print("Atividade ", Label, " Variação do custo= ", DeltaCostActivity, " Novo custo= ", NewCostActivity);
-	.print("Atividade ", Label, " Variação de tempo= ", DeltaTimeActivity, " Novo tempo= ", NewTimeActivity);
-	.print("Quantidadede de reserva de custo apos a mudanca= ", CostReserve);
-	.print("Quantidadede de reserva de tempo apos a mudanca= ",TimeReserve);	
-	.print("Gerente, se você aplicar esta mudança, os riscos abaixo serão afetados:");
+    .print("Activity ", Label, " Cost variation= ", DeltaCostActivity, " New cost= ", NewCostActivity);
+	.print("Activity ", Label, " Time variation= ", DeltaTimeActivity, " New Time= ", NewTimeActivity);
+	.print("Quantity of cost reserve after change= ", CostReserve);
+	.print("Quantity of time reserve after the change= ",TimeReserve);	
+	.print("Manager, if you apply this change, the following risks will be affected:");
 	
 	!probabilityUpdate(RiskList, EnvironmentProperties); 
 	
@@ -210,7 +209,7 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 			cartago.invoke_obj(Risk, getScopeI, SI);
 			-+scopeI(SI);    	
 			!calculateRiskExposure(Id);
-			!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, "Informacoes do Risco.");		
+			!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, "Risk Information.");		
 			iActions.internalStateARis(Id);
 		};
 		
@@ -223,7 +222,7 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 		
 		if (InternalState \== null){
 			.length(InternalState, LengthRiksList);
-			.print("Recebi uma lista ordenada do meu estado interno. Ela contem  ", LengthRiksList," riscos.");
+			.print("I received an ordered list of my internal state. It contains  ", LengthRiksList," risks.");
 		}	
 			
 	}.
@@ -237,7 +236,7 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	cartago.invoke_obj(P, getId, IdProject);
 	+idProject(IdProject);
 	setProject(P); //setando a propriedade observavel novamente
-	.print("ARis observando o Projeto ", IdProject).
+	.print("ARis observing Project ", IdProject).
 
 +!calculateRiskExposure(Id): costP(CP) & costI(CI) & timeP(TP) & timeI(TI) & scopeP(SP) & scopeI(SI) & risk(Risk)<-
 	TotalRiskExposure = CP*CI+TP*TI+SP*SI;
