@@ -25,7 +25,7 @@ internalStateACon(null).
 +?artifactSetup(AuxId) : true <-
 	makeArtifact("AuxControl", "workspaces.AuxControlArtifact", [], AuxId);
 	focus(AuxId);
-	.println("Artefato auxiliar criado!").
+	.println("Auxiliary artifact created!").
 
 -?myArtifact(ArtifactId) : true <-
 	.wait(10);

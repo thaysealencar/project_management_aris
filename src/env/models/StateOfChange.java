@@ -9,10 +9,10 @@ public class StateOfChange {
 	
 	public static String getDescription(int sc){
 		switch (sc){
-		case REQUESTED: return "Solicitado";
-		case APPROVED: return "Solicitacao aprovada";
-		case REJECTED: return "Solicitacao rejeitada";
-		case OBSOLETE: return "Solicitacao obsoleta";
+		case REQUESTED: return "Requested";
+		case APPROVED: return "Approved application";
+		case REJECTED: return "Rejected request";
+		case OBSOLETE: return "Obsolete request";
 		default: return null;
 		}
 	}

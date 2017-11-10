@@ -71,4 +71,4 @@ rules(null).
 		.println("Monitoramento Concluido - analise o log do AMon.");
 	}.
 
-+idProject(ID) <- .println("Monitorando Projeto ", ID).
++idProject(ID) <- .println("Monitoring Project ", ID).
