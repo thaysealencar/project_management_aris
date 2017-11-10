@@ -7,18 +7,20 @@ import java.util.Collections;
 
 import cartago.Artifact;
 import cartago.OPERATION;
-import models.EnvironmentProperties;
+import cartago.OpFeedbackParam;
 import models.Project;
 import models.Risk;
 
 public class EnvironmentRiskControl extends Artifact {
 	
 	private Project project;
-	private EnvironmentProperties environmentProperties;
+	double newCostP, newTimeP, puccb, putcb;
 	
 	void init() {
-		environmentProperties = new EnvironmentProperties(0.0,0.0,0.0,0.0);
-		defineObsProperty("environmentProperties", environmentProperties);
+		defineObsProperty("newCostP", 0.0);
+		defineObsProperty("newTimeP", 0.0);
+		defineObsProperty("puccb", 0.0);
+		defineObsProperty("putcb", 0.0);
 	}
 
 	@OPERATION
@@ -30,18 +32,55 @@ public class EnvironmentRiskControl extends Artifact {
 	public void setProject(Project project) {
 		this.project = project;
 	}
-
 	@OPERATION
-	public EnvironmentProperties getEnvironmentProperties() {
-		return environmentProperties;
+	void setPuccb(double puccb) {
+	this.puccb = puccb;
+	getObsProperty("puccb").updateValue(puccb);
 	}
 
 	@OPERATION
-	public void setEnvironmentProperties(EnvironmentProperties environmentProperties) {
-		this.environmentProperties = environmentProperties;
+	void getPuccb(OpFeedbackParam<Double> puccbAux)
+	{
+	puccbAux.set(this.puccb);
 	}
 
 
+	@OPERATION
+	void setPutcb(double putcb) {
+	this.putcb = putcb;
+	getObsProperty("putcb").updateValue(putcb);
+	}
+
+	@OPERATION
+	void getPutcb(OpFeedbackParam<Double> putcbAux)
+	{
+	putcbAux.set(this.putcb);
+	}
+
+
+	@OPERATION
+	void setNewCostP(double newCostP) {
+	this.newCostP = newCostP;
+	}
+
+	@OPERATION
+	void getNewCostP(OpFeedbackParam<Double> newCostPAux)
+	{
+	newCostPAux.set(this.newCostP);
+	}
+
+
+	@OPERATION
+	void setNewTimeP(double newTimeP) {
+	this.newTimeP = newTimeP;
+	}
+
+	@OPERATION
+	void getNewTimeP(OpFeedbackParam<Double> newTimePAux)
+	{
+	newTimePAux.set(this.newTimeP);
+	}
+	
 	@OPERATION
 	public void riskControl(ArrayList<Risk> aux )
 	{
