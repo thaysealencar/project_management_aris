@@ -40,10 +40,6 @@ public class internalRiskControl extends DefaultInternalAction {
 		NumberTerm Instant = (NumberTerm) args[11];
 		NumberTerm ActivityId = (NumberTerm) args[12];
 	
-
-		System.out.println(p.getTimeBudgetReserve());
-		System.out.println(p.getCostBudgetReserve());
-		
 		ListTerm result = new ListTermImpl();
     	result.add(Title);
     	result.add(Id);

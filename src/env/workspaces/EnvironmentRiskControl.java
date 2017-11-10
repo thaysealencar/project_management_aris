@@ -7,76 +7,41 @@ import java.util.Collections;
 
 import cartago.Artifact;
 import cartago.OPERATION;
-import cartago.OpFeedbackParam;
+import models.EnvironmentProperties;
 import models.Project;
 import models.Risk;
 
 public class EnvironmentRiskControl extends Artifact {
 	
 	private Project project;
-	double puccb, putcb , newCostP, newTimeP;
+	private EnvironmentProperties environmentProperties;
 	
 	void init() {
-		defineObsProperty("puccb", 0.0);
-		defineObsProperty("putcb", 0.0);
-		//defineObsProperty("newCostP", 0.0);
-		//defineObsProperty("newTimeP", 0.0);
+		environmentProperties = new EnvironmentProperties(0.0,0.0,0.0,0.0);
+		defineObsProperty("environmentProperties", environmentProperties);
 	}
-	
+
 	@OPERATION
-	void setProject(Project p) {
-		this.project = p;
+	public Project getProject() {
+		return project;
 	}
-	
+
 	@OPERATION
-	void setPuccb(double puccb) {
-		this.puccb = puccb;
-		getObsProperty("puccb").updateValue(puccb);
+	public void setProject(Project project) {
+		this.project = project;
 	}
-	
+
 	@OPERATION
-	void getPuccb(OpFeedbackParam<Double> puccbAux)
-	{
-		puccbAux.set(this.puccb);
+	public EnvironmentProperties getEnvironmentProperties() {
+		return environmentProperties;
 	}
-	
-	
+
 	@OPERATION
-	void setPutcb(double putcb) {
-		this.putcb = putcb;
-		getObsProperty("putcb").updateValue(putcb);
+	public void setEnvironmentProperties(EnvironmentProperties environmentProperties) {
+		this.environmentProperties = environmentProperties;
 	}
-	
-	@OPERATION
-	void getPutcb(OpFeedbackParam<Double> putcbAux)
-	{
-		putcbAux.set(this.putcb);
-	}
-	
-	
-	@OPERATION
-	void setNewCostP(double newCostP) {
-		this.newCostP = newCostP;
-	}
-	
-	@OPERATION
-	void getNewCostP(OpFeedbackParam<Double> newCostPAux)
-	{
-		newCostPAux.set(this.newCostP);
-	}
-	
-	
-	@OPERATION
-	void setNewTimeP(double newTimeP) {
-		this.newTimeP = newTimeP;
-	}
-	
-	@OPERATION
-	void getNewTimeP(OpFeedbackParam<Double> newTimePAux)
-	{
-		newTimePAux.set(this.newTimeP);
-	}
-	
+
+
 	@OPERATION
 	public void riskControl(ArrayList<Risk> aux )
 	{
@@ -86,7 +51,6 @@ public class EnvironmentRiskControl extends Artifact {
 			System.out.println(risk.getId()+ " - "+risk.getTotalRiskExposure());
 			
 		}
-		
 		
 	}
 
