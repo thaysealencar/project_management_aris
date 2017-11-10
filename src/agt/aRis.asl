@@ -5,6 +5,7 @@ internalStateARis(null).
 internalStateAMud(null).
 useTimeContingencyBudget(0).
 useCostContingencyBudget(0).
+changeRequest(false).
 
 /* Initial goals */
 !monitoring.
@@ -39,7 +40,12 @@ useCostContingencyBudget(0).
 		!create.	
 /*Message */
 +!kqml_received(Sender, tell, Variables, Response) : instant(K)  & project(P) & risks(RiskList) & 
-timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudget(UTCB) & useCostContingencyBudget(UCCB)<-
+timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudget(UTCB) & useCostContingencyBudget(UCCB) & changeRequest(CR)<-
+
+	-+changeRequest(true);
+	.print("Change Request = ", CR);
+	
+	.print("I will evaluate the impact of this change request on the project!");
 
  	-+internalStateAMud(Variables);
 	.nth(0, Variables, Title);
@@ -110,8 +116,13 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	TimeReserve = TCB-DeltaTimeActivity; // Atualizando o valor da Reserva de Tempo, ser� atualizada quando esses valores da reserva forem descontados no projeto
 	CostReserve = CCB-DeltaCostActivity;
 	
-	setPuccb(UseCostContingencyBudget/CCB);
+	.print("Activity ", Label, " Cost variation= ", DeltaCostActivity, " New Cost= ", NewCostActivity);
+	.print("Activity ", Label, " Cost variation= ", DeltaTimeActivity, " New Time= ", NewTimeActivity);
+	.print("Amount of cost reserve after change= ", CostReserve);
+	.print("Amount of time reserve after change= ",TimeReserve);
+	.print("Dear manager, if you apply this change to the project, the following riks will be affected:");
 	
+	setPuccb(UseCostContingencyBudget/CCB);
 	setPutcb(UseTimeContingencyBudget/TCB);
 
 
@@ -126,6 +137,7 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 		for(.range(I, 0, Size-1)){
 			
 			cartago.invoke_obj(RiskList, get(I), Risk);
+			cartago.invoke_obj(RiskList, getId, RiskId);
 			cartago.invoke_obj(Risk, getCostP, CostP);
 			cartago.invoke_obj(Risk, getCostI, CostI);
 			cartago.invoke_obj(Risk, getTimeP, TimeP);
@@ -135,6 +147,8 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 				setNewCostP(Puccb*(1-CostP) + CostP);
 				getNewCostP(NewCostP);
 				
+				.print("Risk ",RiskId,", initial PC = ", CostP,", PC after change =", NewCostP);
+				
 				cartago.invoke_obj(Risk, setCostP(NewCostP));
 				setNewCostP(0.0);
 			}
@@ -142,26 +156,22 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 				setNewTimeP(Putcb*(1-TimeP) + TimeP);
 				getNewTimeP(NewTimeP);
 				
+				.print("Risk ",RiskId,", initial PT = ", TimeP,", PT after change =", NewTimeP);
+				
 				cartago.invoke_obj(Risk, setTimeP(NewTimeP));
 				setNewTimeP(0.0);
 			}
-			
-		.print("CostP = ", CostP);
-		.print("NewCostP =", NewCostP);
-		
-		//chamar calculateRiskExposure
 		}
-		//reordenar o vetor de riscos
 		
+		.print("Percentege of cost reserve that will be used= ", Puccb);
+		.print("Percentege of time reserve that will be used=", Putcb);
+		
+	}else{
+		.print("No risks affected.");
 	};
 	
 	setPuccb(null);
 	setPutcb(null);
-	
-	.print("Actual CostReserve = ", CostReserve);
-	.print("Actual Time Reserve = ",TimeReserve);
-	.print("ACTIVITY ", Label, " DELTA COST ", DeltaCostActivity, " NEW COST ", NewCostActivity);
-	.print("ACTIVITY ", Label, " DELTA TIME ", DeltaTimeActivity, " NEW TIME ", NewTimeActivity);
 	
 	-+timeContingencyBudget(TimeReserve);
 	-+costContingencyBudget(CostReserve);
@@ -191,7 +201,7 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 			cartago.invoke_obj(Risk, getScopeI, SI);
 			-+scopeI(SI);    	
 			!calculateRiskExposure(Id);
-			!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, "Informacoes do Risco.");		
+			!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, "Risk Information.");		
 			iActions.internalStateARis(Id);
 		};
 		
@@ -204,7 +214,7 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 		
 		if (InternalState \== null){
 			.length(InternalState, LengthRiksList);
-			.print("Recebi uma lista ordenada do meu estado interno. Ela contem  ", LengthRiksList," riscos.");
+			.print("I have received a risk list in my internal state. This list contais  ", LengthRiksList," riscos.");
 		}	
 			
 	}.
