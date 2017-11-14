@@ -177,8 +177,8 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	
 	//setPuccb(null);
 	//setPutcb(null);
-	toZeroPuccb;
-	toZeroPutcb;
+	//toZeroPuccb;
+	//toZeroPutcb;
 	//Aqui foi zerado no Ambiente!
 	//O agente deve esquecer:  PUCCB, PUTCB, NewCostP, NewTimeP
 	
