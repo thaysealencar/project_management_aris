@@ -94,7 +94,6 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 			
 		}	
 		
-		
 		if(CostAdd>0){ //diminui o tempo de uma atividade
 				DeltaCostActivity = ECostAP*CostAdd;
 				
@@ -112,6 +111,8 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 			}
 			
 		}
+		
+	//.print("\nUseCostContingencyBudget = ", UseCostContingencyBudget);
 	// ATRIBUINDO VALORES
 	TimeReserve = TCB-DeltaTimeActivity; // Atualizando o valor da Reserva de Tempo, ser? atualizada quando esses valores da reserva forem descontados no projeto
 	CostReserve = CCB-DeltaCostActivity;
@@ -124,6 +125,10 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	
 	setPuccb(UseCostContingencyBudget/CCB);
 	setPutcb(UseTimeContingencyBudget/TCB);
+	//O que é realmente esse Usecostcontingency ???
+
+	//setPuccb(DeltaCostActivity/CCB);
+	//setPutcb(DeltaTimeActivity/TCB);
 
 
 	if (RiskList \== null){
@@ -170,13 +175,20 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 		.print("No risks affected.");
 	};
 	
-	setPuccb(null);
-	setPutcb(null);
+	//setPuccb(null);
+	//setPutcb(null);
+	toZeroPuccb;
+	toZeroPutcb;
+	//Aqui foi zerado no Ambiente!
+	//O agente deve esquecer:  PUCCB, PUTCB, NewCostP, NewTimeP
+	
 	
 	-+timeContingencyBudget(TimeReserve);
 	-+costContingencyBudget(CostReserve);
-	-+useTimeContingencyBudget(UseTimeContingencyBudget);
-	-+useCostContingencyBudget(UseCostContingencyBudget).
+	//-+useTimeContingencyBudget(UseTimeContingencyBudget);
+	//-+useCostContingencyBudget(UseCostContingencyBudget).
+	-+useTimeContingencyBudget(0);
+	-+useCostContingencyBudget(0).
 	
 
 +!monitoringRisks : risks(RiskList) <-
