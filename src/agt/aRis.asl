@@ -7,6 +7,7 @@ useTimeContingencyBudget(0).
 useCostContingencyBudget(0).
 changeRequest(false).
 
+
 /* Initial goals */
 !monitoring.
 !create.
@@ -117,27 +118,28 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	TimeReserve = TCB-DeltaTimeActivity; // Atualizando o valor da Reserva de Tempo, ser? atualizada quando esses valores da reserva forem descontados no projeto
 	CostReserve = CCB-DeltaCostActivity;
 	
+	.print("CostReserve :", CostReserve);
+	
 	.print("Activity ", Label, " Cost variation= ", DeltaCostActivity, " New Cost= ", NewCostActivity);
 	.print("Activity ", Label, " Cost variation= ", DeltaTimeActivity, " New Time= ", NewTimeActivity);
 	.print("Amount of cost reserve after change= ", CostReserve);
 	.print("Amount of time reserve after change= ",TimeReserve);
 	.print("Dear manager, if you apply this change to the project, the following riks will be affected:");
 	
-	setPuccb(UseCostContingencyBudget/CCB);
-	setPutcb(UseTimeContingencyBudget/TCB);
-	//O que Ã© realmente esse Usecostcontingency ???
+	setPucr(UseCostContingencyBudget/CCB);
+	setPutr(UseTimeContingencyBudget/TCB);
+	// No futuro, trocar CCB e TCB por TimeReserve e CostReserve
 
-	//setPuccb(DeltaCostActivity/CCB);
-	//setPutcb(DeltaTimeActivity/TCB);
 
 
 	if (RiskList \== null){
 		cartago.invoke_obj(RiskList, size, Size);
 		
-		getPuccb(Puccb);
-		.print("New PUCCB", Puccb);
-		getPutcb(Putcb);
-	   .print("New PUTCB", Putcb);
+		// PUTR E PUCR Porcentagem de uso das reservas de tempo e custo.
+		getPucr(Pucr);
+		.print("Percentage of Use of Cost Reserve!", Pucr);
+		getPutr(Putr);
+	   .print("Percentage of Use of Time Reserve!", Putr);
 	
 		for(.range(I, 0, Size-1)){
 			
@@ -149,7 +151,7 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 			cartago.invoke_obj(Risk, getTimeI, TimeI);
 			
 			if((CostAdd\==0 | CostRem\==0) & CostP \== 0 & CostI \== 0){
-				setNewCostP(Puccb*(1-CostP) + CostP);
+				setNewCostP(Pucr*(1-CostP) + CostP);
 				getNewCostP(NewCostP);
 				
 				.print("Risk ",RiskId,", initial PC = ", CostP,", PC after change =", NewCostP);
@@ -158,7 +160,7 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 				setNewCostP(0.0);
 			}
 			if((TimeAdd\== 0 | TimeRem\==0) & TimeP \== 0 & TimeI \==0){
-				setNewTimeP(Putcb*(1-TimeP) + TimeP);
+				setNewTimeP(Putr*(1-TimeP) + TimeP);
 				getNewTimeP(NewTimeP);
 				
 				.print("Risk ",RiskId,", initial PT = ", TimeP,", PT after change =", NewTimeP);
@@ -168,13 +170,13 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 			}
 		}
 		
-		.print("Percentege of cost reserve that will be used= ", Puccb);
-		.print("Percentege of time reserve that will be used=", Putcb);
+		.print("Percentege of cost reserve that will be used= ", Pucr);
+		.print("Percentege of time reserve that will be used=", Putr);
 		
 	}else{
 		.print("No risks affected.");
 	};
-	
+	!calculateMetrics(Purc, Putr, TimeReserve, CostReserve);
 	//setPuccb(null);
 	//setPutcb(null);
 	//toZeroPuccb;
@@ -191,7 +193,7 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	-+useCostContingencyBudget(0).
 	
 
-+!monitoringRisks : risks(RiskList) <-
++!monitoringRisks : risks(RiskList) <- // Remover crenças que não são usuais: risk,costP e etc
 	if (RiskList \== null){
 		cartago.invoke_obj(RiskList, size, Size);
 		
@@ -226,7 +228,7 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 		
 		if (InternalState \== null){
 			.length(InternalState, LengthRiksList);
-			.print("I have received a risk list in my internal state. This list contais  ", LengthRiksList," riscos.");
+			.print("I have received a risk list in my internal state. This list contais  ", LengthRiksList," risks.");
 		}	
 			
 	}.
@@ -239,7 +241,7 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	cartago.invoke_obj(P, getId, IdProject);
 	+idProject(IdProject);
 	setProject(P); //setando a propriedade observavel novamente
-	.print("ARis observando o Projeto ", IdProject).
+	.print("ARis is observing the project: ", IdProject).
 
 +!calculateRiskExposure(Id): costP(CP) & costI(CI) & timeP(TP) & timeI(TI) & scopeP(SP) & scopeI(SI) & risk(Risk)<-
 	TotalRiskExposure = (CP*CI)+(TP*TI)+(SP*SI);
@@ -249,9 +251,32 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	
 +!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, Msg): instant(K) & cenario(Cenario) & totalRiskEsposure(TotalRiskExposure) <-
 	iActions.recordLogARis(P, Id, Cenario, K, Name, CP, CI, TP, TI, SP, SI, TotalRiskExposure, Msg).
-
-//+!controllingRisks(RiskList) <-
-//	if (RiskList \== null){
-//		iActions.internalStateARis(RiskList);
-//	};   
-//	-+internalStateARis(InternalState).
+	
+	
+	
+	
++!calculateMetrics(Pucr, Putr, TimeReserve, CostReserve): timeContingencyBudget(TCB) & costContingencyBudget(CCB) <-
+	.print("Ponto 1");
+	
+	if(Pucr > 0){
+		getCostCRCounter(CcrC);
+		incrementCounter(CcrC, "costCRCounter");
+		getCostCRCounter(CcrC);
+		.print("Número de Mudanças de Custo:",CcrC);
+		Aux = CostReserve/CCB;
+		if(Aux < 0.31){
+		 	.print("Manager, the Projects Cost Reserve is low!");
+		}
+	}
+	if(Putr > 0){
+		getTimeCRCounter(TcrC);
+		incrementCounter(TcrC, "timeCRCounter");
+		getTimeCRCounter(TcrC);
+		.print("Número de Mudanças de Time:",TcrC);
+		Aux2 = CostReserve/CCB;
+		if(Aux2 < 0.31){
+		 	.print("Manager, the Projects Time Reserve is low!");
+		}
+	}
+	.
+	

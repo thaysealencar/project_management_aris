@@ -14,13 +14,15 @@ import models.Risk;
 public class EnvironmentRiskControl extends Artifact {
 	
 	private Project project;
-	double newCostP, newTimeP, puccb, putcb;
+	double newCostP, newTimeP, pucr, putr, costCRCounter, timeCRCounter;
 	
 	void init() {
 		defineObsProperty("newCostP", 0.0);
 		defineObsProperty("newTimeP", 0.0);
-		defineObsProperty("puccb", 0.0);
-		defineObsProperty("putcb", 0.0);
+		defineObsProperty("pucr", 0.0);
+		defineObsProperty("putr", 0.0);
+		defineObsProperty("costCRCounter", 0.0);
+		defineObsProperty("timeCRCounter", 0.0);
 	}
 
 	@OPERATION
@@ -33,28 +35,28 @@ public class EnvironmentRiskControl extends Artifact {
 		this.project = project;
 	}
 	@OPERATION
-	void setPuccb(double puccb) {
-	this.puccb = puccb;
-	getObsProperty("puccb").updateValue(puccb);
+	void setPucr(double pucr) {
+	this.pucr = pucr;
+	getObsProperty("pucr").updateValue(pucr);
 	}
 
 	@OPERATION
-	void getPuccb(OpFeedbackParam<Double> puccbAux)
+	void getPucr(OpFeedbackParam<Double> pucrAux)
 	{
-	puccbAux.set(this.puccb);
+	pucrAux.set(this.pucr);
 	}
 
 
 	@OPERATION
-	void setPutcb(double putcb) {
-	this.putcb = putcb;
-	getObsProperty("putcb").updateValue(putcb);
+	void setPutr(double putr) {
+	this.putr = putr;
+	getObsProperty("putr").updateValue(putr);
 	}
 
 	@OPERATION
-	void getPutcb(OpFeedbackParam<Double> putcbAux)
+	void getPutr(OpFeedbackParam<Double> putrAux)
 	{
-	putcbAux.set(this.putcb);
+	putrAux.set(this.putr);
 	}
 
 
@@ -91,6 +93,20 @@ public class EnvironmentRiskControl extends Artifact {
 			
 		}
 		
+	}
+	@OPERATION
+	public void incrementCounter(double counter, String propertie){
+		getObsProperty(propertie).updateValue(counter++);
+	}
+	@OPERATION
+	void getCostCRCounter(OpFeedbackParam<Double> CcrC)
+	{
+	CcrC.set(this.costCRCounter);
+	}
+	@OPERATION
+	void getTimeCRCounter(OpFeedbackParam<Double> TcrC)
+	{
+	TcrC.set(this.timeCRCounter);
 	}
 
 }
