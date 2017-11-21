@@ -14,7 +14,7 @@ import models.Risk;
 public class EnvironmentRiskControl extends Artifact {
 	
 	private Project project;
-	double newCostP, newTimeP, pucr, putr, costCRCounter, timeCRCounter;
+	double newCostP, newTimeP, pucr, putr, costCRCounter, timeCRCounter, qualifiedWorkersCounter;
 	
 	void init() {
 		defineObsProperty("newCostP", 0.0);
@@ -23,6 +23,7 @@ public class EnvironmentRiskControl extends Artifact {
 		defineObsProperty("putr", 0.0);
 		defineObsProperty("costCRCounter", 0.0);
 		defineObsProperty("timeCRCounter", 0.0);
+		defineObsProperty("qualifiedWorkersCounter", 0.0);
 	}
 
 	@OPERATION
@@ -35,45 +36,44 @@ public class EnvironmentRiskControl extends Artifact {
 		this.project = project;
 	}
 	@OPERATION
-	void setPucr(double pucr) {
+	public void setPucr(double pucr) {
 	this.pucr = pucr;
 	getObsProperty("pucr").updateValue(pucr);
 	}
 
 	@OPERATION
-	void getPucr(OpFeedbackParam<Double> pucrAux)
+	public void getPucr(OpFeedbackParam<Double> pucrAux)
 	{
 	pucrAux.set(this.pucr);
 	}
 
 
 	@OPERATION
-	void setPutr(double putr) {
+	public void setPutr(double putr) {
 	this.putr = putr;
 	getObsProperty("putr").updateValue(putr);
 	}
 
 	@OPERATION
-	void getPutr(OpFeedbackParam<Double> putrAux)
+	public void getPutr(OpFeedbackParam<Double> putrAux)
 	{
 	putrAux.set(this.putr);
 	}
 
 
 	@OPERATION
-	void setNewCostP(double newCostP) {
+	public void setNewCostP(double newCostP) {
 	this.newCostP = newCostP;
 	}
 
 	@OPERATION
-	void getNewCostP(OpFeedbackParam<Double> newCostPAux)
+	public void getNewCostP(OpFeedbackParam<Double> newCostPAux)
 	{
 	newCostPAux.set(this.newCostP);
 	}
 
-
 	@OPERATION
-	void setNewTimeP(double newTimeP) {
+	public void setNewTimeP(double newTimeP) {
 	this.newTimeP = newTimeP;
 	}
 
@@ -94,19 +94,28 @@ public class EnvironmentRiskControl extends Artifact {
 		}
 		
 	}
+//	@OPERATION
+//	public void incrementCounter(double counter, String propertie){
+//		getObsProperty(propertie).updateValue(counter++);
+//		System.out.println("Number of " +propertie+ " is "+counter);
+//	}
+	
 	@OPERATION
-	public void incrementCounter(double counter, String propertie){
-		getObsProperty(propertie).updateValue(counter++);
-	}
-	@OPERATION
-	void getCostCRCounter(OpFeedbackParam<Double> CcrC)
+	public void getCostCRCounter(OpFeedbackParam<Double> ccrCAux)
 	{
-	CcrC.set(this.costCRCounter);
+		ccrCAux.set(this.costCRCounter);
 	}
+	
 	@OPERATION
-	void getTimeCRCounter(OpFeedbackParam<Double> TcrC)
+	public void getTimeCRCounter(OpFeedbackParam<Double> tcrCAux)
 	{
-	TcrC.set(this.timeCRCounter);
+		tcrCAux.set(this.timeCRCounter);
+	}
+	
+	@OPERATION
+	public void getQualifiedWorkersCounter(OpFeedbackParam<Double> QwCAux)
+	{
+		QwCAux.set(this.qualifiedWorkersCounter);
 	}
 
 }

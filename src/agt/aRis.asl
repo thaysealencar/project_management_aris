@@ -193,7 +193,7 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	-+useCostContingencyBudget(0).
 	
 
-+!monitoringRisks : risks(RiskList) <- // Remover crenças que não são usuais: risk,costP e etc
++!monitoringRisks : risks(RiskList) <- // Remover crenï¿½as que nï¿½o sï¿½o usuais: risk,costP e etc
 	if (RiskList \== null){
 		cartago.invoke_obj(RiskList, size, Size);
 		
@@ -252,27 +252,24 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 +!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, Msg): instant(K) & cenario(Cenario) & totalRiskEsposure(TotalRiskExposure) <-
 	iActions.recordLogARis(P, Id, Cenario, K, Name, CP, CI, TP, TI, SP, SI, TotalRiskExposure, Msg).
 	
-	
-	
-	
-+!calculateMetrics(Pucr, Putr, TimeReserve, CostReserve): timeContingencyBudget(TCB) & costContingencyBudget(CCB) <-
-	.print("Ponto 1");
++!calculateMetrics(Pucr, Putr, TimeReserve, CostReserve): timeContingencyBudget(TCB) & costContingencyBudget(CCB)& costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersCounter(QwC) <-
 	
 	if(Pucr > 0){
-		getCostCRCounter(CcrC);
-		incrementCounter(CcrC, "costCRCounter");
-		getCostCRCounter(CcrC);
-		.print("Número de Mudanças de Custo:",CcrC);
+		A= CcrC+1;
+		-+costCRCounter(A);
+		.print("TostCRCounter is now ", A);
+		
 		Aux = CostReserve/CCB;
 		if(Aux < 0.31){
 		 	.print("Manager, the Projects Cost Reserve is low!");
 		}
 	}
+	
 	if(Putr > 0){
-		getTimeCRCounter(TcrC);
-		incrementCounter(TcrC, "timeCRCounter");
-		getTimeCRCounter(TcrC);
-		.print("Número de Mudanças de Time:",TcrC);
+		B = TcrC+1;
+		-+timeCRCounter(B);
+		.print("TimeCRCounter is now ", B);
+		
 		Aux2 = CostReserve/CCB;
 		if(Aux2 < 0.31){
 		 	.print("Manager, the Projects Time Reserve is low!");

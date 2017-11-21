@@ -4,13 +4,15 @@ public class Employee {
 	private int id;
 	private String name;
 	private String speciality;
+	private boolean qualified;
 	
 	
-	public Employee(int id, String name, String speciality) {
+	public Employee(int id, String name, String speciality, boolean qualified) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.speciality = speciality;
+		this.qualified = qualified;
 	}
 	
 	
@@ -32,4 +34,16 @@ public class Employee {
 	public void setSpeciality(String speciality) {
 		this.speciality = speciality;
 	}
+
+
+	public boolean isQualified() {
+		return qualified;
+	}
+
+
+	public void setQualified(boolean qualified) {
+		this.qualified = qualified;
+	}
+	
+	
 }

@@ -37,7 +37,7 @@ public class Scenario1_SBQS extends Simulate
 		// Atividades do Projeto.
 				Activity A, B, C, D, E, F, G, H, I, J, K, L, M, N;
 				Risk R1,R2,R3;
-				Employee E1, E2, E3;
+				Employee E1, E2, E3, E4, E5, E6, E7;
 				
 				A = new Activity(1, "A", 10, 700.0f);	B = new Activity(2, "B", 5, 350.0f);
 				C = new Activity(3, "C", 5, 350.0f);	D = new Activity(4, "D", 15, 1050.0f);
@@ -81,12 +81,24 @@ public class Scenario1_SBQS extends Simulate
 				p.addActivity(K);	p.addActivity(L);
 				p.addActivity(M);	p.addActivity(N);
 				
-				E1 = new Employee(1, "Asdrubal", "Tempo");
+				E1 = new Employee(1, "Asdrubal", "Tempo", true);
 				p.addEmployee(E1);
-				E2 = new Employee(2, "Fransisca" , "Gerenciamento");
+				E2 = new Employee(2, "Fransisca" , "Gerenciamento", true);
 				p.addEmployee(E2);
-				E3 = new Employee(3, "Muller", "RH");
+				E3 = new Employee(3, "Muller", "RH", false);
 				p.addEmployee(E3);
+				
+				E4 = new Employee(4, "Lala", "RH", false);
+				p.addEmployee(E4);
+				
+				E5 = new Employee(5, "Ana", "RH", false);
+				p.addEmployee(E5);
+				
+				E6 = new Employee(6, "Matilda", "RH", false);
+				p.addEmployee(E6);
+				
+				E7 = new Employee(7, "Sasha", "RH", false);
+				p.addEmployee(E7);
 				
 				R1 = new Risk(1, "Definicao do Custo", 0.3, 4, 0.3, 4, 0, 0, 0, RiskArea.COST, 1,1);
 				p.addRisk(R1);
@@ -94,7 +106,6 @@ public class Scenario1_SBQS extends Simulate
 				p.addRisk(R2);
 				R3 = new Risk(3, "Definicao do Custo3", 0.2, 1, 0, 0, 0, 0, 0, RiskArea.COST, 1,1);
 				p.addRisk(R3);
-				
 				
 				
 				double aux1 = p.calculateTimeContingencyBudget(p.getContingencyPercentage());
