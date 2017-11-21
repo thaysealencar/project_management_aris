@@ -42,8 +42,8 @@ public class EnvironmentProject extends Artifact
 		
 		// Propriedades observaveis dos riscos do projeto.
 		defineObsProperty("risks", p.getRisks());
+		defineObsProperty("projectTeam", p.getProjectTeam());
 		
-		defineObsProperty("projectTeamList", p.getProjectTeamList());
 		defineObsProperty("timeContingencyBudget", p.getTimeBudgetReserve());
 		defineObsProperty("costContingencyBudget", p.getCostBudgetReserve());
 		

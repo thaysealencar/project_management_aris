@@ -14,7 +14,7 @@ public class Project
 	private double scopContingencyBudget;
 	private double contingencyPercentage;
 	
-	private ArrayList< Employee > projectTeamList;
+	private ArrayList< Employee > projectTeam;
 	private ArrayList<Activity> activities = new ArrayList<Activity>();
 	private ArrayList<Risk> risks = new ArrayList<Risk>();
 	
@@ -25,7 +25,7 @@ public class Project
 		budget		= 0.0f;
 		instant 	= 0;
 		contingencyPercentage = 0;
-		projectTeamList = null; // Array List inicializa zero como null;
+		projectTeam = null; // Array List inicializa zero como null;
 		
 	}
 	
@@ -38,7 +38,7 @@ public class Project
 		this.budget		= budget;
 		this.realDuration = this.duration;
 		this.contingencyPercentage = contingencyPercentege;
-		this.projectTeamList = new ArrayList<Employee>();
+		this.projectTeam = new ArrayList<Employee>();
 		
 	}
 	
@@ -147,7 +147,7 @@ public class Project
 
 	public void addEmployee(Employee e)
 	{
-		projectTeamList.add(e);
+		projectTeam.add(e);
 	}
 	
 	public double calculateTimeContingencyBudget(double contingencyPercentage)
@@ -209,6 +209,10 @@ public class Project
 	{
 		return risks;
 	}
+	public ArrayList<Employee> getEmployee()
+	{
+		return projectTeam;
+	}
 	
 	public double getTimeBudgetReserve() 
 	{
@@ -225,9 +229,9 @@ public class Project
 		return scopContingencyBudget;
 	}
 	
-	public ArrayList<Employee> getProjectTeamList() 
+	public ArrayList<Employee> getProjectTeam() 
 	{
-		return projectTeamList;
+		return projectTeam;
 	}
 	
 	public double getContingencyPercentage() 
@@ -276,7 +280,7 @@ public class Project
 	
 	public void setProjectTeamList(ArrayList<Employee> projectTeamList) 
 	{
-		this.projectTeamList = projectTeamList;
+		this.projectTeam = projectTeamList;
 	}
 	
 	public void setContingencyPercentage(double contingencyPercentage) 

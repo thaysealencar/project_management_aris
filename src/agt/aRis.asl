@@ -252,7 +252,7 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 +!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, Msg): instant(K) & cenario(Cenario) & totalRiskEsposure(TotalRiskExposure) <-
 	iActions.recordLogARis(P, Id, Cenario, K, Name, CP, CI, TP, TI, SP, SI, TotalRiskExposure, Msg).
 	
-+!calculateMetrics(Pucr, Putr, TimeReserve, CostReserve): timeContingencyBudget(TCB) & costContingencyBudget(CCB)& costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersCounter(QwC) <-
++!calculateMetrics(Pucr, Putr, TimeReserve, CostReserve): timeContingencyBudget(TCB) & costContingencyBudget(CCB)& costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersCounter(QwC) & projectTeam(ProjectTeam) <-
 	
 	if(Pucr > 0){
 		A= CcrC+1;
@@ -275,5 +275,27 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 		 	.print("Manager, the Projects Time Reserve is low!");
 		}
 	}
-	.
+	if (ProjectTeam \== null){
+		cartago.invoke_obj(ProjectTeam, size, Size);
+		
+		for(.range(I, 0, Size-1)){
+			cartago.invoke_obj(ProjectTeam, get(I), Employee);
+			cartago.invoke_obj(Employee, getName, Name);
+			cartago.invoke_obj(Employee, getSpeciality, Speciality);
+			cartago.invoke_obj(Employee, isQualified, Qualified);
+			if(Qualified == true){
+				.print("Yeah!");
+			}
+//			if(Qualified){
+//				.print("Eh qualificado!")
+//				math.sum([A, 1]);
+//				
+//			}else{
+//				.print("Nao E qualificado!")
+//				math.sum([B, 1]);
+//				
+//			}
+		}
+		
+	}.
 	
