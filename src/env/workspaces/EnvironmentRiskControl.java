@@ -27,53 +27,53 @@ public class EnvironmentRiskControl extends Artifact {
 	}
 
 	@OPERATION
-	public Project getProject() {
+	 Project getProject() {
 		return project;
 	}
 
 	@OPERATION
-	public void setProject(Project project) {
+	 void setProject(Project project) {
 		this.project = project;
 	}
 	@OPERATION
-	public void setPucr(double pucr) {
+	 void setPucr(double pucr) {
 	this.pucr = pucr;
 	getObsProperty("pucr").updateValue(pucr);
 	}
 
 	@OPERATION
-	public void getPucr(OpFeedbackParam<Double> pucrAux)
+	 void getPucr(OpFeedbackParam<Double> pucrAux)
 	{
 	pucrAux.set(this.pucr);
 	}
 
 
 	@OPERATION
-	public void setPutr(double putr) {
+	 void setPutr(double putr) {
 	this.putr = putr;
 	getObsProperty("putr").updateValue(putr);
 	}
 
 	@OPERATION
-	public void getPutr(OpFeedbackParam<Double> putrAux)
+	 void getPutr(OpFeedbackParam<Double> putrAux)
 	{
 	putrAux.set(this.putr);
 	}
 
 
 	@OPERATION
-	public void setNewCostP(double newCostP) {
+	 void setNewCostP(double newCostP) {
 	this.newCostP = newCostP;
 	}
 
 	@OPERATION
-	public void getNewCostP(OpFeedbackParam<Double> newCostPAux)
+	 void getNewCostP(OpFeedbackParam<Double> newCostPAux)
 	{
 	newCostPAux.set(this.newCostP);
 	}
 
 	@OPERATION
-	public void setNewTimeP(double newTimeP) {
+	 void setNewTimeP(double newTimeP) {
 	this.newTimeP = newTimeP;
 	}
 
@@ -84,7 +84,7 @@ public class EnvironmentRiskControl extends Artifact {
 	}
 	
 	@OPERATION
-	public void riskControl(ArrayList<Risk> aux )
+	 void riskControl(ArrayList<Risk> aux )
 	{
 		Collections.sort(aux);
 		
@@ -94,26 +94,32 @@ public class EnvironmentRiskControl extends Artifact {
 		}
 		
 	}
-//	@OPERATION
-//	public void incrementCounter(double counter, String propertie){
-//		getObsProperty(propertie).updateValue(counter++);
-//		System.out.println("Number of " +propertie+ " is "+counter);
-//	}
+	@OPERATION
+	void incrementCounter(double a, double b, String propertie, OpFeedbackParam<Double> sum){
+		sum.set(a+b);
+		getObsProperty(propertie).updateValue(sum);
+	}
 	
 	@OPERATION
-	public void getCostCRCounter(OpFeedbackParam<Double> ccrCAux)
+	void divison(OpFeedbackParam<Double> a, double b, OpFeedbackParam<Double> div){
+		int aux = Integer.parseInt(a.toString());
+		div.set(aux/b);
+	}
+	
+	@OPERATION
+	 void getCostCRCounter(OpFeedbackParam<Double> ccrCAux)
 	{
 		ccrCAux.set(this.costCRCounter);
 	}
 	
 	@OPERATION
-	public void getTimeCRCounter(OpFeedbackParam<Double> tcrCAux)
+	 void getTimeCRCounter(OpFeedbackParam<Double> tcrCAux)
 	{
 		tcrCAux.set(this.timeCRCounter);
 	}
 	
 	@OPERATION
-	public void getQualifiedWorkersCounter(OpFeedbackParam<Double> QwCAux)
+	 void getQualifiedWorkersCounter(OpFeedbackParam<Double> QwCAux)
 	{
 		QwCAux.set(this.qualifiedWorkersCounter);
 	}

@@ -252,7 +252,8 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 +!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, Msg): instant(K) & cenario(Cenario) & totalRiskEsposure(TotalRiskExposure) <-
 	iActions.recordLogARis(P, Id, Cenario, K, Name, CP, CI, TP, TI, SP, SI, TotalRiskExposure, Msg).
 	
-+!calculateMetrics(Pucr, Putr, TimeReserve, CostReserve): timeContingencyBudget(TCB) & costContingencyBudget(CCB)& costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersCounter(QwC) & projectTeam(ProjectTeam) <-
++!calculateMetrics(Pucr, Putr, TimeReserve, CostReserve): timeContingencyBudget(TCB) & costContingencyBudget(CCB)& 
+costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersCounter(QwC) & projectTeam(ProjectTeam) <-
 	
 	if(Pucr > 0){
 		A= CcrC+1;
@@ -283,19 +284,16 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 			cartago.invoke_obj(Employee, getName, Name);
 			cartago.invoke_obj(Employee, getSpeciality, Speciality);
 			cartago.invoke_obj(Employee, isQualified, Qualified);
+			
 			if(Qualified == true){
-				.print("Yeah!");
+				incrementCounter(QwC,1.0,"qualifiedWorkersCounter",Sum);
+				.print("Number of qualified workers is ", Sum);
 			}
-//			if(Qualified){
-//				.print("Eh qualificado!")
-//				math.sum([A, 1]);
-//				
-//			}else{
-//				.print("Nao E qualificado!")
-//				math.sum([B, 1]);
-//				
-//			}
 		}
+		
+		divison(Sum,7,Div);
+		.print("The percentege of qualified workers is ", Div);
+		-+qualifiedWorkersCounter(QwPercentege);
 		
 	}.
 	
