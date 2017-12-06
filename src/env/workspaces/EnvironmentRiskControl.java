@@ -24,6 +24,7 @@ public class EnvironmentRiskControl extends Artifact {
 		defineObsProperty("costCRCounter", 0.0);
 		defineObsProperty("timeCRCounter", 0.0);
 		defineObsProperty("qualifiedWorkersCounter", 0.0);
+		defineObsProperty("percentegeOfQualifiedWorkers", 0.0);
 	}
 
 	@OPERATION
@@ -101,9 +102,8 @@ public class EnvironmentRiskControl extends Artifact {
 	}
 	
 	@OPERATION
-	void divison(OpFeedbackParam<Double> a, double b, OpFeedbackParam<Double> div){
-		int aux = Integer.parseInt(a.toString());
-		div.set(aux/b);
+	void divison(double a, double b, OpFeedbackParam<Double> div){
+		div.set(a/b);
 	}
 	
 	@OPERATION

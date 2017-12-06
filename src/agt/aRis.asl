@@ -7,7 +7,6 @@ useTimeContingencyBudget(0).
 useCostContingencyBudget(0).
 changeRequest(false).
 
-
 /* Initial goals */
 !monitoring.
 !create.
@@ -276,6 +275,7 @@ costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersCounter(QwC) & proje
 		 	.print("Manager, the Projects Time Reserve is low!");
 		}
 	}
+	
 	if (ProjectTeam \== null){
 		cartago.invoke_obj(ProjectTeam, size, Size);
 		
@@ -286,14 +286,17 @@ costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersCounter(QwC) & proje
 			cartago.invoke_obj(Employee, isQualified, Qualified);
 			
 			if(Qualified == true){
-				incrementCounter(QwC,1.0,"qualifiedWorkersCounter",Sum);
-				.print("Number of qualified workers is ", Sum);
+				incrementCounter(QwC,1.0,"qualifiedWorkersCounter", Aux);
+				
 			}
+
 		}
-		
+		getQualifiedWorkersCounter(Sum);
+		.print("Number of qualified workers is ", Sum);	
 		divison(Sum,7,Div);
 		.print("The percentege of qualified workers is ", Div);
 		-+qualifiedWorkersCounter(QwPercentege);
+		
 		
 	}.
 	
