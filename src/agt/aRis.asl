@@ -252,12 +252,12 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	iActions.recordLogARis(P, Id, Cenario, K, Name, CP, CI, TP, TI, SP, SI, TotalRiskExposure, Msg).
 	
 +!calculateMetrics(Pucr, Putr, TimeReserve, CostReserve): timeContingencyBudget(TCB) & costContingencyBudget(CCB)& 
-costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersCounter(QwC) & projectTeam(ProjectTeam) <-
+costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersCounter(QwC) & projectTeam(ProjectTeam)& percentegeOfQualifiedWorkers(P_QwC) <-
 	
 	if(Pucr > 0){
 		A= CcrC+1;
 		-+costCRCounter(A);
-		.print("TostCRCounter is now ", A);
+		.print("CostCRCounter is now ", A);
 		
 		Aux = CostReserve/CCB;
 		if(Aux < 0.31){
@@ -286,17 +286,56 @@ costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersCounter(QwC) & proje
 			cartago.invoke_obj(Employee, isQualified, Qualified);
 			
 			if(Qualified == true){
-				incrementCounter(QwC,1.0,"qualifiedWorkersCounter", Aux);
-				
+				+qualifiedWorkersCounter(QwC);
 			}
 
 		}
-		getQualifiedWorkersCounter(Sum);
-		.print("Number of qualified workers is ", Sum);	
-		divison(Sum,7,Div);
+		.count(qualifiedWorkersCounter(QwC), N);
+		.print("Number of qualified workers is ", N);	
+		Div = N/7;
 		.print("The percentege of qualified workers is ", Div);
-		-+qualifiedWorkersCounter(QwPercentege);
+		-+percentegeOfQualifiedWorkers(Div);
 		
 		
 	}.
 	
+	
+//	if (ProjectTeam \== null){
+//
+//cartago.invoke_obj(ProjectTeam, size, Size);
+//
+//
+//
+//for(.range(I, 0, Size-1)){
+//
+//cartago.invoke_obj(ProjectTeam, get(I), Employee);
+//
+//cartago.invoke_obj(Employee, getName, Name);
+//
+//cartago.invoke_obj(Employee, getSpeciality, Speciality);
+//
+//cartago.invoke_obj(Employee, isQualified, Qualified);
+//
+//
+//
+//if(Qualified == true){
+//
+//incrementCounter(QwC,1.0,"qualifiedWorkersCounter",Sum);
+//
+//.print("Number of qualified workers is ", Sum);
+//
+//}
+//
+//}
+//
+//
+//
+//divison(Sum,7,Div);
+//
+//.print("The percentege of qualified workers is ", Div);
+//
+//-+qualifiedWorkersCounter(QwPercentege);
+//
+//
+//
+//}.

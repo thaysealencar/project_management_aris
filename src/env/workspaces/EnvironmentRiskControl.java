@@ -16,6 +16,8 @@ public class EnvironmentRiskControl extends Artifact {
 	private Project project;
 	double newCostP, newTimeP, pucr, putr, costCRCounter, timeCRCounter, qualifiedWorkersCounter;
 	
+	
+
 	void init() {
 		defineObsProperty("newCostP", 0.0);
 		defineObsProperty("newTimeP", 0.0);
@@ -96,33 +98,56 @@ public class EnvironmentRiskControl extends Artifact {
 		
 	}
 	@OPERATION
-	void incrementCounter(double a, double b, String propertie, OpFeedbackParam<Double> sum){
-		sum.set(a+b);
-		getObsProperty(propertie).updateValue(sum);
+
+	void incrementCounter(double a, double b, String propertie){
+
+		getObsProperty(propertie).updateValue(a+b);
+
 	}
+
 	
+
 	@OPERATION
-	void divison(double a, double b, OpFeedbackParam<Double> div){
-		div.set(a/b);
+
+	void divison(OpFeedbackParam<Double> a, double b, OpFeedbackParam<Double> div){
+
+		int aux = Integer.parseInt(a.toString());
+
+		div.set(aux/b);
+
 	}
-	
-	@OPERATION
-	 void getCostCRCounter(OpFeedbackParam<Double> ccrCAux)
-	{
-		ccrCAux.set(this.costCRCounter);
-	}
-	
-	@OPERATION
-	 void getTimeCRCounter(OpFeedbackParam<Double> tcrCAux)
-	{
-		tcrCAux.set(this.timeCRCounter);
-	}
-	
-	@OPERATION
-	 void getQualifiedWorkersCounter(OpFeedbackParam<Double> QwCAux)
-	{
-		QwCAux.set(this.qualifiedWorkersCounter);
+    @OPERATION
+    void getQualifiedWorkersCounter(OpFeedbackParam<Double> QwCAux)
+    {
+    	QwCAux.set(this.qualifiedWorkersCounter);
+    }
+    @OPERATION
+	void setQualifiedWorkersCounter(double qualifiedWorkersCounter) {
+		this.qualifiedWorkersCounter = qualifiedWorkersCounter;
 	}
 
 }
+//@OPERATION
+//
+//void incrementCounter(double a, double b, String propertie, OpFeedbackParam<Double> sum){
+//
+//	sum.set(a+b);
+//
+//	getObsProperty(propertie).updateValue(sum);
+//
+//}
+//
+//
+//
+//@OPERATION
+//
+//void divison(OpFeedbackParam<Double> a, double b, OpFeedbackParam<Double> div){
+//
+//	int aux = Integer.parseInt(a.toString());
+//
+//	div.set(aux/b);
+//
+//
+//
+//}
 
