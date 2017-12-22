@@ -124,19 +124,51 @@ public class Risk implements Comparable<Risk> {
         }
 		return 0;
 	}
+	
+	public RiskArea getRiskArea() {
+		return riskArea;
+	}
+
+	public void setRiskArea(RiskArea riskArea) {
+		this.riskArea = riskArea;
+	}
+
+	public int getHandlingAction() {
+		return handlingAction;
+	}
+
+	public void setHandlingAction(int handlingAction) {
+		this.handlingAction = handlingAction;
+	}
+
+	public int getIdEmployee() {
+		return idEmployee;
+	}
+
+	public void setIdEmployee(int idEmployee) {
+		this.idEmployee = idEmployee;
+	}
+	
 	public enum RiskArea {
 		SCOPE(1),
 		COST(2),
 		SCHEDULE(3),
 		TECNICAL(4),
 		STAFF(5),
-		COSTUMER(5);
+		COSTUMER(6);
 		
-		 public int areaType;
+		public int areaType;
+		
 		 RiskArea(int valor) {
 		    areaType = valor;
 		 }
 		
+		public int getAreaType() {
+			return areaType;
+		}
+		public void setAreaType(int areaType) {
+			this.areaType = areaType;
+		}
 	}
 
 }

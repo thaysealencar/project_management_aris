@@ -127,27 +127,5 @@ public class EnvironmentRiskControl extends Artifact {
 	}
 
 }
-//@OPERATION
-//
-//void incrementCounter(double a, double b, String propertie, OpFeedbackParam<Double> sum){
-//
-//	sum.set(a+b);
-//
-//	getObsProperty(propertie).updateValue(sum);
-//
-//}
-//
-//
-//
-//@OPERATION
-//
-//void divison(OpFeedbackParam<Double> a, double b, OpFeedbackParam<Double> div){
-//
-//	int aux = Integer.parseInt(a.toString());
-//
-//	div.set(aux/b);
-//
-//
-//
-//}
+
 

@@ -112,7 +112,6 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 			
 		}
 		
-	//.print("\nUseCostContingencyBudget = ", UseCostContingencyBudget);
 	// ATRIBUINDO VALORES
 	TimeReserve = TCB-DeltaTimeActivity; // Atualizando o valor da Reserva de Tempo, ser? atualizada quando esses valores da reserva forem descontados no projeto
 	CostReserve = CCB-DeltaCostActivity;
@@ -176,23 +175,16 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 		.print("No risks affected.");
 	};
 	!calculateMetrics(Purc, Putr, TimeReserve, CostReserve);
-	//setPuccb(null);
-	//setPutcb(null);
-	//toZeroPuccb;
-	//toZeroPutcb;
-	//Aqui foi zerado no Ambiente!
 	//O agente deve esquecer:  PUCCB, PUTCB, NewCostP, NewTimeP
 	
 	
 	-+timeContingencyBudget(TimeReserve);
 	-+costContingencyBudget(CostReserve);
-	//-+useTimeContingencyBudget(UseTimeContingencyBudget);
-	//-+useCostContingencyBudget(UseCostContingencyBudget).
 	-+useTimeContingencyBudget(0);
 	-+useCostContingencyBudget(0).
 	
 
-+!monitoringRisks : risks(RiskList) <- // Remover cren�as que n�o s�o usuais: risk,costP e etc
++!monitoringRisks : risks(RiskList) <- 
 	if (RiskList \== null){
 		cartago.invoke_obj(RiskList, size, Size);
 		
@@ -202,28 +194,19 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 			cartago.invoke_obj(Risk, getId, Id);
 			cartago.invoke_obj(Risk, getName, Name);
 			cartago.invoke_obj(Risk, getCostP, CP);
-			-+costP(CP);
 			cartago.invoke_obj(Risk, getCostI, CI);
-			-+costI(CI);
 			cartago.invoke_obj(Risk, getTimeP, TP);
-			-+timeP(TP);
 			cartago.invoke_obj(Risk, getCostP, TI);
-			-+timeI(TI);
 			cartago.invoke_obj(Risk, getScopeP, SP);
-			-+scopeP(SP);   
 			cartago.invoke_obj(Risk, getScopeI, SI);
-			-+scopeI(SI);    	
-			!calculateRiskExposure(Id);
+			!calculateRiskExposure(CP, CI, TP, TI, SP, SI);
 			!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, "Risk Information.");		
 			iActions.internalStateARis(Id);
 		};
 		
-		//SOLUCAO DE CONTROLE VIA ESTADO INTERNO DO AGENTE
+		//Apos adicionar todos os riscos o agente ordena a lista de riscos.
 		iActions.internalStateARis(exit, InternalState);
 		-+internalStateARis(InternalState);
-		
-		//SOLUCAO DE CONTROLE VIA AMBIENTE DO ARIS
-		//riskControl(RiskList);
 		
 		if (InternalState \== null){
 			.length(InternalState, LengthRiksList);
@@ -231,6 +214,14 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 		}	
 			
 	}.
+
++!calculateRiskExposure(CP, CI, TP, TI, SP, SI): risk(Risk)<-
+	TotalRiskExposure = (CP*CI)+(TP*TI)+(SP*SI);
+	cartago.invoke_obj(Risk, setTotalRiskExposure(TotalRiskExposure));
+	-+totalRiskEsposure(TotalRiskExposure).	
+	
++!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, Msg): instant(K) & cenario(Cenario) & totalRiskEsposure(TotalRiskExposure) <-
+	iActions.recordLogARis(P, Id, Cenario, K, Name, CP, CI, TP, TI, SP, SI, TotalRiskExposure, Msg).
 
 +tick : instant(K) <-
 	!monitoringRisks.
@@ -241,17 +232,8 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	+idProject(IdProject);
 	setProject(P); //setando a propriedade observavel novamente
 	.print("ARis is observing the project: ", IdProject).
-
-+!calculateRiskExposure(Id): costP(CP) & costI(CI) & timeP(TP) & timeI(TI) & scopeP(SP) & scopeI(SI) & risk(Risk)<-
-	TotalRiskExposure = (CP*CI)+(TP*TI)+(SP*SI);
-	cartago.invoke_obj(Risk, setTotalRiskExposure(TotalRiskExposure));
-	//.print("Risk = ",Id," RE = ",TotalRiskExposure); 
-	-+totalRiskEsposure(TotalRiskExposure).	
 	
-+!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, Msg): instant(K) & cenario(Cenario) & totalRiskEsposure(TotalRiskExposure) <-
-	iActions.recordLogARis(P, Id, Cenario, K, Name, CP, CI, TP, TI, SP, SI, TotalRiskExposure, Msg).
-	
-+!calculateMetrics(Pucr, Putr, TimeReserve, CostReserve): timeContingencyBudget(TCB) & costContingencyBudget(CCB)& 
++!calculateMetrics(Pucr, Putr, TimeReserve, CostReserve): risks(RiskList) & timeContingencyBudget(TCB) & costContingencyBudget(CCB)& 
 costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersCounter(QwC) & projectTeam(ProjectTeam)& percentegeOfQualifiedWorkers(P_QwC) <-
 	
 	if(Pucr > 0){
@@ -260,8 +242,14 @@ costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersCounter(QwC) & proje
 		.print("CostCRCounter is now ", A);
 		
 		Aux = CostReserve/CCB;
-		if(Aux < 0.31){
+		if(Aux > 0.30 & Aux < 0.60){
 		 	.print("Manager, the Projects Cost Reserve is low!");
+		 	
+		 	if(Aux < 0.31){
+				.print("Manager, I have detected a new risk in this project! You should talk to the project sponsor about the Cost Reserve.");
+				//criar novo risco e inserir na lista de risco
+				
+			}
 		}
 	}
 	
@@ -271,8 +259,14 @@ costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersCounter(QwC) & proje
 		.print("TimeCRCounter is now ", B);
 		
 		Aux2 = CostReserve/CCB;
-		if(Aux2 < 0.31){
+		if(Aux2 > 0.30 & Aux2 < 0.60){
 		 	.print("Manager, the Projects Time Reserve is low!");
+		 	
+		 	if(Aux2 < 0.31){
+				.print("Manager, I have detected a new risk in this project! You should check your team members and activities schedule.");
+				//criar novo risco e inserir na lista de risco
+				
+			}
 		}
 	}
 	
@@ -296,46 +290,40 @@ costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersCounter(QwC) & proje
 		.print("The percentege of qualified workers is ", Div);
 		-+percentegeOfQualifiedWorkers(Div);
 		
+		if(Div > 0.30 & Div < 0.60 ){
+		 	.print("Manager, the percentege of qualified workers is low!");
+		 	
+		}else{
+			
+			if(Div < 0.31){
+				.print("Manager, I have detected a new risk in this project! You should hire more qualified workers or provide training to your team members.");
+				cartago.invoke_obj(RiskList, size, RLSize);
+				
+				cartago.new_obj("models.Risk", [], Ri);
+				cartago.invoke_obj(Ri, setId(RLSize+1));
+				cartago.invoke_obj(Ri, setName("Team members are not qualified to the project."));
+				cartago.invoke_obj(Ri, setId(Size+1));
+				cartago.invoke_obj(Ri, setCostP(0.2));
+				cartago.invoke_obj(Ri, setCostI(1.0));
+				cartago.invoke_obj(Ri, setTimeP(0));
+				cartago.invoke_obj(Ri, setCostP(0));
+				cartago.invoke_obj(Ri, setScopeP(0));
+				cartago.invoke_obj(Ri, setScopeI(0));
+				
+				//CRIAR NOVO PLANO PARA ADD RISCOS NOVOS NA LISTA
+				if (RiskList \== null){ 
+					cartago.invoke_obj(RiskList, add(Ri));
+					-+risk(Ri);
+					cartago.invoke_obj(Ri, getCostP, CP);
+					cartago.invoke_obj(Ri, getCostI, CI);
+					cartago.invoke_obj(Ri, getTimeP, TP);
+					cartago.invoke_obj(Ri, getCostP, TI);
+					cartago.invoke_obj(Ri, getScopeP, SP);
+					cartago.invoke_obj(Ri, getScopeI, SI);
+					!calculateRiskExposure(CP, CI, TP, TI, SP, SI);
+				}
+			}
+		}
 		
 	}.
 	
-	
-//	if (ProjectTeam \== null){
-//
-//cartago.invoke_obj(ProjectTeam, size, Size);
-//
-//
-//
-//for(.range(I, 0, Size-1)){
-//
-//cartago.invoke_obj(ProjectTeam, get(I), Employee);
-//
-//cartago.invoke_obj(Employee, getName, Name);
-//
-//cartago.invoke_obj(Employee, getSpeciality, Speciality);
-//
-//cartago.invoke_obj(Employee, isQualified, Qualified);
-//
-//
-//
-//if(Qualified == true){
-//
-//incrementCounter(QwC,1.0,"qualifiedWorkersCounter",Sum);
-//
-//.print("Number of qualified workers is ", Sum);
-//
-//}
-//
-//}
-//
-//
-//
-//divison(Sum,7,Div);
-//
-//.print("The percentege of qualified workers is ", Div);
-//
-//-+qualifiedWorkersCounter(QwPercentege);
-//
-//
-//
-//}.
