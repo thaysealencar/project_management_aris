@@ -2,17 +2,15 @@
 
 package iActions;
 
+import java.util.ArrayList;
+
 import jason.asSemantics.DefaultInternalAction;
 import jason.asSemantics.TransitionSystem;
 import jason.asSemantics.Unifier;
-import jason.asSyntax.ListTerm;
-import jason.asSyntax.ListTermImpl;
-import jason.asSyntax.NumberTerm;
-import jason.asSyntax.StringTerm;
 import jason.asSyntax.Term;
-import models.Activity;
-import models.Change;
 import models.Project;
+import models.Risk;
+import models.Risk.RiskArea;
 import simulations.Scenario1_SBQS;
 
 public class internalRiskControl extends DefaultInternalAction {
@@ -25,36 +23,27 @@ public class internalRiskControl extends DefaultInternalAction {
 	@Override
     public Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception {
     	Project p  = Scenario1_SBQS.getProject();
+    	String id = args[0].toString();
+    	String name = args[1].toString();
     	
-    	StringTerm Title = (StringTerm) args[0];
-    	NumberTerm Id	= (NumberTerm) args[1];
-    	StringTerm State  = (StringTerm) args[2];
-		NumberTerm AddCost = (NumberTerm) args[3];
-		NumberTerm AddTime = (NumberTerm) args[4];
-		NumberTerm RemCost = (NumberTerm) args[5];
-		NumberTerm RemTime = (NumberTerm) args[6];
-		NumberTerm DAddCost = (NumberTerm) args[7];
-		NumberTerm DAddTime = (NumberTerm) args[8];
-		NumberTerm DRemCost = (NumberTerm) args[9];
-		NumberTerm DRemTime = (NumberTerm) args[10];
-		NumberTerm Instant = (NumberTerm) args[11];
-		NumberTerm ActivityId = (NumberTerm) args[12];
-	
-		ListTerm result = new ListTermImpl();
-    	result.add(Title);
-    	result.add(Id);
-    	result.add(State);
-    	result.add(AddCost);
-    	result.add(AddTime);
-    	result.add(RemCost);
-    	result.add(RemTime);
-    	result.add(DAddCost);
-    	result.add(DAddTime);
-    	result.add(DRemCost);
-    	result.add(DRemTime);
-    	result.add(Instant);
-    	result.add(ActivityId);
+    	Risk r = new Risk();
+    	r.setId(Integer.parseInt(id));
+    	r.setName(name);
+    	r.setCostP(0.6); //Esses valores devem ser calculados de alguma maneira
+    	r.setCostI(1);
+    	r.setTimeP(0);
+    	r.setTimeI(0);
+    	r.setScopeP(0);
+    	r.setScopeI(0);
+    	r.setRiskArea(RiskArea.STAFF);
+    	double  totalRiskExposure = r.getScopeP()*r.getScopeI()+r.getCostP()*r.getCostI()+r.getTimeP()*r.getTimeI();
+    	r.setTotalRiskExposure(totalRiskExposure);
     	
-		return un.unifies(result, args[13]);
+		ArrayList<Risk> risks = p.getRisks();
+    	
+        if(!risks.contains(r)){
+        	risks.add(r);
+        }
+        return true;
     }
 }

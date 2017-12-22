@@ -22,7 +22,7 @@ public class internalStateARis extends DefaultInternalAction {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private ArrayList<Risk> risks = new ArrayList<Risk>();
+	private ArrayList<Risk> risks = new ArrayList<Risk>(); //Essa lista começa vazia e é preenchida pelo código dentro do ELSE bloco.
 		
 	@Override
     public Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception {
@@ -34,24 +34,25 @@ public class internalStateARis extends DefaultInternalAction {
         	
         	Collections.sort(risks);
         	
-        	System.out.println("Risks Ordered");
+        	System.out.println("Project's risks:");
     		for (Risk r : risks) {
-    			System.out.println("Risk ID "+ r.getId()+ " - RE= "+r.getTotalRiskExposure());
+    			System.out.println("Risk ID "+ r.getId()+"- "+r.getName()+" - RE= "+r.getTotalRiskExposure());
     			Term t = new NumberTermImpl(r.getId());
     			result.add(t);
     		}
     		risks.clear();
-    		return un.unifies(result, args[1]); //mandando a lista de id's de riscos ordenada de volta para o Aris
+    		return un.unifies(result, args[1]); //mandando a lista de id's de riscos ordenada de volta para o Aris 
     		
-        }
+        }else{
+        	
         	Risk risk = p.getRiskById(Integer.parseInt(id));
         	
             if(!risks.contains(risk)){
             	risks.add(risk);
-                System.out.println("I added the risk= "+ id +" The size of the list is now=" + risks.size());
             }
             return true;
         }
+        	
+     }
         
-        
-    }
+}

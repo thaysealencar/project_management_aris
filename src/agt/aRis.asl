@@ -201,17 +201,17 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 			cartago.invoke_obj(Risk, getScopeI, SI);
 			!calculateRiskExposure(CP, CI, TP, TI, SP, SI);
 			!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, "Risk Information.");		
-			iActions.internalStateARis(Id);
+			iActions.internalStateARis(Id); //Adiciona risco na lista. Isso é feito iterativamente pois as propriedades dos riscos sofrem alterações no decorrer do tmepo. 
 		};
 		
-		//Apos adicionar todos os riscos o agente ordena a lista de riscos.
-		iActions.internalStateARis(exit, InternalState);
+		
+		iActions.internalStateARis(exit, InternalState); //Apos adicionar todos os riscos o agente ordena a lista de riscos pela ER.
 		-+internalStateARis(InternalState);
 		
-		if (InternalState \== null){
-			.length(InternalState, LengthRiksList);
-			.print("I have received a risk list in my internal state. This list contais  ", LengthRiksList," risks.");
-		}	
+//		if (InternalState \== null){
+//			.length(InternalState, LengthRiksList);
+//			.print("I have received a risk list in my internal state. This list contais  ", LengthRiksList," risks.");
+//		}	
 			
 	}.
 
@@ -245,9 +245,11 @@ costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersCounter(QwC) & proje
 		if(Aux > 0.30 & Aux < 0.60){
 		 	.print("Manager, the Projects Cost Reserve is low!");
 		 	
-		 	if(Aux < 0.31){
+		 	if(Aux < 0.31){//CORRIGIR PARA SÓ ENTRAR AQUI UMA ÚNICA VEZ E NÃO FICAR INSERINDO O MESMO RISCO MAIS DE 1X
 				.print("Manager, I have detected a new risk in this project! You should talk to the project sponsor about the Cost Reserve.");
-				//criar novo risco e inserir na lista de risco
+				cartago.invoke_obj(RiskList, size, RLSize);
+				Id = RLSize+1;
+				iActions.internalRiskControl(Id, "Insufficient Cost Reserve to apply changes in the project.");
 				
 			}
 		}
@@ -262,9 +264,11 @@ costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersCounter(QwC) & proje
 		if(Aux2 > 0.30 & Aux2 < 0.60){
 		 	.print("Manager, the Projects Time Reserve is low!");
 		 	
-		 	if(Aux2 < 0.31){
+		 	if(Aux2 < 0.31){//CORRIGIR PARA SÓ ENTRAR AQUI UMA ÚNICA VEZ E NÃO FICAR INSERINDO O MESMO RISCO MAIS DE 1X
 				.print("Manager, I have detected a new risk in this project! You should check your team members and activities schedule.");
-				//criar novo risco e inserir na lista de risco
+				cartago.invoke_obj(RiskList, size, RLSize);
+				Id = RLSize+1;
+				iActions.internalRiskControl(Id, "Insufficient Time Reserve to apply changes in the project.");
 				
 			}
 		}
@@ -295,35 +299,35 @@ costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersCounter(QwC) & proje
 		 	
 		}else{
 			
-			if(Div < 0.31){
+			if(Div < 0.31){ //CORRIGIR PARA SÓ ENTRAR AQUI UMA ÚNICA VEZ E NÃO FICAR INSERINDO O MESMO RISCO MAIS DE 1X
 				.print("Manager, I have detected a new risk in this project! You should hire more qualified workers or provide training to your team members.");
 				cartago.invoke_obj(RiskList, size, RLSize);
+				Id = RLSize+1;
+				iActions.internalRiskControl(Id, "Team members are not qualified to the project.");
 				
-				cartago.new_obj("models.Risk", [], Ri);
-				cartago.invoke_obj(Ri, setId(RLSize+1));
-				cartago.invoke_obj(Ri, setName("Team members are not qualified to the project."));
-				cartago.invoke_obj(Ri, setId(Size+1));
-				cartago.invoke_obj(Ri, setCostP(0.2));
-				cartago.invoke_obj(Ri, setCostI(1.0));
-				cartago.invoke_obj(Ri, setTimeP(0));
-				cartago.invoke_obj(Ri, setCostP(0));
-				cartago.invoke_obj(Ri, setScopeP(0));
-				cartago.invoke_obj(Ri, setScopeI(0));
-				
-				//CRIAR NOVO PLANO PARA ADD RISCOS NOVOS NA LISTA
-				if (RiskList \== null){ 
-					cartago.invoke_obj(RiskList, add(Ri));
-					-+risk(Ri);
-					cartago.invoke_obj(Ri, getCostP, CP);
-					cartago.invoke_obj(Ri, getCostI, CI);
-					cartago.invoke_obj(Ri, getTimeP, TP);
-					cartago.invoke_obj(Ri, getCostP, TI);
-					cartago.invoke_obj(Ri, getScopeP, SP);
-					cartago.invoke_obj(Ri, getScopeI, SI);
-					!calculateRiskExposure(CP, CI, TP, TI, SP, SI);
-				}
 			}
 		}
 		
 	}.
+//outra forma de criar novos riscos	
+//+!insertNewRisk(): risks(RiskList)  <-
+// cartago.new_obj("models.Risk", [], Ri);
+//	cartago.invoke_obj(Ri, setId(RLSize+1));
+//	cartago.invoke_obj(Ri, setName("Team members are not qualified to the project."));
+//	cartago.invoke_obj(Ri, setCostP(0.2));
+//	cartago.invoke_obj(Ri, setCostI(1.0));
+//	cartago.invoke_obj(Ri, setTimeP(0));
+//	cartago.invoke_obj(Ri, setCostP(0));
+//	cartago.invoke_obj(Ri, setScopeP(0));
+//	cartago.invoke_obj(Ri, setScopeI(0));
+//-+risk(Ri);
+//	cartago.invoke_obj(Ri, getCostP, CP);
+//	cartago.invoke_obj(Ri, getCostI, CI);
+//	cartago.invoke_obj(Ri, getTimeP, TP);
+//	cartago.invoke_obj(Ri, getCostP, TI);
+//	cartago.invoke_obj(Ri, getScopeP, SP);
+//	cartago.invoke_obj(Ri, getScopeI, SI);
+//	!calculateRiskExposure(CP, CI, TP, TI, SP, SI);
+//	cartago.invoke_obj(RiskList, add(Ri));
+//.
 	
