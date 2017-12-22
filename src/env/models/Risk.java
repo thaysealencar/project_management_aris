@@ -5,11 +5,11 @@ public class Risk implements Comparable<Risk> {
 	private String name;
 	private double totalRiskExposure;
 	private double costP; // cost probability
-	private int costI;  // cost impact
+	private int costI;  // cost impact (1,2,3,4,5)
 	private double timeP; // time probability
-	private int timeI; // time impact
+	private int timeI; // time impact (1,2,3,4,5)
 	private double scopeP; // scope probability
-	private int scopeI;  // scope impact
+	private int scopeI;  // scope impact (1,2,3,4,5)
 	private RiskArea riskArea;
 	private int handlingAction; //1,2,3,4 (prevenir, aceitar, mitigar, transferir)
 	private int idEmployee;
@@ -150,12 +150,12 @@ public class Risk implements Comparable<Risk> {
 	}
 	
 	public enum RiskArea {
-		SCOPE(1),
-		COST(2),
-		SCHEDULE(3),
-		TECNICAL(4),
-		STAFF(5),
-		COSTUMER(6);
+		SCOPE(1),//scopeI
+		COST(2), //costI
+		SCHEDULE(3),//timeI
+		TECNICAL(4),//costI, timeI
+		STAFF(5),//costI, timeI, scopeI
+		COSTUMER(6);//costI, timeI, scopeI
 		
 		public int areaType;
 		

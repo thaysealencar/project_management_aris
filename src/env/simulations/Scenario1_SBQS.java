@@ -85,10 +85,10 @@ public class Scenario1_SBQS extends Simulate
 				p.addEmployee(E1);
 				E2 = new Employee(2, "Fransisca" , "Gerenciamento", true);
 				p.addEmployee(E2);
-				E3 = new Employee(3, "Muller", "RH", false);
+				E3 = new Employee(3, "Muller", "RH", true);
 				p.addEmployee(E3);
 				
-				E4 = new Employee(4, "Lala", "RH", false);
+				E4 = new Employee(4, "Lala", "RH", true);
 				p.addEmployee(E4);
 				
 				E5 = new Employee(5, "Ana", "RH", false);

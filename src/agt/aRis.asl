@@ -295,16 +295,17 @@ costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersCounter(QwC) & proje
 		-+percentegeOfQualifiedWorkers(Div);
 		
 		if(Div > 0.30 & Div < 0.60 ){
-		 	.print("Manager, the percentege of qualified workers is low!");
+		 	.print("Manager, I have detected a new risk in this project due to the percentege of qualified workers! You should hire more qualified workers or provide training to your team members.");
+			cartago.invoke_obj(RiskList, size, RLSize);
+			Id = RLSize+1;
+			iActions.internalRiskControl(Id, "Team members are not qualified to the project.", Div, 5);
 		 	
 		}else{
 			
-			if(Div < 0.31){ //CORRIGIR PARA SÓ ENTRAR AQUI UMA ÚNICA VEZ E NÃO FICAR INSERINDO O MESMO RISCO MAIS DE 1X
-				.print("Manager, I have detected a new risk in this project! You should hire more qualified workers or provide training to your team members.");
-				cartago.invoke_obj(RiskList, size, RLSize);
-				Id = RLSize+1;
-				iActions.internalRiskControl(Id, "Team members are not qualified to the project.");
-				
+			if(Div < 0.31){
+				//RISCO ACONTECEU!----ALTERAR AS RESERVAS DE CONTINGENCIA
+				.print("Manager, I have detected the risk X has happened.");
+				//iActions.internalRiskControl(Id, "Team members are not qualified to the project.",100, 0); 
 			}
 		}
 		

@@ -25,17 +25,81 @@ public class internalRiskControl extends DefaultInternalAction {
     	Project p  = Scenario1_SBQS.getProject();
     	String id = args[0].toString();
     	String name = args[1].toString();
+        double div = Double.parseDouble(args[2].toString());
+        int riskArea = Integer.parseInt(args[3].toString());
+        int impact = 0;
     	
     	Risk r = new Risk();
     	r.setId(Integer.parseInt(id));
     	r.setName(name);
-    	r.setCostP(0.6); //Esses valores devem ser calculados de alguma maneira
-    	r.setCostI(1);
-    	r.setTimeP(0);
-    	r.setTimeI(0);
-    	r.setScopeP(0);
+    	r.setCostP(0); 
+		r.setCostI(0);
+		r.setTimeP(0);
+		r.setTimeI(0);
+		r.setScopeP(0);
     	r.setScopeI(0);
-    	r.setRiskArea(RiskArea.STAFF);
+    	
+    	if(div>=0.8 && div<=1){
+    		impact = 1; 
+    	}else if(div>=0.6 && div<=0.79){
+    		impact = 2; 
+    	}else if(div>=0.4 && div<=0.59){
+    		impact = 3; 
+    	}else if(div>=0.2 && div<=0.39){
+    		impact = 4; 
+    	}else{
+    		impact = 5; 
+    	}
+    	
+    	switch(riskArea){
+    		case 1:
+    			r.setScopeP(100-div);
+            	r.setScopeI(impact);
+            	r.setRiskArea(RiskArea.SCOPE);
+    			break;
+    		case 2:
+    			r.setCostP(100-div); 
+    			r.setCostI(impact);
+    			r.setRiskArea(RiskArea.COST);
+        		break;
+    		case 3:
+    			r.setTimeP(100-div);
+    			r.setTimeI(impact);
+    			r.setRiskArea(RiskArea.SCHEDULE);
+        		break;
+    		case 4:
+    			r.setCostP(100-div); 
+    			r.setCostI(impact);
+    			r.setTimeP(100-div);
+    			r.setTimeI(impact);
+    			r.setRiskArea(RiskArea.TECNICAL);
+        		break;
+    		case 5:
+    			r.setCostP(100-div); 
+    			r.setCostI(impact);
+    			r.setTimeP(100-div);
+    			r.setTimeI(impact);
+    			r.setScopeP(100-div);
+            	r.setScopeI(impact);
+            	r.setRiskArea(RiskArea.STAFF);
+        		break;
+    		case 6:
+    			r.setCostP(100-div); 
+    			r.setCostI(impact);
+    			r.setTimeP(100-div);
+    			r.setTimeI(impact);
+    			r.setScopeP(100-div);
+            	r.setScopeI(impact);
+            	r.setRiskArea(RiskArea.COSTUMER);
+        		break;
+        	default: r.setCostP(100); 
+					 r.setCostI(impact);
+					 r.setTimeP(100);
+					 r.setTimeI(impact);
+					 r.setScopeP(100);
+		        	 r.setScopeI(impact);
+    	}
+    	
     	double  totalRiskExposure = r.getScopeP()*r.getScopeI()+r.getCostP()*r.getCostI()+r.getTimeP()*r.getTimeI();
     	r.setTotalRiskExposure(totalRiskExposure);
     	
