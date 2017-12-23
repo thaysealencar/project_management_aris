@@ -3,6 +3,7 @@
 package iActions;
 
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 import jason.asSemantics.DefaultInternalAction;
 import jason.asSemantics.TransitionSystem;
@@ -28,6 +29,7 @@ public class internalRiskControl extends DefaultInternalAction {
         double div = Double.parseDouble(args[2].toString());
         int riskArea = Integer.parseInt(args[3].toString());
         int impact = 0;
+        boolean repeatedRisk = false;
     	
     	Risk r = new Risk();
     	r.setId(Integer.parseInt(id));
@@ -53,60 +55,70 @@ public class internalRiskControl extends DefaultInternalAction {
     	
     	switch(riskArea){
     		case 1:
-    			r.setScopeP(100-div);
+    			r.setScopeP(1-div);
             	r.setScopeI(impact);
             	r.setRiskArea(RiskArea.SCOPE);
     			break;
     		case 2:
-    			r.setCostP(100-div); 
+    			r.setCostP(1-div); 
     			r.setCostI(impact);
     			r.setRiskArea(RiskArea.COST);
         		break;
     		case 3:
-    			r.setTimeP(100-div);
+    			r.setTimeP(1-div);
     			r.setTimeI(impact);
     			r.setRiskArea(RiskArea.SCHEDULE);
         		break;
     		case 4:
-    			r.setCostP(100-div); 
+    			r.setCostP(1-div); 
     			r.setCostI(impact);
-    			r.setTimeP(100-div);
+    			r.setTimeP(1-div);
     			r.setTimeI(impact);
     			r.setRiskArea(RiskArea.TECNICAL);
         		break;
     		case 5:
-    			r.setCostP(100-div); 
+    			r.setCostP(1-div); 
     			r.setCostI(impact);
-    			r.setTimeP(100-div);
+    			r.setTimeP(1-div);
     			r.setTimeI(impact);
-    			r.setScopeP(100-div);
+    			r.setScopeP(1-div);
             	r.setScopeI(impact);
             	r.setRiskArea(RiskArea.STAFF);
         		break;
     		case 6:
-    			r.setCostP(100-div); 
+    			r.setCostP(1-div); 
     			r.setCostI(impact);
-    			r.setTimeP(100-div);
+    			r.setTimeP(1-div);
     			r.setTimeI(impact);
-    			r.setScopeP(100-div);
+    			r.setScopeP(1-div);
             	r.setScopeI(impact);
             	r.setRiskArea(RiskArea.COSTUMER);
         		break;
-        	default: r.setCostP(100); 
+        	default: r.setCostP(1); 
 					 r.setCostI(impact);
-					 r.setTimeP(100);
+					 r.setTimeP(1);
 					 r.setTimeI(impact);
-					 r.setScopeP(100);
+					 r.setScopeP(1);
 		        	 r.setScopeI(impact);
     	}
     	
     	double  totalRiskExposure = r.getScopeP()*r.getScopeI()+r.getCostP()*r.getCostI()+r.getTimeP()*r.getTimeI();
     	r.setTotalRiskExposure(totalRiskExposure);
     	
-		ArrayList<Risk> risks = p.getRisks();
+    	ArrayList<Risk> risks = p.getRisks(); ///VAZIA
     	
-        if(!risks.contains(r)){
-        	risks.add(r);
+//		ListIterator<Risk> litr = risks.listIterator();
+//	    while (litr.hasNext()) {
+//	    	Risk element = litr.next();
+//	    	String riskName = element.getName();
+//	    	
+//	    	if(riskName.compareTo(name)==0){
+//	    		repeatedRisk=true;
+//	    		break;
+//	    	}
+//	    }
+        if(!risks.contains(r)){// && repeatedRisk==false
+        	risks.add(r); 
         }
         return true;
     }

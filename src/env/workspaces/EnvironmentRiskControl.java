@@ -8,6 +8,7 @@ import java.util.Collections;
 import cartago.Artifact;
 import cartago.OPERATION;
 import cartago.OpFeedbackParam;
+import models.Employee;
 import models.Project;
 import models.Risk;
 
@@ -15,8 +16,7 @@ public class EnvironmentRiskControl extends Artifact {
 	
 	private Project project;
 	double newCostP, newTimeP, pucr, putr, costCRCounter, timeCRCounter, qualifiedWorkersCounter;
-	
-	
+	ArrayList< Employee > qualifiedWorkersTemp = new ArrayList<Employee>();
 
 	void init() {
 		defineObsProperty("newCostP", 0.0);
@@ -25,8 +25,7 @@ public class EnvironmentRiskControl extends Artifact {
 		defineObsProperty("putr", 0.0);
 		defineObsProperty("costCRCounter", 0.0);
 		defineObsProperty("timeCRCounter", 0.0);
-		defineObsProperty("qualifiedWorkersCounter", 0.0);
-		defineObsProperty("percentegeOfQualifiedWorkers", 0.0);
+		defineObsProperty("qualifiedWorkersTemp", qualifiedWorkersTemp);
 	}
 
 	@OPERATION
@@ -97,25 +96,7 @@ public class EnvironmentRiskControl extends Artifact {
 		}
 		
 	}
-	@OPERATION
 
-	void incrementCounter(double a, double b, String propertie){
-
-		getObsProperty(propertie).updateValue(a+b);
-
-	}
-
-	
-
-	@OPERATION
-
-	void divison(OpFeedbackParam<Double> a, double b, OpFeedbackParam<Double> div){
-
-		int aux = Integer.parseInt(a.toString());
-
-		div.set(aux/b);
-
-	}
     @OPERATION
     void getQualifiedWorkersCounter(OpFeedbackParam<Double> QwCAux)
     {
@@ -124,6 +105,16 @@ public class EnvironmentRiskControl extends Artifact {
     @OPERATION
 	void setQualifiedWorkersCounter(double qualifiedWorkersCounter) {
 		this.qualifiedWorkersCounter = qualifiedWorkersCounter;
+	}
+    
+    @OPERATION
+    void getQualifiedWorkersTemp(OpFeedbackParam<ArrayList<Employee>> qualifiedWorkersTempAux) {
+    	qualifiedWorkersTempAux.set(this.qualifiedWorkersTemp);
+	}
+    
+    @OPERATION
+	void setQualifiedWorkersTemp(ArrayList<Employee> qualifiedWorkersTemp) {
+		this.qualifiedWorkersTemp = qualifiedWorkersTemp;
 	}
 
 }

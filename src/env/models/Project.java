@@ -25,27 +25,21 @@ public class Project
 		budget		= 0.0f;
 		instant 	= 0;
 		contingencyPercentage = 0;
-		projectTeam = null; // Array List inicializa zero como null;
-		
+		projectTeam = new ArrayList<Employee>();
 	}
 	
 	
 
-	public Project(int id, int duration, float budget, double contingencyPercentege, ArrayList projectTeamList)
+	public Project(int id, int duration, float budget, double contingencyPercentege, ArrayList< Employee > projectTeamList)
 	{
 		this.id			= id;
 		this.duration	= duration;
 		this.budget		= budget;
 		this.realDuration = this.duration;
 		this.contingencyPercentage = contingencyPercentege;
-		this.projectTeam = new ArrayList<Employee>();
+		this.projectTeam = projectTeamList;
 		
 	}
-	
-	
-
-
-
 	
 
 

@@ -207,11 +207,6 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 		
 		iActions.internalStateARis(exit, InternalState); //Apos adicionar todos os riscos o agente ordena a lista de riscos pela ER.
 		-+internalStateARis(InternalState);
-		
-//		if (InternalState \== null){
-//			.length(InternalState, LengthRiksList);
-//			.print("I have received a risk list in my internal state. This list contais  ", LengthRiksList," risks.");
-//		}	
 			
 	}.
 
@@ -234,8 +229,9 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	.print("ARis is observing the project: ", IdProject).
 	
 +!calculateMetrics(Pucr, Putr, TimeReserve, CostReserve): risks(RiskList) & timeContingencyBudget(TCB) & costContingencyBudget(CCB)& 
-costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersCounter(QwC) & projectTeam(ProjectTeam)& percentegeOfQualifiedWorkers(P_QwC) <-
+costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersTemp(QwT) & projectTeam(ProjectTeam) <-
 	
+	.println("METRIC 1");
 	if(Pucr > 0){
 		A= CcrC+1;
 		-+costCRCounter(A);
@@ -249,12 +245,12 @@ costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersCounter(QwC) & proje
 				.print("Manager, I have detected a new risk in this project! You should talk to the project sponsor about the Cost Reserve.");
 				cartago.invoke_obj(RiskList, size, RLSize);
 				Id = RLSize+1;
-				iActions.internalRiskControl(Id, "Insufficient Cost Reserve to apply changes in the project.");
+				iActions.internalRiskControl(Id, "Insufficient Cost Reserve to apply changes in the project");
 				
 			}
 		}
 	}
-	
+	.println("METRIC 2");
 	if(Putr > 0){
 		B = TcrC+1;
 		-+timeCRCounter(B);
@@ -268,67 +264,60 @@ costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersCounter(QwC) & proje
 				.print("Manager, I have detected a new risk in this project! You should check your team members and activities schedule.");
 				cartago.invoke_obj(RiskList, size, RLSize);
 				Id = RLSize+1;
-				iActions.internalRiskControl(Id, "Insufficient Time Reserve to apply changes in the project.");
+				iActions.internalRiskControl(Id, "Insufficient Time Reserve to apply changes in the project");
 				
 			}
 		}
 	}
-	
+	.println("METRIC 3");
 	if (ProjectTeam \== null){
 		cartago.invoke_obj(ProjectTeam, size, Size);
-		
-		for(.range(I, 0, Size-1)){
-			cartago.invoke_obj(ProjectTeam, get(I), Employee);
-			cartago.invoke_obj(Employee, getName, Name);
-			cartago.invoke_obj(Employee, getSpeciality, Speciality);
-			cartago.invoke_obj(Employee, isQualified, Qualified);
+		if(Size>0){
+			.print("Total number of workers= ",Size);
+			cartago.invoke_obj(QwT, clear);
 			
-			if(Qualified == true){
-				+qualifiedWorkersCounter(QwC);
+			for(.range(I, 0, Size-1)){
+				cartago.invoke_obj(ProjectTeam, get(I), Employee);
+				cartago.invoke_obj(Employee, isQualified, Qualified);
+				
+				if(Qualified == true){
+				  cartago.invoke_obj(QwT, add(Employee));
+				}
+				
 			}
-
-		}
-		.count(qualifiedWorkersCounter(QwC), N);
-		.print("Number of qualified workers is ", N);	
-		Div = N/7;
-		.print("The percentege of qualified workers is ", Div);
-		-+percentegeOfQualifiedWorkers(Div);
-		
-		if(Div > 0.30 & Div < 0.60 ){
-		 	.print("Manager, I have detected a new risk in this project due to the percentege of qualified workers! You should hire more qualified workers or provide training to your team members.");
-			cartago.invoke_obj(RiskList, size, RLSize);
-			Id = RLSize+1;
-			iActions.internalRiskControl(Id, "Team members are not qualified to the project.", Div, 5);
-		 	
-		}else{
+			//-+qualifiedWorkersTemp(QwT); 
+			if(QwT \== null){
+				cartago.invoke_obj(QwT, size, SizeQwT);
+				.print("Number of qualified workers is ", SizeQwT);	
+				
+				if(SizeQwT>0){
+					Div = SizeQwT/Size;
+					.print("The percentege of qualified workers is ", Div);
+					
+					if(Div > 0.30 & Div < 0.60 ){ 
+					 	.print("Manager, I have detected a new risk in this project due to the percentege of qualified workers! You should hire more qualified workers or provide training to your team members.");
+						cartago.invoke_obj(RiskList, size, RLSize);
+						Id = RLSize+1;
+						iActions.internalRiskControl(Id,"Team members are not qualified to the project", Div, 5);
+					 	
+					}else{
+						
+						if(Div < 0.31){
+							//RISCO ACONTECEU!----PROBABILIDADE=100 E ALTERAR AS RESERVAS DE CONTINGENCIA
+							.print("Manager, I have detected the risk X has happened.");
+							//iActions.internalRiskControl("Team members are not qualified to the project.",100, 0); 
+						}
+					}
+						
+				}
+				//-+projectTeam(ProjectTeam);
+				cartago.invoke_obj(QwT, clear);
+				cartago.invoke_obj(QwT, size, SizeQwT2);
+				.print("Tamanho da QwT=",SizeQwT2 );
+				 -+qualifiedWorkersTemp(QwT);
+			}
 			
-			if(Div < 0.31){
-				//RISCO ACONTECEU!----ALTERAR AS RESERVAS DE CONTINGENCIA
-				.print("Manager, I have detected the risk X has happened.");
-				//iActions.internalRiskControl(Id, "Team members are not qualified to the project.",100, 0); 
-			}
 		}
-		
 	}.
-//outra forma de criar novos riscos	
-//+!insertNewRisk(): risks(RiskList)  <-
-// cartago.new_obj("models.Risk", [], Ri);
-//	cartago.invoke_obj(Ri, setId(RLSize+1));
-//	cartago.invoke_obj(Ri, setName("Team members are not qualified to the project."));
-//	cartago.invoke_obj(Ri, setCostP(0.2));
-//	cartago.invoke_obj(Ri, setCostI(1.0));
-//	cartago.invoke_obj(Ri, setTimeP(0));
-//	cartago.invoke_obj(Ri, setCostP(0));
-//	cartago.invoke_obj(Ri, setScopeP(0));
-//	cartago.invoke_obj(Ri, setScopeI(0));
-//-+risk(Ri);
-//	cartago.invoke_obj(Ri, getCostP, CP);
-//	cartago.invoke_obj(Ri, getCostI, CI);
-//	cartago.invoke_obj(Ri, getTimeP, TP);
-//	cartago.invoke_obj(Ri, getCostP, TI);
-//	cartago.invoke_obj(Ri, getScopeP, SP);
-//	cartago.invoke_obj(Ri, getScopeI, SI);
-//	!calculateRiskExposure(CP, CI, TP, TI, SP, SI);
-//	cartago.invoke_obj(RiskList, add(Ri));
-//.
+
 	
