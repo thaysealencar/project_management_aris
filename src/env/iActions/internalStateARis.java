@@ -15,12 +15,14 @@ import jason.asSyntax.Term;
 import models.Project;
 import models.Risk;
 import simulations.Scenario1_SBQS;
+import workspaces.EnvironmentProject;
 
 public class internalStateARis extends DefaultInternalAction {
 
     /**
 	 * 
 	 */
+	
 	private static final long serialVersionUID = 1L;
 	private ArrayList<Risk> risks = new ArrayList<Risk>(); //Essa lista começa vazia e é preenchida pelo código dentro do ELSE bloco.
 		
@@ -28,25 +30,28 @@ public class internalStateARis extends DefaultInternalAction {
     public Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception {
     	Project p  = Scenario1_SBQS.getProject();
 		String id = args[0].toString();
-        
+		
         if(id.equals("exit")) {
         	ListTerm result = new ListTermImpl();
         	
         	Collections.sort(risks);
-        	
+        	p.clearRisk();
         	System.out.println("Project's risks:");
+        	System.out.println("Tamanho da lista de riscos = "+risks.size());
     		for (Risk r : risks) {
+    			p.addRisk(r);
     			System.out.println("Risk ID "+ r.getId()+"- "+r.getName()+" - RE= "+r.getTotalRiskExposure());
     			Term t = new NumberTermImpl(r.getId());
     			result.add(t);
     		}
+    		p.setAux(2000);
     		risks.clear();
+    		//getObsProperty("timeContingencyBudget").updateValue(p.getTimeBudgetReserve());
     		return un.unifies(result, args[1]); //mandando a lista de id's de riscos ordenada de volta para o Aris 
     		
         }else{
         	
         	Risk risk = p.getRiskById(Integer.parseInt(id));
-        	
             if(!risks.contains(risk)){
             	risks.add(risk);
             }

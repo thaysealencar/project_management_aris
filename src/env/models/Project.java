@@ -13,10 +13,21 @@ public class Project
 	private double costContingencyBudget;
 	private double scopContingencyBudget;
 	private double contingencyPercentage;
-	
+	public int Aux;
+
+	public int getAux() {
+		return Aux;
+	}
+
+
+
+	public void setAux(int aux) {
+		Aux = aux;
+	}
+
 	private ArrayList< Employee > projectTeam;
 	private ArrayList<Activity> activities = new ArrayList<Activity>();
-	private ArrayList<Risk> risks = new ArrayList<Risk>();
+	public ArrayList<Risk> risks = new ArrayList<Risk>();
 	
 	public Project()
 	{
@@ -47,10 +58,12 @@ public class Project
 	/*************************************************
 	  					ACTIVITIES
 	 **************************************************/
+
 	public void clearActivities()
 	{
 		activities.clear();
 	}
+	
 	public void addActivity(Activity a)
 	{
 		activities.add(a);

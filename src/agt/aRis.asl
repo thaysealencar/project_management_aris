@@ -39,7 +39,7 @@ changeRequest(false).
 		.wait(100);
 		!create.	
 /*Message */
-+!kqml_received(Sender, tell, Variables, Response) : instant(K)  & project(P) & risks(RiskList) & 
++!kqml_received(Sender, tell, Variables, Response) : instant(K)  & project(P) & 
 timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudget(UTCB) & useCostContingencyBudget(UCCB) & changeRequest(CR)<-
 
 	-+changeRequest(true);
@@ -129,7 +129,7 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	// No futuro, trocar CCB e TCB por TimeReserve e CostReserve
 
 
-
+	cartago.invoke_obj(P, getRisks, RiskList);
 	if (RiskList \== null){
 		cartago.invoke_obj(RiskList, size, Size);
 		
@@ -184,11 +184,13 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	-+useCostContingencyBudget(0).
 	
 
-+!monitoringRisks : risks(RiskList) <- 
++!monitoringRisks :  project(P) <- 
+	cartago.invoke_obj(P, getRisks, RiskList);
 	if (RiskList \== null){
 		cartago.invoke_obj(RiskList, size, Size);
 		
 		for(.range(I, 0, Size-1)){
+			
 			cartago.invoke_obj(RiskList, get(I), Risk);
 			-+risk(Risk);
 			cartago.invoke_obj(Risk, getId, Id);
@@ -200,14 +202,23 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 			cartago.invoke_obj(Risk, getScopeP, SP);
 			cartago.invoke_obj(Risk, getScopeI, SI);
 			!calculateRiskExposure(CP, CI, TP, TI, SP, SI);
+			-+risk(Risk);
+			
 			!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, "Risk Information.");		
-			iActions.internalStateARis(Id); //Adiciona risco na lista. Isso é feito iterativamente pois as propriedades dos riscos sofrem alterações no decorrer do tmepo. 
+			iActions.internalStateARis(Id); //Adiciona risco na lista. Isso é feito iterativamente pois as propriedades dos riscos sofrem alterações no decorrer do tempo.
+			
 		};
 		
 		
 		iActions.internalStateARis(exit, InternalState); //Apos adicionar todos os riscos o agente ordena a lista de riscos pela ER.
-		-+internalStateARis(InternalState);
-			
+//		cartago.invoke_obj(P, getRisks, Risks);
+//		cartago.invoke_obj(Risks, get(0), Risk0);
+//		cartago.invoke_obj(Risk0, getTotalRiskExposure, RE0);
+//		.print("Risk Exposure Aqui! = ", RE0);
+//		cartago.invoke_obj(P, getAux, Aux);
+//		.print("Aux  = ", Aux);
+		//-+internalStateARis(InternalState);	
+		-+project(P);
 	}.
 
 +!calculateRiskExposure(CP, CI, TP, TI, SP, SI): risk(Risk)<-
@@ -222,13 +233,13 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	!monitoringRisks.
 	
 	
-+project(P) <- 
++project(P) <- // Toda vida que eu atualizar uma crença com -+, faço um "plano" com a crença e atualizo dentro do projeto :D 
 	cartago.invoke_obj(P, getId, IdProject);
 	+idProject(IdProject);
 	setProject(P); //setando a propriedade observavel novamente
 	.print("ARis is observing the project: ", IdProject).
 	
-+!calculateMetrics(Pucr, Putr, TimeReserve, CostReserve): risks(RiskList) & timeContingencyBudget(TCB) & costContingencyBudget(CCB)& 
++!calculateMetrics(Pucr, Putr, TimeReserve, CostReserve): project(P) & timeContingencyBudget(TCB) & costContingencyBudget(CCB)& 
 costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersTemp(QwT) & projectTeam(ProjectTeam) <-
 	
 	.println("METRIC 1");
@@ -296,6 +307,7 @@ costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersTemp(QwT) & projectT
 					
 					if(Div > 0.30 & Div < 0.60 ){ 
 					 	.print("Manager, I have detected a new risk in this project due to the percentege of qualified workers! You should hire more qualified workers or provide training to your team members.");
+						cartago.invoke_obj(P, getRisks, RiskList);
 						cartago.invoke_obj(RiskList, size, RLSize);
 						Id = RLSize+1;
 						iActions.internalRiskControl(Id,"Team members are not qualified to the project", Div, 5);
@@ -315,6 +327,7 @@ costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersTemp(QwT) & projectT
 				cartago.invoke_obj(QwT, size, SizeQwT2);
 				.print("Tamanho da QwT=",SizeQwT2 );
 				 -+qualifiedWorkersTemp(QwT);
+				 +risks;
 			}
 			
 		}

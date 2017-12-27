@@ -106,20 +106,23 @@ public class internalRiskControl extends DefaultInternalAction {
     	r.setTotalRiskExposure(totalRiskExposure);
     	
     	ArrayList<Risk> risks = p.getRisks(); ///VAZIA
+    	if(risks != null){
+			ListIterator<Risk> litr = risks.listIterator();
+		    while (litr.hasNext()) {
+		    	Risk element = litr.next();
+		    	String riskName = element.getName();
+		    	
+		    	if(riskName.compareTo(name)==0){
+		    		repeatedRisk=true;
+		    		System.out.println("lalala");
+		    		break;
+		    	}
+		    }
+    	}
+	        if(!risks.contains(r) && repeatedRisk==false){ 
+	        	risks.add(r); 
+	        }
     	
-//		ListIterator<Risk> litr = risks.listIterator();
-//	    while (litr.hasNext()) {
-//	    	Risk element = litr.next();
-//	    	String riskName = element.getName();
-//	    	
-//	    	if(riskName.compareTo(name)==0){
-//	    		repeatedRisk=true;
-//	    		break;
-//	    	}
-//	    }
-        if(!risks.contains(r)){// && repeatedRisk==false
-        	risks.add(r); 
-        }
         return true;
     }
 }
