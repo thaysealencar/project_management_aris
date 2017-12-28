@@ -30,7 +30,7 @@ public class internalRiskControl extends DefaultInternalAction {
         int riskArea = Integer.parseInt(args[3].toString());
         int impact = 0;
         boolean repeatedRisk = false;
-    	
+        System.out.println("Aqui 1");
     	Risk r = new Risk();
     	r.setId(Integer.parseInt(id));
     	r.setName(name);
@@ -52,7 +52,8 @@ public class internalRiskControl extends DefaultInternalAction {
     	}else{
     		impact = 5; 
     	}
-    	
+    	System.out.println("Aqui 2");
+
     	switch(riskArea){
     		case 1:
     			r.setScopeP(1-div);
@@ -63,6 +64,7 @@ public class internalRiskControl extends DefaultInternalAction {
     			r.setCostP(1-div); 
     			r.setCostI(impact);
     			r.setRiskArea(RiskArea.COST);
+    	    	System.out.println("Aqui 3");
         		break;
     		case 3:
     			r.setTimeP(1-div);
@@ -101,28 +103,32 @@ public class internalRiskControl extends DefaultInternalAction {
 					 r.setScopeP(1);
 		        	 r.setScopeI(impact);
     	}
-    	
+    	System.out.println("Aqui 4");
+
     	double  totalRiskExposure = r.getScopeP()*r.getScopeI()+r.getCostP()*r.getCostI()+r.getTimeP()*r.getTimeI();
     	r.setTotalRiskExposure(totalRiskExposure);
     	
     	ArrayList<Risk> risks = p.getRisks(); ///VAZIA
+    	System.out.println("Tamanho da risks = " + risks.size());
+    //	p.clearRisk();
     	if(risks != null){
 			ListIterator<Risk> litr = risks.listIterator();
 		    while (litr.hasNext()) {
 		    	Risk element = litr.next();
 		    	String riskName = element.getName();
 		    	
-		    	if(riskName.compareTo(name)==0){
+		    	if(riskName.compareTo(name)== 0){
 		    		repeatedRisk=true;
-		    		System.out.println("lalala");
+		    		
 		    		break;
 		    	}
 		    }
     	}
 	        if(!risks.contains(r) && repeatedRisk==false){ 
 	        	risks.add(r); 
+	        	p.addRisk(r);
 	        }
-    	
+	       
         return true;
     }
 }

@@ -6,7 +6,7 @@ internalStateAMud(null).
 useTimeContingencyBudget(0).
 useCostContingencyBudget(0).
 changeRequest(false).
-
+calculatingMetric(1).
 /* Initial goals */
 !monitoring.
 !create.
@@ -40,7 +40,7 @@ changeRequest(false).
 		!create.	
 /*Message */
 +!kqml_received(Sender, tell, Variables, Response) : instant(K)  & project(P) & 
-timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudget(UTCB) & useCostContingencyBudget(UCCB) & changeRequest(CR)<-
+timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudget(UTCB) & useCostContingencyBudget(UCCB) & changeRequest(CR) <-
 
 	-+changeRequest(true);
 	.print("Change Request = ", CR);
@@ -184,9 +184,12 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	-+useCostContingencyBudget(0).
 	
 
-+!monitoringRisks :  project(P) <- 
++!monitoringRisks :  project(P) & calculatingMetric(CM) <- 
+	if(CM \== 0){
+	.print("Vou monitorar!");
 	cartago.invoke_obj(P, getRisks, RiskList);
 	if (RiskList \== null){
+		.print("Monitorando!");
 		cartago.invoke_obj(RiskList, size, Size);
 		
 		for(.range(I, 0, Size-1)){
@@ -204,30 +207,23 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 			!calculateRiskExposure(CP, CI, TP, TI, SP, SI);
 			-+risk(Risk);
 			
-			!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, "Risk Information.");		
+			//!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, "Risk Information.");		
 			iActions.internalStateARis(Id); //Adiciona risco na lista. Isso é feito iterativamente pois as propriedades dos riscos sofrem alterações no decorrer do tempo.
 			
 		};
 		
 		
-		iActions.internalStateARis(exit, InternalState); //Apos adicionar todos os riscos o agente ordena a lista de riscos pela ER.
-//		cartago.invoke_obj(P, getRisks, Risks);
-//		cartago.invoke_obj(Risks, get(0), Risk0);
-//		cartago.invoke_obj(Risk0, getTotalRiskExposure, RE0);
-//		.print("Risk Exposure Aqui! = ", RE0);
-//		cartago.invoke_obj(P, getAux, Aux);
-//		.print("Aux  = ", Aux);
-		//-+internalStateARis(InternalState);	
+		iActions.internalStateARis(exit, InternalState); //Apos adicionar todos os riscos o agente ordena a lista de riscos pela ER.	
 		-+project(P);
-	}.
-
+	}
+}.
 +!calculateRiskExposure(CP, CI, TP, TI, SP, SI): risk(Risk)<-
 	TotalRiskExposure = (CP*CI)+(TP*TI)+(SP*SI);
 	cartago.invoke_obj(Risk, setTotalRiskExposure(TotalRiskExposure));
 	-+totalRiskEsposure(TotalRiskExposure).	
 	
-+!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, Msg): instant(K) & cenario(Cenario) & totalRiskEsposure(TotalRiskExposure) <-
-	iActions.recordLogARis(P, Id, Cenario, K, Name, CP, CI, TP, TI, SP, SI, TotalRiskExposure, Msg).
+//+!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, Msg): instant(K) & cenario(Cenario) & totalRiskEsposure(TotalRiskExposure) <-
+//	iActions.recordLogARis(P, Id, Cenario, K, Name, CP, CI, TP, TI, SP, SI, TotalRiskExposure, Msg).
 
 +tick : instant(K) <-
 	!monitoringRisks.
@@ -241,23 +237,26 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	
 +!calculateMetrics(Pucr, Putr, TimeReserve, CostReserve): project(P) & timeContingencyBudget(TCB) & costContingencyBudget(CCB)& 
 costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersTemp(QwT) & projectTeam(ProjectTeam) <-
-	
+	+calculatingMetric(0);
 	.println("METRIC 1");
 	if(Pucr > 0){
 		A= CcrC+1;
 		-+costCRCounter(A);
 		.print("CostCRCounter is now ", A);
 		
-		Aux = CostReserve/CCB;
-		if(Aux > 0.30 & Aux < 0.60){
-		 	.print("Manager, the Projects Cost Reserve is low!");
+		POCR = CostReserve/CCB;
+		.print("CostReserve/CCB = ", POCR);
+		if(POCR > 0.90 & POCR < 0.99){
+		 	.print("Manager, the Projects Cost Reserve is low! Percentage of Cost Reserve = ", POCR);
 		 	
-		 	if(Aux < 0.31){//CORRIGIR PARA SÓ ENTRAR AQUI UMA ÚNICA VEZ E NÃO FICAR INSERINDO O MESMO RISCO MAIS DE 1X
+		 	if(POCR < 0.99){
 				.print("Manager, I have detected a new risk in this project! You should talk to the project sponsor about the Cost Reserve.");
+				cartago.invoke_obj(P, getRisks, RiskList);
 				cartago.invoke_obj(RiskList, size, RLSize);
 				Id = RLSize+1;
-				iActions.internalRiskControl(Id, "Insufficient Cost Reserve to apply changes in the project");
-				
+				.concat("Insufficient Cost Reserve to apply changes in the project", Msg);
+				iActions.internalRiskControl(Id, Msg, POCR, 2);
+			setProject(P);
 			}
 		}
 	}
@@ -267,20 +266,24 @@ costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersTemp(QwT) & projectT
 		-+timeCRCounter(B);
 		.print("TimeCRCounter is now ", B);
 		
-		Aux2 = CostReserve/CCB;
-		if(Aux2 > 0.30 & Aux2 < 0.60){
-		 	.print("Manager, the Projects Time Reserve is low!");
+		POTR = TimeReserve/TCB;
+		.print("TimeReserve/TCB = ", POTR);
+		if(POTR > 0.30 & POTR < 0.60){
+		 	.print("Manager, the Projects Time Reserve is low! Percentage of Time Reserve = ", POTR);
 		 	
-		 	if(Aux2 < 0.31){//CORRIGIR PARA SÓ ENTRAR AQUI UMA ÚNICA VEZ E NÃO FICAR INSERINDO O MESMO RISCO MAIS DE 1X
+		 	if(POTR < 0.31){
 				.print("Manager, I have detected a new risk in this project! You should check your team members and activities schedule.");
+				cartago.invoke_obj(P, getRisks, RiskList);
 				cartago.invoke_obj(RiskList, size, RLSize);
 				Id = RLSize+1;
-				iActions.internalRiskControl(Id, "Insufficient Time Reserve to apply changes in the project");
-				
+				.concat("Insufficient Time Reserve to apply changes in the project", Msg);
+				iActions.internalRiskControl(Id, Msg, POTR, 3);
+			-+project(P);	
 			}
 		}
 	}
 	.println("METRIC 3");
+	cartago.invoke_obj(P, getProjectTeam, ProjectTeam);
 	if (ProjectTeam \== null){
 		cartago.invoke_obj(ProjectTeam, size, Size);
 		if(Size>0){
@@ -293,9 +296,11 @@ costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersTemp(QwT) & projectT
 				
 				if(Qualified == true){
 				  cartago.invoke_obj(QwT, add(Employee));
+				  .print("Eu adicionei, Thayse, calma!");
 				}
 				
 			}
+			
 			//-+qualifiedWorkersTemp(QwT); 
 			if(QwT \== null){
 				cartago.invoke_obj(QwT, size, SizeQwT);
@@ -306,12 +311,18 @@ costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersTemp(QwT) & projectT
 					.print("The percentege of qualified workers is ", Div);
 					
 					if(Div > 0.30 & Div < 0.60 ){ 
+						
 					 	.print("Manager, I have detected a new risk in this project due to the percentege of qualified workers! You should hire more qualified workers or provide training to your team members.");
+					 	cartago.invoke_obj(P, getId, Id);
+					 	.print("Id do Projeto = ", Id);
 						cartago.invoke_obj(P, getRisks, RiskList);
 						cartago.invoke_obj(RiskList, size, RLSize);
 						Id = RLSize+1;
-						iActions.internalRiskControl(Id,"Team members are not qualified to the project", Div, 5);
-					 	
+						.concat("Team members are not qualified to the project", Msg);
+						
+						iActions.internalRiskControl(Id, Msg, Div, 5);
+						
+					 	setProject(P);
 					}else{
 						
 						if(Div < 0.31){
@@ -324,13 +335,12 @@ costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersTemp(QwT) & projectT
 				}
 				//-+projectTeam(ProjectTeam);
 				cartago.invoke_obj(QwT, clear);
-				cartago.invoke_obj(QwT, size, SizeQwT2);
-				.print("Tamanho da QwT=",SizeQwT2 );
 				 -+qualifiedWorkersTemp(QwT);
-				 +risks;
 			}
 			
 		}
+	-+project(P);
+	-+calculatingMetric(1);
 	}.
 
 	

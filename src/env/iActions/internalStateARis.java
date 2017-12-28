@@ -37,14 +37,12 @@ public class internalStateARis extends DefaultInternalAction {
         	Collections.sort(risks);
         	p.clearRisk();
         	System.out.println("Project's risks:");
-        	System.out.println("Tamanho da lista de riscos = "+risks.size());
     		for (Risk r : risks) {
     			p.addRisk(r);
     			System.out.println("Risk ID "+ r.getId()+"- "+r.getName()+" - RE= "+r.getTotalRiskExposure());
     			Term t = new NumberTermImpl(r.getId());
     			result.add(t);
     		}
-    		p.setAux(2000);
     		risks.clear();
     		//getObsProperty("timeContingencyBudget").updateValue(p.getTimeBudgetReserve());
     		return un.unifies(result, args[1]); //mandando a lista de id's de riscos ordenada de volta para o Aris 
