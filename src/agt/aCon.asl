@@ -135,7 +135,7 @@ internalStateACon(null).
 		
 		if(VP > 0 & VC < 0 & CPI < 1 & SPI > 1)	// Adiantado no Cronograma e Acima do Orcamento.
 		{
-			getSuccessorsActivitiesOutCP(Id, SuccOutCP);
+			getSuccessorsActivitiesOutCP(Id, SuccOutCP); //RETORNA UM VETOR DE ATIVIDADES!!!
 			.length(SuccOutCP, Size);
 		
 			if(Size > 1)

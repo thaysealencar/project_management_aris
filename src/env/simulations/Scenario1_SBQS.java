@@ -36,7 +36,7 @@ public class Scenario1_SBQS extends Simulate
 	{	
 		// Atividades do Projeto.
 				Activity A, B, C, D, E, F, G, H, I, J, K, L, M, N;
-				Risk R1,R2,R3;
+				Risk R1,R2,R3, R4, R5, R6;
 				Employee E1, E2, E3, E4, E5, E6, E7;
 				
 				A = new Activity(1, "A", 10, 700.0f);	B = new Activity(2, "B", 5, 350.0f);
@@ -100,12 +100,18 @@ public class Scenario1_SBQS extends Simulate
 				E7 = new Employee(7, "Sasha", "RH", false);
 				p.addEmployee(E7);
 				
-				R1 = new Risk(1, "Definicao do Custo", 0.3, 4, 0.3, 4, 0, 0, 0, RiskArea.COST, 1,1);
+				R1 = new Risk(1, "Definition of scope", 0, 0, 0.5, 5, 0, 0, 0, RiskArea.SCOPE, 1,1); 
 				p.addRisk(R1);
-				R2 = new Risk(2, "Definicao do Custo2", 0.4, 5, 0, 0, 0, 0, 0, RiskArea.SCHEDULE, 1,1);
+				R2 = new Risk(2, "Misunderstanding of the requisites", 0, 0, 0.5, 5, 0, 0, 0, RiskArea.SCHEDULE, 1,1); 
 				p.addRisk(R2);
-				R3 = new Risk(3, "Definicao do Custo3", 0.2, 1, 0, 0, 0, 0, 0, RiskArea.COST, 1,1);
+				R3 = new Risk(3, "Incorporation of a new technology", 0.7, 5, 0, 0, 0, 0, 0, RiskArea.COST, 1,1);
 				p.addRisk(R3);
+				R4 = new Risk(4, "Unrealistic schedule", 0, 0, 0.9, 3, 0.4, 1, 0, RiskArea.SCHEDULE, 1,1);
+				p.addRisk(R4);
+				R5 = new Risk(5, "Unrealistic budget", 0.3, 4, 0, 0, 0.5, 1, 0, RiskArea.COST, 1,1);
+				p.addRisk(R5);
+				//R6 = new Risk(6, "Development errors of the functions or interface", 0, 0, 0, 0, 0.3, 1, 0, RiskArea.SCHEDULE, 1,1);
+				//p.addRisk(R6);
 				
 				
 				double aux1 = p.calculateTimeContingencyBudget(p.getContingencyPercentage());

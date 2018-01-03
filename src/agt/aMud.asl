@@ -170,7 +170,7 @@
 +project(P) <- 
 	cartago.invoke_obj(P, getId, IdProject);
 	setProject(P);
-	.print("AMud observing Project ", IdProject).
+	.print("Observing Project ", IdProject).
 
 +tick : instant(K) & activities(A)<-
 	setActivities(A, K);

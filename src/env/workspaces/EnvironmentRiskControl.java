@@ -3,7 +3,7 @@
 package workspaces;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.ListIterator;
 
 import cartago.Artifact;
 import cartago.OPERATION;
@@ -11,6 +11,8 @@ import cartago.OpFeedbackParam;
 import models.Employee;
 import models.Project;
 import models.Risk;
+import models.Risk.RiskArea;
+import simulations.Scenario1_SBQS;
 
 public class EnvironmentRiskControl extends Artifact {
 	
@@ -26,17 +28,21 @@ public class EnvironmentRiskControl extends Artifact {
 		defineObsProperty("costCRCounter", 0.0);
 		defineObsProperty("timeCRCounter", 0.0);
 		defineObsProperty("qualifiedWorkersTemp", qualifiedWorkersTemp);
+		
 	}
 
 	@OPERATION
-	 Project getProject() {
-		return project;
+	 void getProject(OpFeedbackParam<Project> p) {
+		project  = Scenario1_SBQS.getProject();
+		p.set(project);
 	}
 
 	@OPERATION
 	 void setProject(Project project) {
 		this.project = project;
+		//getObsProperty("risks").updateValue(project.getRisks());
 	}
+	
 	@OPERATION
 	 void setPucr(double pucr) {
 	this.pucr = pucr;
@@ -85,17 +91,17 @@ public class EnvironmentRiskControl extends Artifact {
 	newTimePAux.set(this.newTimeP);
 	}
 	
-	@OPERATION
-	 void riskControl(ArrayList<Risk> aux )
-	{
-		Collections.sort(aux);
-		
-		for (Risk risk : aux) {
-			System.out.println(risk.getId()+ " - "+risk.getTotalRiskExposure());
-			
-		}
-		
-	}
+//	@OPERATION
+//	 void riskControl(ArrayList<Risk> aux )
+//	{
+//		Collections.sort(aux);
+//		
+//		for (Risk risk : aux) {
+//			System.out.println(risk.getId()+ " - "+risk.getTotalRiskExposure());
+//			
+//		}
+//		
+//	}
 
     @OPERATION
     void getQualifiedWorkersCounter(OpFeedbackParam<Double> QwCAux)
@@ -115,6 +121,115 @@ public class EnvironmentRiskControl extends Artifact {
     @OPERATION
 	void setQualifiedWorkersTemp(ArrayList<Employee> qualifiedWorkersTemp) {
 		this.qualifiedWorkersTemp = qualifiedWorkersTemp;
+	}
+    
+    @OPERATION
+    void calculateMetrics(String name_p, double div_p, int riskArea_p, OpFeedbackParam<Project> succOutCP){
+		Project p  = Scenario1_SBQS.getProject();
+    	String name = name_p;
+        double div = div_p;
+        int riskArea = riskArea_p;
+        ArrayList<Risk> risks = p.getRisks();
+        int id = risks.size()+1;
+        int impact = 0;
+        boolean repeatedRisk = false;
+        //System.out.println("Esse projeto tem "+p.getRisks().size()+" riscos");
+       
+        Risk r = new Risk();
+    	r.setId(id);
+    	r.setName(name);
+    	r.setCostP(0); 
+		r.setCostI(0);
+		r.setTimeP(0);
+		r.setTimeI(0);
+		r.setScopeP(0);
+    	r.setScopeI(0);
+    	
+    	if(div>=0.8 && div<=1){
+    		impact = 1; 
+    	}else if(div>=0.6 && div<=0.79){
+    		impact = 2; 
+    	}else if(div>=0.4 && div<=0.59){
+    		impact = 3; 
+    	}else if(div>=0.2 && div<=0.39){
+    		impact = 4; 
+    	}else{
+    		impact = 5; 
+    	}
+
+    	switch(riskArea){
+    		case 1:
+    			r.setScopeP(1-div);
+            	r.setScopeI(impact);
+            	r.setRiskArea(RiskArea.SCOPE);
+    			break;
+    		case 2:
+    			r.setCostP(1-div); 
+    			r.setCostI(impact);
+    			r.setRiskArea(RiskArea.COST);
+        		break;
+    		case 3:
+    			r.setTimeP(1-div);
+    			r.setTimeI(impact);
+    			r.setRiskArea(RiskArea.SCHEDULE);
+        		break;
+    		case 4:
+    			r.setCostP(1-div); 
+    			r.setCostI(impact);
+    			r.setTimeP(1-div);
+    			r.setTimeI(impact);
+    			r.setRiskArea(RiskArea.TECNICAL);
+        		break;
+    		case 5:
+    			r.setCostP(1-div); 
+    			r.setCostI(impact);
+    			r.setTimeP(1-div);
+    			r.setTimeI(impact);
+    			r.setScopeP(1-div);
+            	r.setScopeI(impact);
+            	r.setRiskArea(RiskArea.STAFF);
+        		break;
+    		case 6:
+    			r.setCostP(1-div); 
+    			r.setCostI(impact);
+    			r.setTimeP(1-div);
+    			r.setTimeI(impact);
+    			r.setScopeP(1-div);
+            	r.setScopeI(impact);
+            	r.setRiskArea(RiskArea.COSTUMER);
+        		break;
+        	default: r.setCostP(1); 
+					 r.setCostI(impact);
+					 r.setTimeP(1);
+					 r.setTimeI(impact);
+					 r.setScopeP(1);
+		        	 r.setScopeI(impact);
+    	}
+
+    	
+    	if(risks != null){
+			ListIterator<Risk> litr = risks.listIterator();
+		    while (litr.hasNext()) {
+		    	Risk element = litr.next();
+		    	String riskName = element.getName();
+		    	
+		    	if(riskName.compareTo(name)== 0){
+		    		repeatedRisk=true;
+		    		
+		    		break;
+		    	}
+		    }
+    	}
+    	
+    	if(risks != null && repeatedRisk==false ){
+    		 if(!risks.contains(r)){
+ 	        	risks.add(r); 
+ 	        }
+    	}
+    	
+    	p.setRisks(risks);
+    	//System.out.println("O numero de riscos no projeto agora é "+p.getRisks().size());
+    	succOutCP.set(p);
 	}
 
 }

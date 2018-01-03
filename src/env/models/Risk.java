@@ -1,5 +1,10 @@
 package models;
 
+import java.util.ArrayList;
+
+import models.Risk.RiskArea;
+import simulations.Scenario1_SBQS;
+
 public class Risk implements Comparable<Risk> {
 	private int id;
 	private String name;

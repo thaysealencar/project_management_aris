@@ -15,7 +15,6 @@ import jason.asSyntax.Term;
 import models.Project;
 import models.Risk;
 import simulations.Scenario1_SBQS;
-import workspaces.EnvironmentProject;
 
 public class internalStateARis extends DefaultInternalAction {
 
@@ -36,7 +35,6 @@ public class internalStateARis extends DefaultInternalAction {
         	
         	Collections.sort(risks);
         	p.clearRisk();
-        	System.out.println("Project's risks:");
     		for (Risk r : risks) {
     			p.addRisk(r);
     			System.out.println("Risk ID "+ r.getId()+"- "+r.getName()+" - RE= "+r.getTotalRiskExposure());
@@ -44,7 +42,6 @@ public class internalStateARis extends DefaultInternalAction {
     			result.add(t);
     		}
     		risks.clear();
-    		//getObsProperty("timeContingencyBudget").updateValue(p.getTimeBudgetReserve());
     		return un.unifies(result, args[1]); //mandando a lista de id's de riscos ordenada de volta para o Aris 
     		
         }else{

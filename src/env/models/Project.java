@@ -13,18 +13,6 @@ public class Project
 	private double costContingencyBudget;
 	private double scopContingencyBudget;
 	private double contingencyPercentage;
-	public int Aux;
-
-	public int getAux() {
-		return Aux;
-	}
-
-
-
-	public void setAux(int aux) {
-		Aux = aux;
-	}
-
 	private ArrayList< Employee > projectTeam;
 	private ArrayList<Activity> activities = new ArrayList<Activity>();
 	public ArrayList<Risk> risks = new ArrayList<Risk>();

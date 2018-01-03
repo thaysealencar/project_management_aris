@@ -22,8 +22,6 @@ public class EnvironmentProject extends Artifact
 	private ArrayList< Employee > projectTeamList = new ArrayList<Employee>();
 	private Project p = new Project(1, 160, 11200.0f, 0.3, projectTeamList);
 	
-	//private Project p = new Project(1, 30, 150.0f);
-	
 	List<Simulate> scenarios = new LinkedList<Simulate>();
 	
 	public void init()
@@ -39,10 +37,6 @@ public class EnvironmentProject extends Artifact
 
 		// Propriedades observaveis das atividades do projeto.
 		defineObsProperty("activities", p.getActivities());
-		
-		// Propriedades observaveis dos riscos do projeto.
-		defineObsProperty("risks", p.getRisks());
-		defineObsProperty("projectTeam", p.getProjectTeam());
 		
 		defineObsProperty("timeContingencyBudget", p.getTimeBudgetReserve());
 		defineObsProperty("costContingencyBudget", p.getCostBudgetReserve());
@@ -104,7 +98,8 @@ public class EnvironmentProject extends Artifact
 				}
 			
 			getObsProperty("activities").updateValue(p.getActivities());
-			getObsProperty("risks").updateValue(p.getRisks());
+			//getObsProperty("risks").updateValue(p.getRisks()); --> nao pode ser atualizada pois ZERA a lista de riscos!
+			
 			signal("tick");
 			await_time(2500);
 			instant.updateValue(instant.intValue() + 1);
