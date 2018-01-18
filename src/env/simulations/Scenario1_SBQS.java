@@ -100,7 +100,7 @@ public class Scenario1_SBQS extends Simulate
 				E7 = new Employee(7, "Sasha", "RH", false);
 				p.addEmployee(E7);
 				
-				R1 = new Risk(1, "Definition of scope", 0, 0, 0.5, 5, 0, 0, 0, RiskArea.SCOPE, 1,1); 
+				R1 = new Risk(1, "Definition of scope", 0, 0, 0, 0, 0.3, 4, 0, RiskArea.SCOPE, 1,1); 
 				p.addRisk(R1);
 				R2 = new Risk(2, "Misunderstanding of the requisites", 0, 0, 0.5, 5, 0, 0, 0, RiskArea.SCHEDULE, 1,1); 
 				p.addRisk(R2);

@@ -113,10 +113,8 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	TimeReserve = TCB-DeltaTimeActivity; // Atualizando o valor da Reserva de Tempo (esses valores nao sao de fato descontados do projeto)
 	CostReserve = CCB-DeltaCostActivity;
 	
-	.print("CostReserve :", CostReserve);
-	
 	.print("Activity ", Label, " Cost variation= ", DeltaCostActivity, " New Cost= ", NewCostActivity);
-	.print("Activity ", Label, " Cost variation= ", DeltaTimeActivity, " New Time= ", NewTimeActivity);
+	.print("Activity ", Label, " Time variation= ", DeltaTimeActivity, " New Time= ", NewTimeActivity);
 	.print("Amount of cost reserve after change= ", CostReserve);
 	.print("Amount of time reserve after change= ",TimeReserve);
 	.print("Dear manager, if you apply this change to the project, the following riks will be affected:");
@@ -132,9 +130,9 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 		
 		// PUTR E PUCR Porcentagem de uso das reservas de tempo e custo.
 		getPucr(Pucr);
-		.print("Percentage of Use of Cost Reserve!", Pucr);
+		//.print("Percentage of Use of Cost Reserve!", Pucr);
 		getPutr(Putr);
-	   .print("Percentage of Use of Time Reserve!", Putr);
+	   //.print("Percentage of Use of Time Reserve!", Putr);
 	
 		for(.range(I, 0, Size-1)){
 			
@@ -231,21 +229,22 @@ costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersTemp(QwT)  <-
 	cartago.invoke_obj(P, getProjectTeam, ProjectTeam);
 	cartago.invoke_obj(ProjectTeam, size, Size);
 	
-	.println("-----------METRIC 1: Cost Changes-----------");
+	.println("-------METRIC 1: Percentage of Cost Changes-------");
 	if(Pucr > 0){
 		A= CcrC+1;
 		-+costCRCounter(A);
-		.print("Number of Cost Changes= ", A);
+		.print("Percentage of Cost Changes = ", A/3); 
 		
+		.println("-------METRIC 2: Percentage of Cost Reserve-------");
 		POCR = CostReserve/CCB;
-		.print("Percentege of Cost Reserve = ", POCR);
+		.print("Percentage of Cost Reserve = ", POCR);
 		
-		if(POCR > 0.90 & POCR < 0.99){
-		 	.print("Manager, the Projects Cost Reserve is low! Percentage of Cost Reserve = ", POCR);
+		if(POCR > 0.30 & POCR < 0.60){
+		 	.print("Manager, the Project's Cost Reserve is low! Percentage of Cost Reserve = ", POCR);
 		 	
-		 	if(POCR < 0.99){
-				.println("Manager, I have detected a new risk in this project due to the percentege of cost reserve!");
-				.println("Advice: You should talk to the project sponsor about the Cost Reserve.");
+		 	if(POCR < 0.31){
+				.println("Manager, I have detected a new risk in this project due to the percentage of cost reserve!");
+				.println("Advice: You should talk to the project sponsor about the project budget.");
 				.concat("Insufficient Cost Reserve to apply changes/handle threats in the project", Msg1);
 				calculateMetrics(Msg1, POCR, 2,X1);
 				P = X1;
@@ -253,21 +252,22 @@ costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersTemp(QwT)  <-
 		}
 	}
 	
-	.println("-----------METRIC 2: Time Changes-----------");
+	.println("-------METRIC 3: Percentage of Time Changes-------");
 	if(Putr > 0){
 		B = TcrC+1;
 		-+timeCRCounter(B);
-		.print("Number of Time Changes= ", B);
+		.print("Percentage of Time Changes = ", B/3);
 		
+		.println("-------METRIC 4: Percentage of Time Reserve-------");
 		POTR = TimeReserve/TCB;
-		.print("Percentege of Time Reserve = ", POTR);
+		.print("Percentage of Time Reserve = ", POTR);
 		
 		if(POTR > 0.30 & POTR < 0.60){
-		 	.print("Manager, the Projects Time Reserve is low! Percentage of Time Reserve = ", POTR);
+		 	.print("Manager, the Project's Time Reserve is low! Percentage of Time Reserve = ", POTR);
 		 	
 		 	if(POTR < 0.31){
-				.println("Manager, I have detected a new risk in this project due to the percentege of time reserve!");
-				.println("Advice: You should check your team members and activities schedule.");
+				.println("Manager, I have detected a new risk in this project due to the percentage of time reserve!");
+				.println("Advice: You should check the team members' and activities schedule.");
 				.concat("Insufficient Time Reserve to apply changes/handle threats in the project", Msg2);
 				calculateMetrics(Msg2, POTR, 3,X2);
 				P = X2;
@@ -275,11 +275,17 @@ costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersTemp(QwT)  <-
 		}
 	}
 	
-	.println("-----------METRIC 3: Qualified Workers-----------");
+	.println("-------METRIC 5: Percentage of Scope Changes-------");
+	if(Pucr > 0){
+		.print("Percentage of Scope Changes = ", 0); 
+		
+	}
+	
+	.println("-------METRIC 6: Percentage of Qualified Workers-------");
 	if (ProjectTeam \== null){ 
 		
 		if(Size>0){
-			.print("Total number of workers= ",Size);
+			.print("Total number of workers = ",Size);
 			cartago.invoke_obj(QwT, clear);
 			
 			for(.range(I, 0, Size-1)){
@@ -294,16 +300,16 @@ costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersTemp(QwT)  <-
 			
 			if(QwT \== null){
 				cartago.invoke_obj(QwT, size, SizeQwT);
-				.print("Number of qualified workers is ", SizeQwT);	
+				.print("Number of qualified workers = ", SizeQwT);	
 				
 				if(SizeQwT>0){
 					Div = SizeQwT/Size;
-					.print("The percentege of qualified workers is ", Div);
+					.print("Percentage of qualified workers = ", Div);
 					
 					if(Div > 0.30 & Div < 0.60 ){ 
-						.println("Manager, I have detected a new risk in this project due to the percentege of qualified workers!");
+						.println("Manager, I have detected a new risk in this project due to the percentage of qualified workers!");
 						.println("Advice: You should hire more qualified workers or provide training to your team members.");
-						.concat("Team members are not qualified to the project", Msg3);
+						.concat("Not enough qualified Team members on the project", Msg3);
 						calculateMetrics(Msg3, Div, 5,X3);
 						P = X3;
 						//setProject(X3);
