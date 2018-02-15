@@ -36,7 +36,9 @@ public class Scenario1_SBQS extends Simulate
 	{	
 		// Atividades do Projeto.
 				Activity A, B, C, D, E, F, G, H, I, J, K, L, M, N;
+		// Riscos do Projeto
 				Risk R1,R2,R3, R4, R5, R6;
+		// Funcionários do Projeto
 				Employee E1, E2, E3, E4, E5, E6, E7;
 				
 				A = new Activity(1, "A", 10, 700.0f);	B = new Activity(2, "B", 5, 350.0f);

@@ -37,7 +37,13 @@
 		!monitoringEnvChanges.		
 		
 
-+tick : instant(K) & activities(A) <-   
++tick : instant(K) & activities(A) <- 
+	if(K == 5){
+		.print("-------------The manager has detected a new Risk!-----------------");
+		.print("The Risk is : ", "The Company will fail, run!!!");
+		.concat("Fail of the Company", Name);
+		createRisk(Name, 0.2, 1, X3);
+	}   
     if (K == 40){
     	cartago.invoke_obj(A, get(8), TaskI);
     	cartago.invoke_obj("models.TypeChange", getAddCost, Cost);
@@ -64,7 +70,8 @@
 		cartago.invoke_obj(TaskH, getLabel, LabelH);
 		println("Ordering instantly ", K, " an increase of 5.9% in cost and of 5.9% in time for the activity ", LabelH);		
 		requestChange(Ch);		
-	}. /*
+	}.
+	/*
 	
 	if (K == 6){                                                                                      //Cenário 2 (SBQS)		
 		cartago.invoke_obj(A, get(11), TaskL);

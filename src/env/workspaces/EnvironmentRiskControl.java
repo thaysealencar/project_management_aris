@@ -14,6 +14,8 @@ import models.Risk;
 import models.Risk.RiskArea;
 import simulations.Scenario1_SBQS;
 
+import simulations.Scenario1;
+
 public class EnvironmentRiskControl extends Artifact {
 	
 	private Project project;
@@ -231,7 +233,100 @@ public class EnvironmentRiskControl extends Artifact {
     	//System.out.println("O numero de riscos no projeto agora é "+p.getRisks().size());
     	succOutCP.set(p);
 	}
-
+    @OPERATION
+    void createRisk(String name_p, double div_p, int riskArea_p, OpFeedbackParam<Project> succOutCP){
+	    Project p  = Scenario1.getProject();
+		String name = name_p;
+	    double div = div_p;
+	    int riskArea = riskArea_p;
+	    ArrayList<Risk> risks = p.getRisks();
+	    int id = risks.size()+1;
+	    int impact = 5; // Coloquei direto o maior impacto
+	    boolean repeatedRisk = false;
+	    
+	    Risk r = new Risk();
+    	r.setId(id);
+    	r.setName(name);
+    	r.setCostP(0); 
+		r.setCostI(0);
+		r.setTimeP(0);
+		r.setTimeI(0);
+		r.setScopeP(0);
+    	r.setScopeI(0);
+    	
+    	switch(riskArea){
+		case 1:
+			r.setScopeP(1-div);
+        	r.setScopeI(impact);
+        	r.setRiskArea(RiskArea.SCOPE);
+			break;
+		case 2:
+			r.setCostP(1-div); 
+			r.setCostI(impact);
+			r.setRiskArea(RiskArea.COST);
+    		break;
+		case 3:
+			r.setTimeP(1-div);
+			r.setTimeI(impact);
+			r.setRiskArea(RiskArea.SCHEDULE);
+    		break;
+		case 4:
+			r.setCostP(1-div); 
+			r.setCostI(impact);
+			r.setTimeP(1-div);
+			r.setTimeI(impact);
+			r.setRiskArea(RiskArea.TECNICAL);
+    		break;
+		case 5:
+			r.setCostP(1-div); 
+			r.setCostI(impact);
+			r.setTimeP(1-div);
+			r.setTimeI(impact);
+			r.setScopeP(1-div);
+        	r.setScopeI(impact);
+        	r.setRiskArea(RiskArea.STAFF);
+    		break;
+		case 6:
+			r.setCostP(1-div); 
+			r.setCostI(impact);
+			r.setTimeP(1-div);
+			r.setTimeI(impact);
+			r.setScopeP(1-div);
+        	r.setScopeI(impact);
+        	r.setRiskArea(RiskArea.COSTUMER);
+    		break;
+    	default: r.setCostP(1); 
+				 r.setCostI(impact);
+				 r.setTimeP(1);
+				 r.setTimeI(impact);
+				 r.setScopeP(1);
+	        	 r.setScopeI(impact);
+	}
+    	if(risks != null){
+			ListIterator<Risk> litr = risks.listIterator();
+		    while (litr.hasNext()) {
+		    	Risk element = litr.next();
+		    	String riskName = element.getName();
+		    	
+		    	if(riskName.compareTo(name)== 0){
+		    		repeatedRisk=true;
+		    		
+		    		break;
+		    	}
+		    }
+    	}
+    	
+    	if(risks != null && repeatedRisk==false ){
+    		 if(!risks.contains(r)){
+ 	        	risks.add(r); 
+ 	        }
+    	}
+    	
+    	p.setRisks(risks);
+    	//System.out.println("O numero de riscos no projeto agora é "+p.getRisks().size());
+    	succOutCP.set(p);
+    	
+	    }
 }
 
 
