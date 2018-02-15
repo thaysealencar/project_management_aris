@@ -233,12 +233,22 @@ public class EnvironmentRiskControl extends Artifact {
     	//System.out.println("O numero de riscos no projeto agora Ã© "+p.getRisks().size());
     	succOutCP.set(p);
 	}
-    @OPERATION
-    void createRisk(String name_p, double div_p, int riskArea_p, OpFeedbackParam<Project> succOutCP){
+    
+    
+    //OpFeedbackParam<Project> succOutCP
+    
+    @OPERATION // Receber todos os parâmetros da criação do risco
+    void createRisk(String name_p, double costP_p, int costI_p, double timeP_p, int timeI_p, double scopeP_p, int scopeI_p, double totoalRiskExposure_p, int riskArea_p, OpFeedbackParam<Project> succOutCP){
 	    Project p  = Scenario1.getProject();
 		String name = name_p;
-	    double div = div_p;
-	    int riskArea = riskArea_p;
+		double costP = costP_p;
+		int costI = costI_p;
+		double timeP = timeP_p;
+		int timeI = timeI_p;
+		double scopeP = scopeP_p;
+		int scopeI = scopeI_p;
+		double totalRE = totoalRiskExposure_p;
+		int    riskArea = riskArea_p;
 	    ArrayList<Risk> risks = p.getRisks();
 	    int id = risks.size()+1;
 	    int impact = 5; // Coloquei direto o maior impacto
@@ -247,60 +257,34 @@ public class EnvironmentRiskControl extends Artifact {
 	    Risk r = new Risk();
     	r.setId(id);
     	r.setName(name);
-    	r.setCostP(0); 
-		r.setCostI(0);
-		r.setTimeP(0);
-		r.setTimeI(0);
-		r.setScopeP(0);
-    	r.setScopeI(0);
-    	
+    	r.setCostP(costP); 
+		r.setCostI(costI);
+		r.setTimeP(timeP);
+		r.setTimeI(timeI);
+		r.setScopeP(scopeP);
+    	r.setScopeI(scopeI);
+    	r.setTotalRiskExposure(totalRE);
+    	System.out.println("Alo 1");
     	switch(riskArea){
 		case 1:
-			r.setScopeP(1-div);
-        	r.setScopeI(impact);
-        	r.setRiskArea(RiskArea.SCOPE);
+			r.setRiskArea(RiskArea.SCOPE);
 			break;
 		case 2:
-			r.setCostP(1-div); 
-			r.setCostI(impact);
 			r.setRiskArea(RiskArea.COST);
     		break;
 		case 3:
-			r.setTimeP(1-div);
-			r.setTimeI(impact);
 			r.setRiskArea(RiskArea.SCHEDULE);
     		break;
 		case 4:
-			r.setCostP(1-div); 
-			r.setCostI(impact);
-			r.setTimeP(1-div);
-			r.setTimeI(impact);
 			r.setRiskArea(RiskArea.TECNICAL);
     		break;
 		case 5:
-			r.setCostP(1-div); 
-			r.setCostI(impact);
-			r.setTimeP(1-div);
-			r.setTimeI(impact);
-			r.setScopeP(1-div);
-        	r.setScopeI(impact);
         	r.setRiskArea(RiskArea.STAFF);
     		break;
 		case 6:
-			r.setCostP(1-div); 
-			r.setCostI(impact);
-			r.setTimeP(1-div);
-			r.setTimeI(impact);
-			r.setScopeP(1-div);
-        	r.setScopeI(impact);
         	r.setRiskArea(RiskArea.COSTUMER);
     		break;
-    	default: r.setCostP(1); 
-				 r.setCostI(impact);
-				 r.setTimeP(1);
-				 r.setTimeI(impact);
-				 r.setScopeP(1);
-	        	 r.setScopeI(impact);
+   
 	}
     	if(risks != null){
 			ListIterator<Risk> litr = risks.listIterator();

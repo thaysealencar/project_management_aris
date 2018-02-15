@@ -38,7 +38,7 @@
 +project(P) <- setProject(P).
 
 +tick : instant(K) & activities(A) <- 
-	if (K == 60){		
+	if (K == 50){		
 		cartago.invoke_obj(A, get(10), Task);
 		cartago.invoke_obj("models.TypeChange", getAddCost, Cost);
 		cartago.invoke_obj("models.TypeChange", getAddTime, Time);

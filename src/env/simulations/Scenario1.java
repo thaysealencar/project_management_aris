@@ -36,6 +36,8 @@ public class Scenario1 extends Simulate
 		Activity A, B, C, D, E, F, G, H, I, J, K, L, M, N;
 		// Riscos do Projeto
 		Risk R1,R2,R3;
+		// Funcionários do Projeto
+		Employee E1, E2, E3, E4, E5, E6, E7;
 		
 		A = new Activity(1, "A", 10, 700.0f);	B = new Activity(2, "B", 5, 350.0f);
 		C = new Activity(3, "C", 5, 350.0f);	D = new Activity(4, "D", 15, 1050.0f);
@@ -86,6 +88,27 @@ public class Scenario1 extends Simulate
 		p.addRisk(R2);
 		R3 = new Risk(3, "Incorporation of a new technology", 0.7, 5, 0, 0, 0, 0, 0, RiskArea.COST, 1,1);
 		p.addRisk(R3);
+		
+		
+		// Funcion�rios
+		E1 = new Employee(1, "Asdrubal", "Tempo", true);
+		p.addEmployee(E1);
+		E2 = new Employee(2, "Fransisca" , "Gerenciamento", true);
+		p.addEmployee(E2);
+		E3 = new Employee(3, "Muller", "RH", true);
+		p.addEmployee(E3);
+		
+		E4 = new Employee(4, "Lala", "RH", true);
+		p.addEmployee(E4);
+		
+		E5 = new Employee(5, "Ana", "RH", true);
+		p.addEmployee(E5);
+		
+		E6 = new Employee(6, "Matilda", "RH", true);
+		p.addEmployee(E6);
+		
+		E7 = new Employee(7, "Sasha", "RH", true);
+		p.addEmployee(E7);
 		
 		// Calculando as Reservas de Contingência de Tempo
 		double aux1 = p.calculateTimeContingencyBudget(p.getContingencyPercentage());
