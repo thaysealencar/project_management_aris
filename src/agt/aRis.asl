@@ -239,7 +239,7 @@ costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersTemp(QwT)  <-
 		POCR = CostReserve/CCB;
 		.print("Percentage of Cost Reserve = ", POCR);
 		
-		if(POCR > 0.30 & POCR < 0.60){
+		if(POCR > 0.30 & POCR < 0.100){
 		 	.print("Manager, the Project's Cost Reserve is low! Percentage of Cost Reserve = ", POCR);
 		 	
 		 	if(POCR < 0.31){

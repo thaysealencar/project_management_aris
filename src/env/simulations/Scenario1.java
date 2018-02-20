@@ -91,9 +91,9 @@ public class Scenario1 extends Simulate
 		
 		
 		// Funcionários
-		E1 = new Employee(1, "Asdrubal", "Tempo", true);
+		E1 = new Employee(1, "Carlos", "Tempo", true);
 		p.addEmployee(E1);
-		E2 = new Employee(2, "Fransisca" , "Gerenciamento", true);
+		E2 = new Employee(2, "Alessandra" , "Gerenciamento", true);
 		p.addEmployee(E2);
 		E3 = new Employee(3, "Muller", "RH", true);
 		p.addEmployee(E3);
@@ -104,11 +104,10 @@ public class Scenario1 extends Simulate
 		E5 = new Employee(5, "Ana", "RH", true);
 		p.addEmployee(E5);
 		
-		E6 = new Employee(6, "Matilda", "RH", true);
+		E6 = new Employee(6, "Carla", "RH", true);
 		p.addEmployee(E6);
 		
 		E7 = new Employee(7, "Sasha", "RH", true);
-		p.addEmployee(E7);
 		
 		// Calculando as Reservas de ContingÃªncia de Tempo
 		double aux1 = p.calculateTimeContingencyBudget(p.getContingencyPercentage());

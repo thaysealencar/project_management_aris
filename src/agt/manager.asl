@@ -38,7 +38,7 @@
 		
 
 +tick : instant(K) & activities(A) & cenario(Cenario) <- 
-	if(Cenario == "Cenario_1"){
+	if(Cenario == "Cenario_1" | Cenario == "Cenario_3"){
 		if(K == 45){
 			.print("-------------The manager has detected a new Risk!-----------------");
 			.print("The Risk is : ", "The requirements are out of scope !!!");
@@ -47,7 +47,7 @@
 			createRisk(Name, 0, 0, 0, 0, 0.3, 4, 0, 1, X3);
 		}
 	}
-	if(Cenario == "SBQS_Cenario_1"){
+	if(Cenario == "Cenario_3"){
 		if (K == 40){
 	    	cartago.invoke_obj(A, get(8), TaskI);
 	    	cartago.invoke_obj("models.TypeChange", getAddCost, Cost);

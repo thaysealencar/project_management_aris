@@ -264,7 +264,7 @@ public class EnvironmentRiskControl extends Artifact {
 		r.setScopeP(scopeP);
     	r.setScopeI(scopeI);
     	r.setTotalRiskExposure(totalRE);
-    	System.out.println("Alo 1");
+    	
     	switch(riskArea){
 		case 1:
 			r.setRiskArea(RiskArea.SCOPE);

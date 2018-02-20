@@ -18,6 +18,8 @@ import simulations.Scenario1_SBQS;
 import simulations.Simulate;
 
 import simulations.Scenario1;
+import simulations.Scenario2;
+import simulations.Scenario3;
 
 public class EnvironmentProject extends Artifact
 {	
@@ -51,11 +53,11 @@ public class EnvironmentProject extends Artifact
 	public void simulate()
 	{
 		Simulate s1 = new Scenario1(p, "Cenario_1");
-		//Simulate s2 = new Scenario2(p, "Cenario_2");
-		//Simulate s3 = new Scenario3(p, "Cenario_3");
+		Simulate s2 = new Scenario2(p, "Cenario_2");
+		Simulate s3 = new Scenario3(p, "Cenario_3");
 		Simulate s1_sbqs = new Scenario1_SBQS(p, "SBQS_Cenario_1"); //Cenário Atual Pronto
 		//Simulate s2_sbqs= new Scenario2_SBQS(p, "SBQS_Cenario_2");
-		scenarios.add(s1);	
+		scenarios.add(s2);	
 		//scenarios.add(s1_sbqs);		
 		
 		for (Simulate sl: scenarios)
