@@ -2,14 +2,13 @@ package simulations;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
+import java.util.List;
 
 import models.Activity;
 import models.Employee;
 import models.Project;
 import models.Risk;
 import models.Risk.RiskArea;
-import models.RiskExposure;
 
 /*
  *	Cenario 1 : cenario ideal (sem atrasos ou extrapolos de cronograma e custo)
@@ -90,7 +89,7 @@ public class Scenario1 extends Simulate
 		p.addRisk(R3);
 		
 		
-		// Funcionários
+		// Funcionï¿½rios
 		E1 = new Employee(1, "Carlos", "Tempo", true);
 		p.addEmployee(E1);
 		E2 = new Employee(2, "Alessandra" , "Gerenciamento", true);
@@ -116,7 +115,7 @@ public class Scenario1 extends Simulate
 		double aux2 = p.calculateCostContingencyBudget(p.getContingencyPercentage());
 		p.setCostBudgetReserve(aux2);
 		
-		ArrayList<Activity> activities = p.getActivities();
+		List<Activity> activities = p.getActivities();
 		// Calcula todos os Tes e Tef das atividades.
 		for(int i = 0; i < activities.size(); i++)
 			activities.get(i).compute_Tes_Tef();

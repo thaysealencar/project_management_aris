@@ -48,7 +48,7 @@
 		}
 	}
 	if(Cenario == "Cenario_3"){
-		if (K == 40){
+		if (K == 30){
 	    	cartago.invoke_obj(A, get(8), TaskI);
 	    	cartago.invoke_obj("models.TypeChange", getAddCost, Cost);
 			cartago.invoke_obj("models.TypeChange", getAddTime, Time);

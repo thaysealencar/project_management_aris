@@ -1,6 +1,8 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Project
 {	
@@ -14,7 +16,7 @@ public class Project
 	private double scopContingencyBudget;
 	private double contingencyPercentage;
 	private ArrayList< Employee > projectTeam;
-	private ArrayList<Activity> activities = new ArrayList<Activity>();
+	List<Activity> activities = new LinkedList<Activity>();
 	public ArrayList<Risk> risks = new ArrayList<Risk>();
 	
 	public Project()
@@ -195,7 +197,7 @@ public class Project
 		return instant;
 	}	
 	
-	public ArrayList<Activity> getActivities()
+	public List<Activity> getActivities()
 	{
 		return activities;
 	}
@@ -242,7 +244,7 @@ public class Project
 		this.instant = instant;
 	}
 
-	public void setActivities(ArrayList<Activity> activities) {
+	public void setActivities(List<Activity> activities) {
 		this.activities = activities;
 	}
 	

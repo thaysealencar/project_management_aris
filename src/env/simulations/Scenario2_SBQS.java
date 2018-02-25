@@ -2,7 +2,7 @@ package simulations;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
+import java.util.List;
 
 import models.Activity;
 import models.Project;
@@ -72,7 +72,7 @@ public class Scenario2_SBQS extends Simulate
 				p.addActivity(K);	p.addActivity(L);
 				p.addActivity(M);	p.addActivity(N);
 				
-				ArrayList<Activity> activities = p.getActivities();
+				List<Activity> activities = p.getActivities();
 				// Calcula todos os Tes e Tef das atividades.
 				for(int i = 0; i < activities.size(); i++)
 					activities.get(i).compute_Tes_Tef();

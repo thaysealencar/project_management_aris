@@ -2,9 +2,11 @@
 
 /* Initial beliefs and rules */
 internalStateARis(null).
-internalStateAMud(null).
+internalStateAMud(null). //APAGARRRRR????
 useTimeContingencyBudget(0).
 useCostContingencyBudget(0).
+timeContingencyBudget(TimeReserve).
+costContingencyBudget(CostReserve).
 changeRequest(false).
 calculatingMetric(1).
 /* Initial goals */
@@ -39,8 +41,7 @@ calculatingMetric(1).
 		.wait(100);
 		!create.	
 /*Message */
-+!kqml_received(Sender, tell, Variables, Response) : instant(K)  & project(P) & 
-timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudget(UTCB) & useCostContingencyBudget(UCCB) & changeRequest(CR) <-
++!kqml_received(Sender, tell, Variables, Response) : instant(K)  & project(P) & timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudget(UTCB) & useCostContingencyBudget(UCCB) & changeRequest(CR) <-
 
 	-+changeRequest(true);
 	.print("I will evaluate the impact of this change request on the project!");
@@ -81,6 +82,7 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 			NewTimeActivity = ETimeAP + DeltaTimeActivity; //novo tempo considerando o percentual de variação
 			
 			UseTimeContingencyBudget = UTCB  + DeltaTimeActivity;
+			
 		}else{
 			if(TimeRem>0){ 
 				DeltaTimeActivity = ETimeAP*TimeRem;
@@ -98,6 +100,7 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 				NewCostActivity = DeltaCostActivity + ECostAP;
 				
 				UseCostContingencyBudget = UCCB + DeltaCostActivity;
+
 		}else{
 				
 			if(CostRem>0){
@@ -130,9 +133,9 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 		
 		// PUTR E PUCR Porcentagem de uso das reservas de tempo e custo.
 		getPucr(Pucr);
-		//.print("Percentage of Use of Cost Reserve!", Pucr);
+		.print("Percentage of Use of Cost Reserve!", Pucr);
 		getPutr(Putr);
-	   //.print("Percentage of Use of Time Reserve!", Putr);
+	   .print("Percentage of Use of Time Reserve!", Putr);
 	
 		for(.range(I, 0, Size-1)){
 			
@@ -151,6 +154,7 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 				
 				cartago.invoke_obj(Risk, setCostP(NewCostP));
 				setNewCostP(0.0);
+				
 			}
 			if((TimeAdd\== 0 | TimeRem\==0) & TimeP \== 0 & TimeI \==0){
 				setNewTimeP(Putr*(1-TimeP) + TimeP);
@@ -169,7 +173,7 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	}else{
 		.print("No risks affected.");
 	};
-	!calculateMetrics(Purc, Putr, TimeReserve, CostReserve);
+	!calculateProjectMetrics(Purc, Putr, TimeReserve, CostReserve);
 	//O agente deve esquecer:  PUCCB, PUTCB, NewCostP, NewTimeP
 	
 	
@@ -180,38 +184,45 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	
 
 +!monitoringRisks : instant(K) & project(P) & calculatingMetric(CM) <- 
-	if(CM \== 0){
-	cartago.invoke_obj(P, getRisks, RiskList);
 	
-	.println("Instant ", K, "- Project's risks:");
+	if(CM \== 0){ //soh monitora se não estiver calculando metricas, ou seja, quando CM=1
+		cartago.invoke_obj(P, getRisks, RiskList);
 	
-	if (RiskList \== null){
-		cartago.invoke_obj(RiskList, size, Size);
-		//.print("Tamanho da RL que chegou pro aris", Size);
-		
-		for(.range(I, 0, Size-1)){
-			cartago.invoke_obj(RiskList, get(I), Risk);
-			cartago.invoke_obj(Risk, getId, Id);
-			cartago.invoke_obj(Risk, getName, Name);
-			cartago.invoke_obj(Risk, getCostP, CP);
-			cartago.invoke_obj(Risk, getCostI, CI);
-			cartago.invoke_obj(Risk, getTimeP, TP);
-			cartago.invoke_obj(Risk, getTimeI, TI);
-			cartago.invoke_obj(Risk, getScopeP, SP);
-			cartago.invoke_obj(Risk, getScopeI, SI);
-			TotalRiskExposure = (CP*CI)+(TP*TI)+(SP*SI);
-			cartago.invoke_obj(Risk, setTotalRiskExposure(TotalRiskExposure));
+		.println("Instant ", K, "- Project's risks:");
+	
+		if (RiskList \== null){
+			cartago.invoke_obj(RiskList, size, Size);
+			//.print("Tamanho da RL que chegou pro aris", Size);
 			
-			iActions.internalStateARis(Id); //Adiciona risco na lista. Isso é feito iterativamente pois as propriedades dos riscos sofrem alterações no decorrer do tempo.
-		};
-		
-		iActions.internalStateARis(exit, InternalState); //Apos adicionar todos os riscos o agente ordena a lista de riscos pela ER.	
-		-+project(P);
-	}
-}.
-
+			for(.range(I, 0, Size-1)){
+				cartago.invoke_obj(RiskList, get(I), Risk);
+				cartago.invoke_obj(Risk, getId, Id);
+				cartago.invoke_obj(Risk, getName, Name);
+				cartago.invoke_obj(Risk, getCostP, CP);
+				cartago.invoke_obj(Risk, getCostI, CI);
+				cartago.invoke_obj(Risk, getTimeP, TP);
+				cartago.invoke_obj(Risk, getTimeI, TI);
+				cartago.invoke_obj(Risk, getScopeP, SP);
+				cartago.invoke_obj(Risk, getScopeI, SI);
+				TotalRiskExposure = (CP*CI)+(TP*TI)+(SP*SI);
+				cartago.invoke_obj(Risk, setTotalRiskExposure(TotalRiskExposure));
+				
+				iActions.internalStateARis(Id); //Adiciona risco na lista. Isso é feito iterativamente pois as propriedades dos riscos sofrem alterações no decorrer do tempo.
+			};
+			
+			iActions.internalStateARis(exit, InternalState); //Apos adicionar todos os riscos o agente ordena a lista de riscos pela ER.	
+			-+project(P);
+		}
+	}.
+	
 +tick : instant(K) <-
-	!monitoringRisks.
+	!monitoringRisks;
+	calculateInstantCounter(K);
+	getInstantCounter(InstantCounter);
+    if(InstantCounter \== -1){
+		//.print("multiplo de 4-->", InstantCounter);
+		!calculateProjectMetrics(0.0,0.0,0.0,0.0);
+	}.
 	
 	
 +project(P) <- 
@@ -219,121 +230,123 @@ timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudg
 	setProject(P); //setando a propriedade observavel novamente (atualizando)
 	.print("Observing Project", IdProject).
 	
-+!calculateMetrics(Pucr, Putr, TimeReserve, CostReserve ): project(P) & timeContingencyBudget(TCB) & costContingencyBudget(CCB)& 
-costCRCounter(CcrC) & timeCRCounter(TcrC) & qualifiedWorkersTemp(QwT)  <-
 	
-	.println("-------------CALCULATING METRICS OF THE PROJECT ENVIRONMENT--------------");
-	
++!calculateProjectMetrics(Pucr, Putr, TimeReserve, CostReserve): instant(K) & project(P) & qualifiedWorkersTemp(QwT) &  timeContingencyBudget(TCB) & costContingencyBudget(CCB)& costCRCounter(CcrC) & timeCRCounter(TcrC)  <-
 	-+calculatingMetric(0);
 	
-	cartago.invoke_obj(P, getProjectTeam, ProjectTeam);
-	cartago.invoke_obj(ProjectTeam, size, Size);
-	
-	.println("-------METRIC 1: Percentage of Cost Changes-------");
-	if(Pucr > 0){
-		A= CcrC+1;
-		-+costCRCounter(A);
-		.print("Percentage of Cost Changes = ", A/3); 
+	if(Pucr \== 0){
+		.println("-------------CALCULATING METRICS OF THE PROJECT ENVIRONMENT--------------");
 		
-		.println("-------METRIC 2: Percentage of Cost Reserve-------");
-		POCR = CostReserve/CCB;
-		.print("Percentage of Cost Reserve = ", POCR);
+		cartago.invoke_obj(P, getProjectTeam, ProjectTeam);
+		cartago.invoke_obj(ProjectTeam, size, Size);
 		
-		if(POCR > 0.30 & POCR < 0.100){
-		 	.print("Manager, the Project's Cost Reserve is low! Percentage of Cost Reserve = ", POCR);
-		 	
-		 	if(POCR < 0.31){
-				.println("Manager, I have detected a new risk in this project due to the percentage of cost reserve!");
-				.println("Advice: You should talk to the project sponsor about the project budget.");
-				.concat("Insufficient Cost Reserve to apply changes/handle threats in the project", Msg1);
-				calculateMetrics(Msg1, POCR, 2,X1);
-				P = X1;
+		.println("-------METRIC 1: Percentage of Cost Changes-------");
+		if(Pucr > 0){
+			A= CcrC+1;
+			-+costCRCounter(A); //costChangeRequestCounter
+			.print("Percentage of Cost Changes = ", A/3); 
+			
+			.println("-------METRIC 2: Percentage of Cost Reserve-------");
+			POCR = CostReserve/CCB;
+			.print("Percentage of Cost Reserve = ", POCR);
+			
+			if(POCR > 0.30 & POCR < 0.100){
+			 	.print("Manager, the Project's Cost Reserve is low! Percentage of Cost Reserve = ", POCR);
+			 	
+			 	if(POCR < 0.31){
+					.println("Manager, I have detected a new risk in this project due to the percentage of cost reserve!");
+					.println("Advice: You should talk to the project sponsor about the project budget.");
+					.concat("Insufficient Cost Reserve to apply changes/handle threats in the project", Msg1);
+					calculateMetrics(Msg1, POCR, 2,X1);
+					P = X1;
+				}
 			}
 		}
-	}
-	
-	.println("-------METRIC 3: Percentage of Time Changes-------");
-	if(Putr > 0){
-		B = TcrC+1;
-		-+timeCRCounter(B);
-		.print("Percentage of Time Changes = ", B/3);
 		
-		.println("-------METRIC 4: Percentage of Time Reserve-------");
-		POTR = TimeReserve/TCB;
-		.print("Percentage of Time Reserve = ", POTR);
-		
-		if(POTR > 0.30 & POTR < 0.60){
-		 	.print("Manager, the Project's Time Reserve is low! Percentage of Time Reserve = ", POTR);
-		 	
-		 	if(POTR < 0.31){
-				.println("Manager, I have detected a new risk in this project due to the percentage of time reserve!");
-				.println("Advice: You should check the team members' and activities schedule.");
-				.concat("Insufficient Time Reserve to apply changes/handle threats in the project", Msg2);
-				calculateMetrics(Msg2, POTR, 3,X2);
-				P = X2;
+		.println("-------METRIC 3: Percentage of Time Changes-------");
+		if(Putr > 0){
+			B = TcrC+1;
+			-+timeCRCounter(B); //timeChangeRequestCounter
+			.print("Percentage of Time Changes = ", B/3);
+			
+			.println("-------METRIC 4: Percentage of Time Reserve-------");
+			POTR = TimeReserve/TCB;
+			.print("Percentage of Time Reserve = ", POTR);
+			
+			if(POTR > 0.30 & POTR < 0.60){
+			 	.print("Manager, the Project's Time Reserve is low! Percentage of Time Reserve = ", POTR);
+			 	
+			 	if(POTR < 0.31){
+					.println("Manager, I have detected a new risk in this project due to the percentage of time reserve!");
+					.println("Advice: You should check the team members' and activities schedule.");
+					.concat("Insufficient Time Reserve to apply changes/handle threats in the project", Msg2);
+					calculateMetrics(Msg2, POTR, 3,X2);
+					P = X2;
+				}
 			}
 		}
-	}
-	
-	.println("-------METRIC 5: Percentage of Scope Changes-------");
-	if(Pucr > 0){
-		.print("Percentage of Scope Changes = ", 0); 
 		
-	}
-	
-	.println("-------METRIC 6: Percentage of Qualified Workers-------");
-	if (ProjectTeam \== null){ 
+		.println("-------METRIC 5: Percentage of Scope Changes-------");
+		if(Pucr > 0){
+			.print("Percentage of Scope Changes = ", 0); 
+			
+		}
+	}else{
+		.println("-------METRIC 6: Percentage of Qualified Workers-------");
+		cartago.invoke_obj(P, getProjectTeam, ProjectTeam);
+		cartago.invoke_obj(ProjectTeam, size, Size);
 		
-		if(Size>0){
-			.print("Total number of workers = ",Size);
-			cartago.invoke_obj(QwT, clear);
+		if (ProjectTeam \== null){ 
 			
-			for(.range(I, 0, Size-1)){
-				cartago.invoke_obj(ProjectTeam, get(I), Employee);
-				cartago.invoke_obj(Employee, isQualified, Qualified);
-				
-				if(Qualified == true){
-				  cartago.invoke_obj(QwT, add(Employee));
-				}
-				
-			}
-			
-			if(QwT \== null){
-				cartago.invoke_obj(QwT, size, SizeQwT);
-				.print("Number of qualified workers = ", SizeQwT);	
-				
-				if(SizeQwT>0){
-					Div = SizeQwT/Size;
-					.print("Percentage of qualified workers = ", Div);
-					
-					if(Div > 0.30 & Div < 0.60 ){ 
-						.println("Manager, I have detected a new risk in this project due to the percentage of qualified workers!");
-						.println("Advice: You should hire more qualified workers or provide training to your team members.");
-						.concat("Not enough qualified Team members on the project", Msg3);
-						calculateMetrics(Msg3, Div, 5,X3);
-						P = X3;
-						//setProject(X3);
-						//-+project(X3);
-					}else{
-						
-						if(Div < 0.31){
-							//RISCO ACONTECEU!----PROBABILIDADE=100 E ALTERAR AS RESERVAS DE CONTINGENCIA DO PROJETO
-							.print("Manager, I have detected the risk X has happened.");
-						}
-					}
-						
-				}
+			if(Size>0){
+				.print("Total number of workers = ",Size);
 				cartago.invoke_obj(QwT, clear);
-				 -+qualifiedWorkersTemp(QwT);
+				
+				for(.range(I, 0, Size-1)){
+					cartago.invoke_obj(ProjectTeam, get(I), Employee);
+					cartago.invoke_obj(Employee, isQualified, Qualified);
+					
+					if(Qualified == true){
+					  cartago.invoke_obj(QwT, add(Employee));
+					}
+					
+				}
+				
+				if(QwT \== null){
+					cartago.invoke_obj(QwT, size, SizeQwT);
+					.print("Number of qualified workers = ", SizeQwT);	
+					
+					if(SizeQwT>0){
+						Div = SizeQwT/Size;
+						.print("Percentage of qualified workers = ", Div);
+						
+						if(Div > 0.30 & Div < 0.60 ){ 
+							.println("Manager, I have detected a new risk in this project due to the percentage of qualified workers!");
+							.println("Advice: You should hire more qualified workers or provide training to your team members.");
+							.concat("Not enough qualified Team members on the project", Msg3);
+							calculateMetrics(Msg3, Div, 5,X3);
+							P = X3;
+							//setProject(X3);
+							//-+project(X3);
+						}else{
+							
+							if(Div < 0.31){
+								//RISCO ACONTECEU!----PROBABILIDADE=100 E ALTERAR AS RESERVAS DE CONTINGENCIA DO PROJETO
+								.print("Manager, I have detected the risk X has happened.");
+							}
+						}
+							
+					}
+					cartago.invoke_obj(QwT, clear);
+					 -+qualifiedWorkersTemp(QwT);
+				}
+				
 			}
+			.println("-------------------------------------------------------------------------");
 			
 		}
-		.println("-------------------------------------------------------------------------");
-		-+project(P);
-		-+calculatingMetric(1);
-	}.
-	
-//+!recordLog(Id, Name, CP, CI, TP, TI, SP, SI, Msg): instant(K) & cenario(Cenario) & totalRiskEsposure(TotalRiskExposure) <-
-//	iActions.recordLogARis(P, Id, Cenario, K, Name, CP, CI, TP, TI, SP, SI, TotalRiskExposure, Msg).
+	}
+	-+project(P);
+	-+calculatingMetric(1).
 
 	

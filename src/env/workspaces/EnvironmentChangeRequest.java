@@ -39,7 +39,7 @@ public class EnvironmentChangeRequest extends Artifact {
 	}
 	
 	@OPERATION
-	void setActivities(ArrayList<Activity> acts, int projectInstant) {
+	void setActivities(List<Activity> acts, Byte projectInstant) {
 		this.project.setActivities(acts);
 		this.projectInstant = projectInstant;
 		execInternalOp("updateStates");

@@ -12,14 +12,14 @@ import models.Employee;
 import models.Project;
 import models.Risk;
 import models.Risk.RiskArea;
-import simulations.Scenario1_SBQS;
-
 import simulations.Scenario1;
+import simulations.Scenario1_SBQS;
 
 public class EnvironmentRiskControl extends Artifact {
 	
 	private Project project;
 	double newCostP, newTimeP, pucr, putr, costCRCounter, timeCRCounter, qualifiedWorkersCounter;
+	int instantCounter;
 	ArrayList< Employee > qualifiedWorkersTemp = new ArrayList<Employee>();
 
 	void init() {
@@ -30,6 +30,10 @@ public class EnvironmentRiskControl extends Artifact {
 		defineObsProperty("costCRCounter", 0.0);
 		defineObsProperty("timeCRCounter", 0.0);
 		defineObsProperty("qualifiedWorkersTemp", qualifiedWorkersTemp);
+		defineObsProperty("instantCounter", 0);
+		
+		
+		
 		
 	}
 
@@ -92,18 +96,6 @@ public class EnvironmentRiskControl extends Artifact {
 	{
 	newTimePAux.set(this.newTimeP);
 	}
-	
-//	@OPERATION
-//	 void riskControl(ArrayList<Risk> aux )
-//	{
-//		Collections.sort(aux);
-//		
-//		for (Risk risk : aux) {
-//			System.out.println(risk.getId()+ " - "+risk.getTotalRiskExposure());
-//			
-//		}
-//		
-//	}
 
     @OPERATION
     void getQualifiedWorkersCounter(OpFeedbackParam<Double> QwCAux)
@@ -126,6 +118,29 @@ public class EnvironmentRiskControl extends Artifact {
 	}
     
     @OPERATION
+    void getInstantCounter(OpFeedbackParam<Integer> k) {
+  		k.set(this.instantCounter);
+  	}
+    
+    @OPERATION
+    void setInstantCounter(int instantCounter) {
+  		this.instantCounter = instantCounter;
+  	}
+    
+    
+    @OPERATION
+ 	void calculateInstantCounter(int temp_k) {
+    	if(temp_k>0 && temp_k % 4 == 0){
+    		this.instantCounter = temp_k;
+    		getObsProperty("instantCounter").updateValue(temp_k);
+    	}else{
+    		this.instantCounter = -1;
+    		getObsProperty("instantCounter").updateValue(-1);
+    	}
+ 		
+ 	}
+
+	@OPERATION
     void calculateMetrics(String name_p, double div_p, int riskArea_p, OpFeedbackParam<Project> succOutCP){
 		Project p  = Scenario1_SBQS.getProject();
     	String name = name_p;
@@ -237,7 +252,7 @@ public class EnvironmentRiskControl extends Artifact {
     
     //OpFeedbackParam<Project> succOutCP
     
-    @OPERATION // Receber todos os parâmetros da criação do risco
+    @OPERATION // Receber todos os parï¿½metros da criaï¿½ï¿½o do risco
     void createRisk(String name_p, double costP_p, int costI_p, double timeP_p, int timeI_p, double scopeP_p, int scopeI_p, double totoalRiskExposure_p, int riskArea_p, OpFeedbackParam<Project> succOutCP){
 	    Project p  = Scenario1.getProject();
 		String name = name_p;

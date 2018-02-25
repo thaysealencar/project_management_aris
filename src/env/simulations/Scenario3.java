@@ -2,14 +2,13 @@ package simulations;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
+import java.util.List;
 
 import models.Activity;
 import models.Employee;
 import models.Project;
 import models.Risk;
 import models.Risk.RiskArea;
-import models.RiskExposure;
 
 /*
  *	Cenario 1 : Atividades separadas.
@@ -122,7 +121,7 @@ public class Scenario3 extends Simulate
 				double aux2 = p.calculateCostContingencyBudget(p.getContingencyPercentage());
 				p.setCostBudgetReserve(aux2);
 			
-				ArrayList<Activity> activities = p.getActivities();
+				List<Activity> activities = p.getActivities();
 				// Calcula todos os Tes e Tef das atividades.
 				for(int i = 0; i < activities.size(); i++)
 					activities.get(i).compute_Tes_Tef();

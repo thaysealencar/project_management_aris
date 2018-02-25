@@ -31,6 +31,7 @@ public class EnvironmentProject extends Artifact
 	public void init()
 	{
 		defineObsProperty("instant", 0);
+		defineObsProperty("instantARis", 0);
 		defineObsProperty("cenario", "0");
 		
 		// Propriedades observaveis do projeto.
@@ -57,13 +58,14 @@ public class EnvironmentProject extends Artifact
 		Simulate s3 = new Scenario3(p, "Cenario_3");
 		Simulate s1_sbqs = new Scenario1_SBQS(p, "SBQS_Cenario_1"); //Cenário Atual Pronto
 		//Simulate s2_sbqs= new Scenario2_SBQS(p, "SBQS_Cenario_2");
-		scenarios.add(s2);	
+		scenarios.add(s3);	
 		//scenarios.add(s1_sbqs);		
 		
 		for (Simulate sl: scenarios)
 		{
 			//prepara e simula!
 			getObsProperty("instant").updateValue(0);
+			getObsProperty("instantARis").updateValue(0);
 			getObsProperty("cenario").updateValue(sl.getName());
 			sl.prepare();
 			execInternalOp("environmentEvolution");
@@ -79,6 +81,7 @@ public class EnvironmentProject extends Artifact
 	{
 		ObsProperty durationProject = getObsProperty("durationProject");
 		ObsProperty instant = getObsProperty("instant");
+		ObsProperty instantARis = getObsProperty("instantARis");
 		
 		int delay = 0;
 		
@@ -104,7 +107,8 @@ public class EnvironmentProject extends Artifact
 			
 			getObsProperty("activities").updateValue(p.getActivities());
 			//getObsProperty("risks").updateValue(p.getRisks()); --> nao pode ser atualizada pois ZERA a lista de riscos!
-			
+			signal("tickARis");
+			instantARis.updateValue(instantARis.intValue() + 1);
 			signal("tick");
 			await_time(2500);
 			instant.updateValue(instant.intValue() + 1);
