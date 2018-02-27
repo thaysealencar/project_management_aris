@@ -13,12 +13,14 @@ import models.StateOfChange;
 import cartago.Artifact;
 import cartago.INTERNAL_OPERATION;
 import cartago.OPERATION;
+import cartago.OpFeedbackParam;
 
 public class EnvironmentChangeRequest extends Artifact {
 	
 	private List<Change> requests = new LinkedList<Change>();
 	private Project project;
 	private int projectInstant = 0;
+	private Change actualRequest;
 	
 	void init() {
 		defineObsProperty("requests", requests);
@@ -44,12 +46,40 @@ public class EnvironmentChangeRequest extends Artifact {
 		this.projectInstant = projectInstant;
 		execInternalOp("updateStates");
 	}
-
+	
+	@OPERATION
+	 void getRequests(OpFeedbackParam<List<Change>> aux)
+	{
+		aux.set(this.requests);
+	}
+	
+	@OPERATION
+	void setRequests(List<Change> resquests) {
+	this.requests = resquests;
+	}
+	
+	@OPERATION
+	void getActualRequest(OpFeedbackParam<Change> actualRequest)
+	{
+		actualRequest.set(this.actualRequest);
+	}
+	
+	@OPERATION
+	void setActualRequest(Change actualRequest) {
+	this.actualRequest = actualRequest;
+	}
+	@OPERATION
+	void getChangeRequestById(int id, OpFeedbackParam<Change> change)
+	{
+		Change c = this.requests.get(id);
+		change.set(c);
+	}
 	@INTERNAL_OPERATION
 	private void updateStates(){
 		for (Change c: requests){
 			if (c.getActivity().getEndInstant() <= projectInstant && c.getState() == StateOfChange.REQUESTED)
 				c.setState(StateOfChange.OBSOLETE);
 		}
+		
 	}
 }

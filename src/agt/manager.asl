@@ -37,7 +37,7 @@
 		!monitoringEnvChanges.		
 		
 
-+tick : instant(K) & activities(A) & cenario(Cenario) <- 
++tick : instant(K) & activities(A) & cenario(Cenario) & requests(R) & actualRequest(AR) <- 
 	if(Cenario == "Cenario_1" | Cenario == "Cenario_3"){
 		if(K == 45){
 			.print("-------------The manager has detected a new Risk!-----------------");
@@ -60,6 +60,19 @@
 			cartago.invoke_obj(TaskI, getLabel, LabelI);
 			println("Ordering instantly ", K, " an increase of 11.9% in cost and 11.8% in time for the activity ", LabelI);		
 			requestChange(Ci);
+			-+actualRequest(Ci);
+			getRequests(NewList);
+			-+requests(NewList);
+			//.send(aMud, )
+	    }
+	    if(K == 34){
+	    	getChangeRequestById(0 ,ActualRequest);
+	    	cartago.invoke_obj(ActualRequest, getChange_id, ChangeId);
+	    	cartago.invoke_obj(ActualRequest, getChange_title, ChangeTitle);
+	    	.send(aMud, tell, ChangeId);
+	    	//cartago.invoke_obj(AR, getActualRequest())
+	    	.print("Change resquest approved: ", ChangeId, " , ", ChangeTitle); // Fazer o aMud colocar o status dessa mudança pra aprovada.
+	    	
 	    }
 		if (K == 50){		
 			
@@ -73,7 +86,10 @@
 			cartago.invoke_obj(Ch, addRequest(Time, 5.9));
 			cartago.invoke_obj(TaskH, getLabel, LabelH);
 			println("Ordering instantly ", K, " an increase of 5.9% in cost and of 5.9% in time for the activity ", LabelH);		
-			requestChange(Ch);		
+			requestChange(Ch);	
+			-+actualRequest(Ch);
+			cartago.invoke_obj(R, getRequests, newList);
+			-+requests(newList);	
 		}
 	}.
 	/*
