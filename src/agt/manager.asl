@@ -59,19 +59,19 @@
 			cartago.invoke_obj(Ci, addRequest(Time, 11.8));
 			cartago.invoke_obj(TaskI, getLabel, LabelI);
 			println("Ordering instantly ", K, " an increase of 11.9% in cost and 11.8% in time for the activity ", LabelI);		
-			requestChange(Ci);
+			addChangeRequest(Ci);
 			-+actualRequest(Ci);
 			getRequests(NewList);
 			-+requests(NewList);
-			//.send(aMud, )
+		
 	    }
 	    if(K == 34){
-	    	getChangeRequestById(0 ,ActualRequest);
+	    	getChangeRequestById(1, ActualRequest);
 	    	cartago.invoke_obj(ActualRequest, getChange_id, ChangeId);
 	    	cartago.invoke_obj(ActualRequest, getChange_title, ChangeTitle);
-	    	.send(aMud, tell, ChangeId);
+	    	.send(aMud, tell, ChangeId); 
 	    	//cartago.invoke_obj(AR, getActualRequest())
-	    	.print("Change resquest approved: ", ChangeId, " , ", ChangeTitle); // Fazer o aMud colocar o status dessa mudança pra aprovada.
+	    	.print("Change resquest approved: ", ChangeId, " , ", ChangeTitle); 
 	    	
 	    }
 		if (K == 50){		
@@ -86,7 +86,7 @@
 			cartago.invoke_obj(Ch, addRequest(Time, 5.9));
 			cartago.invoke_obj(TaskH, getLabel, LabelH);
 			println("Ordering instantly ", K, " an increase of 5.9% in cost and of 5.9% in time for the activity ", LabelH);		
-			requestChange(Ch);	
+			addChangeRequest(Ch);	
 			-+actualRequest(Ch);
 			cartago.invoke_obj(R, getRequests, newList);
 			-+requests(newList);	

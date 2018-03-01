@@ -2,18 +2,17 @@
 
 package workspaces;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import models.Activity;
-import models.Change;
-import models.Project;
-import models.StateOfChange;
 import cartago.Artifact;
 import cartago.INTERNAL_OPERATION;
 import cartago.OPERATION;
 import cartago.OpFeedbackParam;
+import models.Activity;
+import models.Change;
+import models.Project;
+import models.StateOfChange;
 
 public class EnvironmentChangeRequest extends Artifact {
 	
@@ -28,7 +27,7 @@ public class EnvironmentChangeRequest extends Artifact {
 	}
 	
 	@OPERATION
-	void requestChange(Change c){
+	void addChangeRequest(Change c){
 		requests.add(c);
 		getObsProperty("requests").updateValue(requests);
 		getObsProperty("actualRequest").updateValue(c);
@@ -55,7 +54,13 @@ public class EnvironmentChangeRequest extends Artifact {
 	
 	@OPERATION
 	void setRequests(List<Change> resquests) {
-	this.requests = resquests;
+		this.requests = resquests;
+	}
+	
+	@OPERATION
+	void clearChangeRequests(OpFeedbackParam<List<Change>> aux){
+		this.requests.clear();
+		aux.set(this.requests);
 	}
 	
 	@OPERATION
@@ -68,10 +73,17 @@ public class EnvironmentChangeRequest extends Artifact {
 	void setActualRequest(Change actualRequest) {
 	this.actualRequest = actualRequest;
 	}
+	
 	@OPERATION
 	void getChangeRequestById(int id, OpFeedbackParam<Change> change)
 	{
-		Change c = this.requests.get(id);
+		Change c = new Change();
+		
+		for (Change aux : requests) {
+			if(aux.getChange_id()==id){
+				c = aux;
+			}
+		}
 		change.set(c);
 	}
 	@INTERNAL_OPERATION

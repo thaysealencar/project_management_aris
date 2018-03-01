@@ -233,6 +233,24 @@
 	println("Instant: ", K,  " Message: ", S);
 	println("IC=", ImpactCost, " IT=", ImpactTime, " U=",U, " Priority=",P).	
 	
++!kqml_received(Sender, tell, ChangeId, Response): requests(R) & actualRequest(AR) <- 
+	
+	getChangeRequestById(ChangeId, ChangeRequest);
+	cartago.invoke_obj(ChangeRequest, getChange_title, CT);
+	.print("Titulo da mudança : ", CT);
+	cartago.invoke_obj(ChangeRequest, setState(2))
+	getChangeRequestById(1, UpdatedChangeRequest);//pegando a mudanca novamente apos atualizar o status da mesma
+	
+	clearChangeRequests(NewList);
+	addChangeRequest(UpdatedChangeRequest);
+	-+actualRequest(UpdatedChangeRequest);
+	getRequests(NewList2);
+	-+requests(NewList2);
+	
+	getChangeRequestById(ChangeId, CR);
+	cartago.invoke_obj(CR, getState, State);
+	.print("State da mudança atual: ", State).
+	
 /*+urgence(U): statusSolicitacao(SS)& instant(K) & msg(S) & impactCost(ImpactCost) &impactTime(ImpactTime) <-
 	println("Instante: ", K,  " Mensagem: ", S);
 	P = U * ImpactCost * ImpactTime;

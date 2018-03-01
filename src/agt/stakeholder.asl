@@ -48,7 +48,7 @@
 		cartago.invoke_obj(C, addRequest(Time, 40));
 		cartago.invoke_obj(Task, getLabel, Label);
 		println("Ordering instantly ", K, " an increase of 15% in cost and 40% in time for the activity ", Label);		
-		requestChange(C);
+		addChangeRequest(C);
 		-+actualRequest(C);
 		cartago.invoke_obj(R, getRequests, newList);
 		-+requests(newList);

@@ -31,10 +31,6 @@ public class EnvironmentRiskControl extends Artifact {
 		defineObsProperty("timeCRCounter", 0.0);
 		defineObsProperty("qualifiedWorkersTemp", qualifiedWorkersTemp);
 		defineObsProperty("instantCounter", 0);
-		
-		
-		
-		
 	}
 
 	@OPERATION
