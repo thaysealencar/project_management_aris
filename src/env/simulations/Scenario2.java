@@ -11,12 +11,8 @@ import models.Risk;
 import models.Risk.RiskArea;
 
 /*
- *	Cenario 1 : cenario ideal (sem atrasos ou extrapolos de cronograma e custo)
- *	
- *	Existem taxas de evolucao, relacionados a tempo e custo, ideais para cada atividade
- *	em execucao ate o ultimo instante do projeto. A partir dessas taxas, as atividades
- *	evoluem idealmente. Assim, os tempos e custos que as atividades consomem ate o fim
- *	do projeto sao exatamente os planejados, sem atrasos ou extrapolos.  
+ *	Cenario 2 : No cenario 2 teremos novos riscos detectados a partir de métricas, sendo esses novos riscos
+ *inseridos na lista de riscos. 
  */
 public class Scenario2 extends Simulate
 {	

@@ -211,17 +211,17 @@ public class Project
 		return projectTeam;
 	}
 	
-	public double getTimeBudgetReserve() 
+	public double getTimeContingencyReserve() 
 	{
 		return timeContingencyBudget;
 	}
 	
-	public double getCostBudgetReserve()
+	public double getCostContingencyReserve()
 	{
 		return costContingencyBudget;
 	}
 	
-	public double getScopBudgetReserve() 
+	public double getScopeContingencyReserve() 
 	{
 		return scopContingencyBudget;
 	}

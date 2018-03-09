@@ -37,8 +37,9 @@
 //Perceptions
 +project(P) <- setProject(P).
 
-+tick : instant(K) & activities(A) <- 
-	if (K == 62){		
++tick : instant(K) & activities(A) & requests(R) & actualRequest(AR) <- 
+	if (K == 60){	
+		// Essa mudança do instante 60 não poderá ser aprovada	
 		cartago.invoke_obj(A, get(10), Task);
 		cartago.invoke_obj("models.TypeChange", getAddCost, Cost);
 		cartago.invoke_obj("models.TypeChange", getAddTime, Time);
@@ -50,6 +51,6 @@
 		println("Ordering instantly ", K, " an increase of 15% in cost and 40% in time for the activity ", Label);		
 		addChangeRequest(C);
 		-+actualRequest(C);
-		cartago.invoke_obj(R, getRequests, newList);
-		-+requests(newList);
+		getRequests(NewList);
+		-+requests(NewList);	
 	}.

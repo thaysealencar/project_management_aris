@@ -43,8 +43,8 @@ public class EnvironmentProject extends Artifact
 		// Propriedades observaveis das atividades do projeto.
 		defineObsProperty("activities", p.getActivities());
 		
-		defineObsProperty("timeContingencyBudget", p.getTimeBudgetReserve());
-		defineObsProperty("costContingencyBudget", p.getCostBudgetReserve());
+		defineObsProperty("timeContingencyReserve", p.getTimeContingencyReserve());
+		defineObsProperty("costContingencyReserve", p.getCostContingencyReserve());
 		
 		defineObsProperty("idsActivitiesRunning", p.getIdsActivitiesRunning());
 		defineObsProperty("numActivitiesRunning", p.getNumActivitiesRunning());
@@ -70,10 +70,10 @@ public class EnvironmentProject extends Artifact
 			sl.prepare();
 			execInternalOp("environmentEvolution");
 		}
-		getObsProperty("timeContingencyBudget").updateValue(p.getTimeBudgetReserve());
-		getObsProperty("costContingencyBudget").updateValue(p.getCostBudgetReserve());
-		System.out.println("Project Cost Contingency Reserve = " +p.getCostBudgetReserve());
-		System.out.println("Project Time Contingency Reserve = " +p.getTimeBudgetReserve());
+		getObsProperty("timeContingencyReserve").updateValue(p.getTimeContingencyReserve());
+		getObsProperty("costContingencyReserve").updateValue(p.getCostContingencyReserve());
+		System.out.println("Project Cost Contingency Reserve = " +p.getCostContingencyReserve());
+		System.out.println("Project Time Contingency Reserve = " +p.getTimeContingencyReserve());
 	}
 	
 	@INTERNAL_OPERATION

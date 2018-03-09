@@ -237,8 +237,8 @@
 	
 	getChangeRequestById(ChangeId, ChangeRequest);
 	cartago.invoke_obj(ChangeRequest, getChange_title, CT);
-	.print("Titulo da mudança : ", CT);
-	cartago.invoke_obj(ChangeRequest, setState(2))
+	cartago.invoke_obj(ChangeRequest, setState(2));
+	
 	getChangeRequestById(1, UpdatedChangeRequest);//pegando a mudanca novamente apos atualizar o status da mesma
 	
 	clearChangeRequests(NewList);
@@ -249,7 +249,11 @@
 	
 	getChangeRequestById(ChangeId, CR);
 	cartago.invoke_obj(CR, getState, State);
-	.print("State da mudança atual: ", State).
+	if(State == 2){
+		.print("New State : Aprovada!");
+		.send(aRis, achieve, updateEnvironment(aprovada));
+	}.
+	
 	
 /*+urgence(U): statusSolicitacao(SS)& instant(K) & msg(S) & impactCost(ImpactCost) &impactTime(ImpactTime) <-
 	println("Instante: ", K,  " Mensagem: ", S);

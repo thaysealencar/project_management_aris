@@ -39,7 +39,7 @@
 
 +tick : instant(K) & activities(A) & cenario(Cenario) & requests(R) & actualRequest(AR) <- 
 	if(Cenario == "Cenario_1" | Cenario == "Cenario_3"){
-		if(K == 45){
+		if(K == 20){
 			.print("-------------The manager has detected a new Risk!-----------------");
 			.print("The Risk is : ", "The requirements are out of scope !!!");
 			.concat("Unrealistic Scope", Name);
@@ -55,7 +55,7 @@
 			cartago.invoke_obj("models.StateOfChange", getRequested, State);
 			
 			cartago.new_obj("models.Change", [1,"Changes in cost and time", K, TaskI, State], Ci);		
-			cartago.invoke_obj(Ci, addRequest(Cost, 11.903));
+			cartago.invoke_obj(Ci, addRequest(Cost, 50));
 			cartago.invoke_obj(Ci, addRequest(Time, 11.8));
 			cartago.invoke_obj(TaskI, getLabel, LabelI);
 			println("Ordering instantly ", K, " an increase of 11.9% in cost and 11.8% in time for the activity ", LabelI);		
@@ -69,13 +69,15 @@
 	    	getChangeRequestById(1, ActualRequest);
 	    	cartago.invoke_obj(ActualRequest, getChange_id, ChangeId);
 	    	cartago.invoke_obj(ActualRequest, getChange_title, ChangeTitle);
+	    	-status;
 	    	.send(aMud, tell, ChangeId); 
+	    	
 	    	//cartago.invoke_obj(AR, getActualRequest())
-	    	.print("Change resquest approved: ", ChangeId, " , ", ChangeTitle); 
+	    	.print("CHANGE REQUEST APPROVED! : ", ChangeId, " , ", ChangeTitle); 
 	    	
 	    }
 		if (K == 50){		
-			
+			// Essa mudança do instante 50 não poderá ser aprovada
 			cartago.invoke_obj(A, get(7), TaskH);
 			cartago.invoke_obj("models.TypeChange", getAddCost, Cost);
 			cartago.invoke_obj("models.TypeChange", getAddTime, Time);
@@ -88,8 +90,8 @@
 			println("Ordering instantly ", K, " an increase of 5.9% in cost and of 5.9% in time for the activity ", LabelH);		
 			addChangeRequest(Ch);	
 			-+actualRequest(Ch);
-			cartago.invoke_obj(R, getRequests, newList);
-			-+requests(newList);	
+			getRequests(NewList2);
+			-+requests(NewList2);	
 		}
 	}.
 	/*

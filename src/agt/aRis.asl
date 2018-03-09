@@ -3,10 +3,10 @@
 /* Initial beliefs and rules */
 internalStateARis(null).
 internalStateAMud(null). //APAGARRRRR????
-useTimeContingencyBudget(0).
-useCostContingencyBudget(0).
-timeContingencyBudget(TimeReserve).
-costContingencyBudget(CostReserve).
+useTimeContingencyReserve(0).
+useCostContingencyReserve(0).
+timeContingencyReserve(TimeReserve).
+costContingencyReserve(CostReserve).
 changeRequest(false).
 calculatingMetric(1).
 /* Initial goals */
@@ -41,7 +41,7 @@ calculatingMetric(1).
 		.wait(100);
 		!create.	
 /*Message */
-+!kqml_received(Sender, tell, Variables, Response) : instant(K)  & project(P) & timeContingencyBudget(TCB) & costContingencyBudget(CCB) & useTimeContingencyBudget(UTCB) & useCostContingencyBudget(UCCB) & changeRequest(CR) <-
++!kqml_received(Sender, tell, Variables, Response) : instant(K)  & project(P) & timeContingencyReserve(TCB) & costContingencyReserve(CCB) & useTimeContingencyReserve(UTCB) & useCostContingencyReserve(UCCB) & changeRequest(CR) <-
 
 	-+changeRequest(true);
 	.print("I will evaluate the impact of this change request on the project!");
@@ -81,7 +81,7 @@ calculatingMetric(1).
 			
 			NewTimeActivity = ETimeAP + DeltaTimeActivity; //novo tempo considerando o percentual de variação
 			
-			UseTimeContingencyBudget = UTCB  + DeltaTimeActivity;
+			UseTimeContingencyReserve = UTCB  + DeltaTimeActivity;
 			
 		}else{
 			if(TimeRem>0){ 
@@ -89,7 +89,7 @@ calculatingMetric(1).
 				
 				NewTimeActivity = ETimeAP - DeltaTimeActivity;
 				
-				UseTimeContingencyBudget = UTCB - DeltaTimeActivity;
+				UseTimeContingencyReserve = UTCB - DeltaTimeActivity;
 			}
 			
 		}	
@@ -99,7 +99,7 @@ calculatingMetric(1).
 				
 				NewCostActivity = DeltaCostActivity + ECostAP;
 				
-				UseCostContingencyBudget = UCCB + DeltaCostActivity;
+				UseCostContingencyReserve = UCCB + DeltaCostActivity;
 
 		}else{
 				
@@ -108,7 +108,7 @@ calculatingMetric(1).
 				
 				NewCostActivity =  ECostA - DeltaCostActivity;
 				
-				UseCostContingencyBudget = UCCB - DeltaCostActivity;
+				UseCostContingencyReserve = UCCB - DeltaCostActivity;
 			}
 			
 		}
@@ -122,8 +122,8 @@ calculatingMetric(1).
 	.print("Amount of time reserve after change= ",TimeReserve);
 	.print("Dear manager, if you apply this change to the project, the following riks will be affected:");
 	
-	setPucr(UseCostContingencyBudget/CCB);
-	setPutr(UseTimeContingencyBudget/TCB);
+	setPucr(UseCostContingencyReserve/CCB);
+	setPutr(UseTimeContingencyReserve/TCB);
 	// No futuro, trocar CCB e TCB por TimeReserve e CostReserve
 
 
@@ -173,14 +173,13 @@ calculatingMetric(1).
 	}else{
 		.print("No risks affected.");
 	};
-	!calculateProjectMetrics(Purc, Putr, TimeReserve, CostReserve);
 	//O agente deve esquecer:  PUCCB, PUTCB, NewCostP, NewTimeP
 	
 	
-	-+timeContingencyBudget(TimeReserve);
-	-+costContingencyBudget(CostReserve);
-	-+useTimeContingencyBudget(0);
-	-+useCostContingencyBudget(0).
+	-+timeContingencyReserve(TimeReserve);
+	-+costContingencyReserve(CostReserve);
+	-+useTimeContingencyReserve(0);
+	-+useCostContingencyReserve(0).
 	
 
 +!monitoringRisks : instant(K) & project(P) & calculatingMetric(CM) <- 
@@ -221,7 +220,7 @@ calculatingMetric(1).
 	getInstantCounter(InstantCounter);
     if(InstantCounter \== -1){
 		//.print("multiplo de 4-->", InstantCounter);
-		!calculateProjectMetrics(0.0,0.0,0.0,0.0);
+		!calculateProjectMetrics;
 	}.
 	
 	
@@ -230,9 +229,10 @@ calculatingMetric(1).
 	setProject(P); //setando a propriedade observavel novamente (atualizando)
 	.print("Observing Project", IdProject).
 	
-	
-+!calculateProjectMetrics(Pucr, Putr, TimeReserve, CostReserve): instant(K) & project(P) & qualifiedWorkersTemp(QwT) &  timeContingencyBudget(TCB) & costContingencyBudget(CCB)& costCRCounter(CcrC) & timeCRCounter(TcrC)  <-
++!updateEnvironment(aprovada) : instant(K) & project(P) & timeContingencyReserve(TCB) & costContingencyReserve(CCB)& costCRCounter(CcrC) & timeCRCounter(TcrC)  <- 
 	-+calculatingMetric(0);
+	getPucr(Pucr);
+	getPutr(Putr);
 	
 	if(Pucr \== 0){
 		.println("-------------CALCULATING METRICS OF THE PROJECT ENVIRONMENT--------------");
@@ -248,19 +248,19 @@ calculatingMetric(1).
 			
 			.println("-------METRIC 2: Percentage of Cost Reserve-------");
 			POCR = CostReserve/CCB;
-			.print("Percentage of Cost Reserve = ", POCR);
+			.print("Percentage of Cost Reserver = ", POCR);
 			
-			if(POCR > 0.30 & POCR < 0.100){
+			if(POCR > 0.60 & POCR < 1.00){
 			 	.print("Manager, the Project's Cost Reserve is low! Percentage of Cost Reserve = ", POCR);
 			 	
-			 	if(POCR < 0.31){
+			}
+			if(POCR < 0.61){
 					.println("Manager, I have detected a new risk in this project due to the percentage of cost reserve!");
 					.println("Advice: You should talk to the project sponsor about the project budget.");
 					.concat("Insufficient Cost Reserve to apply changes/handle threats in the project", Msg1);
 					calculateMetrics(Msg1, POCR, 2,X1);
 					P = X1;
 				}
-			}
 		}
 		
 		.println("-------METRIC 3: Percentage of Time Changes-------");
@@ -291,7 +291,12 @@ calculatingMetric(1).
 			.print("Percentage of Scope Changes = ", 0); 
 			
 		}
-	}else{
+	}
+	-+project(P);
+	-+calculatingMetric(1).
+	
++!calculateProjectMetrics: instant(K) & project(P) & qualifiedWorkersTemp(QwT) <-
+	-+calculatingMetric(0);
 		.println("-------METRIC 6: Percentage of Qualified Workers-------");
 		cartago.invoke_obj(P, getProjectTeam, ProjectTeam);
 		cartago.invoke_obj(ProjectTeam, size, Size);
@@ -345,7 +350,7 @@ calculatingMetric(1).
 			.println("-------------------------------------------------------------------------");
 			
 		}
-	}
+	
 	-+project(P);
 	-+calculatingMetric(1).
 

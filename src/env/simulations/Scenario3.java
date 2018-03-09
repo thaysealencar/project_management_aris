@@ -11,12 +11,9 @@ import models.Risk;
 import models.Risk.RiskArea;
 
 /*
- *	Cenario 1 : Atividades separadas.
- *	
- *	Conto:
- *	A atividade "A" terminará antes do planejado (adiantada no cronograma), porém irá consumir mais recursos que o planejado (acima do orçamento).
- *	Neste mesmo projeto, porém em um momento distinto do acontecido com "A", a atividade "E" irá terminar após o planejado (atrasado no cronograma), 
- * 	no entanto, consumirá menos recurso do que o planejado (abaixo do orçamento).
+ *	Cenario 3: Neste cenário é onde os casos dos últimos 2 cenários acontecem juntos -> o gerente detecta um novo risco
+ *e o ARis também detecta um novo risco a partir de métricas do projeto, como número de funcionários qualificados e 
+ *uso das reservas de contigente.
  */
 
 public class Scenario3 extends Simulate
@@ -44,7 +41,7 @@ public class Scenario3 extends Simulate
 				C = new Activity(3, "C", 5, 350.0f);	D = new Activity(4, "D", 15, 1050.0f);
 				E = new Activity(5, "E", 25, 1750.0f);	F = new Activity(6, "F", 5, 350.0f);
 				G = new Activity(7, "G", 5, 350.0f);	H = new Activity(8, "H", 10, 700.0f);
-				I = new Activity(9, "I", 5, 350.0f);	J = new Activity(10, "J", 15, 1050.0f);
+				I = new Activity(9, "I", 5, 3500.0f);	J = new Activity(10, "J", 15, 1050.0f);
 				K = new Activity(11, "K", 20, 1400.0f);	L = new Activity(12, "L", 10, 700.0f);
 				M = new Activity(13, "M", 25, 1750.0f);	N = new Activity(14, "N", 5, 350.0f);
 				

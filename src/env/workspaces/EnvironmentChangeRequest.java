@@ -28,10 +28,14 @@ public class EnvironmentChangeRequest extends Artifact {
 	
 	@OPERATION
 	void addChangeRequest(Change c){
+		
 		requests.add(c);
 		getObsProperty("requests").updateValue(requests);
 		getObsProperty("actualRequest").updateValue(c);
-		signal("status", "newRequest");
+		if(c.getState() == 1){
+			signal("status", "newRequest");
+		}
+		
 	}
 	
 	@OPERATION
