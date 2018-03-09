@@ -27,6 +27,8 @@ public class EnvironmentRiskControl extends Artifact {
 		defineObsProperty("newTimeP", 0.0);
 		defineObsProperty("pucr", 0.0);
 		defineObsProperty("putr", 0.0);
+		
+		//propriedades observaveis auxiliares
 		defineObsProperty("costCRCounter", 0.0);
 		defineObsProperty("timeCRCounter", 0.0);
 		defineObsProperty("qualifiedWorkersTemp", qualifiedWorkersTemp);

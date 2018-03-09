@@ -127,7 +127,7 @@ internalStateACon(null).
 		}
 	}
 	
-	if(Cenario == "SBQS_Cenario_1")
+	if(Cenario == "Cenario_3")
 	{
 		QuotientCost = ( (VEcost / 2) * -1 );
 		QuotientTime = (QuotientCost / 70);

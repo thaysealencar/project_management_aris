@@ -53,4 +53,19 @@
 		-+actualRequest(C);
 		getRequests(NewList);
 		-+requests(NewList);	
-	}.
+	}
+	
+	
+	if(K == 64){
+	    getChangeRequestById(3, ActualRequest);
+	    cartago.invoke_obj(ActualRequest, getChange_id, ChangeId);
+	    cartago.invoke_obj(ActualRequest, getChange_title, ChangeTitle);
+	    ChangeStatus=2;
+	    	
+	    	iActions.dataPackageManager(ChangeId, ChangeStatus, DataPackage);
+	    	-status;
+	    	.send(aMud, tell, DataPackage); 
+	    	
+	    	.print("CHANGE REQUEST APPROVED! : ID-", ChangeId, " , TITLE-", ChangeTitle); 
+	    	// VERIFICAR SE PEGOU OS DADOS DA SIMULACAO DO INSTANT 30
+	    }.

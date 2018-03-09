@@ -69,13 +69,16 @@
 	    	getChangeRequestById(1, ActualRequest);
 	    	cartago.invoke_obj(ActualRequest, getChange_id, ChangeId);
 	    	cartago.invoke_obj(ActualRequest, getChange_title, ChangeTitle);
-	    	-status;
-	    	.send(aMud, tell, ChangeId); 
+	    	ChangeStatus=2;
 	    	
-	    	//cartago.invoke_obj(AR, getActualRequest())
-	    	.print("CHANGE REQUEST APPROVED! : ", ChangeId, " , ", ChangeTitle); 
+	    	iActions.dataPackageManager(ChangeId, ChangeStatus, DataPackage);
+	    	-status;
+	    	.send(aMud, tell, DataPackage); 
+	    	
+	    	.print("CHANGE REQUEST APPROVED! : ID-", ChangeId, " , TITLE-", ChangeTitle); 
 	    	
 	    }
+	    
 		if (K == 50){		
 			// Essa mudança do instante 50 não poderá ser aprovada
 			cartago.invoke_obj(A, get(7), TaskH);
@@ -93,6 +96,20 @@
 			getRequests(NewList2);
 			-+requests(NewList2);	
 		}
+		
+		if(K == 54){
+	    	getChangeRequestById(2, ActualRequest);
+	    	cartago.invoke_obj(ActualRequest, getChange_id, ChangeId);
+	    	cartago.invoke_obj(ActualRequest, getChange_title, ChangeTitle);
+	    	ChangeStatus=3;
+	    	
+	    	iActions.dataPackageManager(ChangeId, ChangeStatus, DataPackage);
+	    	-status;
+	    	.send(aMud, tell, DataPackage); 
+	    	
+	    	.print("CHANGE REQUEST REJECTED! : ID-", ChangeId, " , TITLE-", ChangeTitle); 
+	    	
+	    }
 	}.
 	/*
 	

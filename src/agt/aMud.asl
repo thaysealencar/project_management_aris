@@ -233,13 +233,16 @@
 	println("Instant: ", K,  " Message: ", S);
 	println("IC=", ImpactCost, " IT=", ImpactTime, " U=",U, " Priority=",P).	
 	
-+!kqml_received(Sender, tell, ChangeId, Response): requests(R) & actualRequest(AR) <- 
++!kqml_received(Sender, tell, DataPackage, Response): requests(R) & actualRequest(AR) <- 
+	
+	.nth(0, DataPackage, ChangeId);
+	.nth(1, DataPackage, ChangeStatus);
 	
 	getChangeRequestById(ChangeId, ChangeRequest);
 	cartago.invoke_obj(ChangeRequest, getChange_title, CT);
-	cartago.invoke_obj(ChangeRequest, setState(2));
+	cartago.invoke_obj(ChangeRequest, setState(ChangeStatus));
 	
-	getChangeRequestById(1, UpdatedChangeRequest);//pegando a mudanca novamente apos atualizar o status da mesma
+	getChangeRequestById(ChangeId, UpdatedChangeRequest);//pegando a mudanca novamente apos atualizar o status da mesma
 	
 	clearChangeRequests(NewList);
 	addChangeRequest(UpdatedChangeRequest);
@@ -249,9 +252,15 @@
 	
 	getChangeRequestById(ChangeId, CR);
 	cartago.invoke_obj(CR, getState, State);
+	
 	if(State == 2){
-		.print("New State : Aprovada!");
-		.send(aRis, achieve, updateEnvironment(aprovada));
+		.print("New State : ACCEPTED!");
+		.send(aRis, achieve, updateEnvironment(accepted));
+	}
+	
+	if(State == 3){
+		.print("New State : REJECTED");
+		.send(aRis, achieve, updateEnvironment(rejectecd));
 	}.
 	
 	
