@@ -18,7 +18,7 @@ import simulations.Scenario1_SBQS;
 public class EnvironmentRiskControl extends Artifact {
 	
 	private Project project;
-	double newCostP, newTimeP, pucr, putr, costCRCounter, timeCRCounter, qualifiedWorkersCounter;
+	double newCostP, newTimeP, pucr, putr, costCRCounter, timeCRCounter, scopeCRCounter, qualifiedWorkersCounter;
 	int instantCounter;
 	ArrayList< Employee > qualifiedWorkersTemp = new ArrayList<Employee>();
 
@@ -31,6 +31,7 @@ public class EnvironmentRiskControl extends Artifact {
 		//propriedades observaveis auxiliares
 		defineObsProperty("costCRCounter", 0.0);
 		defineObsProperty("timeCRCounter", 0.0);
+		defineObsProperty("scopeCRCounter", 0.0);
 		defineObsProperty("qualifiedWorkersTemp", qualifiedWorkersTemp);
 		defineObsProperty("instantCounter", 0);
 	}
@@ -127,6 +128,42 @@ public class EnvironmentRiskControl extends Artifact {
     
     
     @OPERATION
+	void setCostCRCounter(double costCRCounter) {
+    	this.costCRCounter = costCRCounter;
+    	getObsProperty("costCRCounter").updateValue(costCRCounter);
+	}
+
+	@OPERATION
+	 void getCostCRCounter(OpFeedbackParam<Double> costCRCounter)
+	{
+		costCRCounter.set(this.costCRCounter);
+	}
+	
+	@OPERATION
+	void setTimeCRCounter(double timeCRCounter) {
+	    this.timeCRCounter = timeCRCounter;
+	    getObsProperty("timeCRCounter").updateValue(timeCRCounter);
+	}
+
+	@OPERATION
+	void getTimeCRCounter(OpFeedbackParam<Double> timeCRCounter)
+	{
+		timeCRCounter.set(this.timeCRCounter);
+	}
+  
+	@OPERATION
+	void setScopeCRCounter(double scopeCRCounter) {
+	    this.scopeCRCounter = scopeCRCounter;
+	    getObsProperty("scopeCRCounter").updateValue(scopeCRCounter);
+	}
+
+	@OPERATION
+	void getScopeCRCounter(OpFeedbackParam<Double> scopeCRCounter)
+	{
+		scopeCRCounter.set(this.scopeCRCounter);
+	}
+
+	@OPERATION
  	void calculateInstantCounter(int temp_k) {
     	if(temp_k>0 && temp_k % 4 == 0){
     		this.instantCounter = temp_k;

@@ -8,6 +8,10 @@ actualTimeContingencyReserve(0).
 actualCostContingencyReserve(0).
 pucr(0).
 putr(0).
+costCRCounter(0).
+timeCRCounter(0).
+scopeCRCounter(0).
+totalChangeRequests(0).
 changeRequest(false).
 calculatingMetric(1).
 /* Initial goals */
@@ -228,13 +232,21 @@ calculatingMetric(1).
 	.print("Observing Project", IdProject).
 	
 +!updateEnvironment(accepted) : instant(K) & project(P) & initialTimeContingencyReserve(ITCR) & initialCostContingencyReserve(ICCR) & actualTimeContingencyReserve (ATCR) & actualCostContingencyReserve(ACCR) 
-& costCRCounter(CcrC) & timeCRCounter(TcrC) & pucr(PUCR) & putr(PUTR) <- 
+& costCRCounter(CcrC) & timeCRCounter(TcrC) & scopeCRCounter(ScrC) & pucr(PUCR) & putr(PUTR) & costCRCounter(A) & timeCRCounter(B) <- 
 
 	-+calculatingMetric(0);
 	setPucr(PUCR);
 	setPutr(PUTR);
 	
 	.print("ENVIRONMENT SUCCESSFULLY UPDATED!");
+	
+	if(K==64){
+			TEMP = 1 + CcrC + TcrC + ScrC;
+	}else{
+			TEMP = 2 + CcrC + TcrC + ScrC;
+		
+	}
+	
 	
 	if(PUCR \== 0){
 		.println("-------------CALCULATING METRICS OF THE PROJECT ENVIRONMENT--------------");
@@ -243,57 +255,76 @@ calculatingMetric(1).
 		cartago.invoke_obj(ProjectTeam, size, Size);
 		
 		.println("-------METRIC 1: Percentage of Cost Changes-------");
-		if(PUCR > 0){
-			A= CcrC+1;
-			-+costCRCounter(A); //costChangeRequestCounter
-			.print("Percentage of Cost Changes = ", A/3); 
-			
-			.println("-------METRIC 2: Percentage of Cost Reserve-------");
-			POCR = ACCR/ICCR;
-			.print("Percentage of Cost Reserve = ", POCR);
-			
-			if(POCR > 0.60 & POCR < 1.00){
-			 	.print("Manager, the Project's Cost Reserve is low! Percentage of Cost Reserve = ", POCR);
-			 	
-			}
-			if(POCR < 0.61){
-					.println("Manager, I have detected a new risk in this project due to the percentage of cost reserve!");
-					.println("Advice: You should talk to the project sponsor about the project budget.");
-					.concat("Insufficient Cost Reserve to apply changes/handle threats in the project", Msg1);
-					calculateMetrics(Msg1, POCR, 2,X1);
-					P = X1;
-				}
-		}
 		
+		if(PUCR > 0){
+			setCostCRCounter(CcrC+1);
+			getCostCRCounter(Aux_A);
+
+			-+costCRCounter(Aux_A); //costChangeRequestCounter
+			.print("Percentage of Cost Changes = ", Aux_A/TEMP);
+		}else{
+			getCostCRCounter(Aux_A);
+			.print("Percentage of Cost Changes = ", Aux_A/TEMP);
+		}
+			
+		.println("-------METRIC 2: Percentage of Cost Reserve-------");
+		POCR = ACCR/ICCR;
+		.print("Percentage of Cost Reserve = ", POCR);
+			
+		if(POCR > 0.60 & POCR < 1.00){
+			 .print("Manager, the Project's Cost Reserve is low! Percentage of Cost Reserve = ", POCR);
+			 	
+		}
+		if(POCR < 0.61){
+				.println("Manager, I have detected a new risk in this project due to the percentage of cost reserve!");
+				.println("Advice: You should talk to the project sponsor about the project budget.");
+				.concat("Insufficient Cost Reserve to apply changes/handle threats in the project", Msg1);
+				calculateMetrics(Msg1, POCR, 2,X1);
+				P = X1;
+		}
+			
 		.println("-------METRIC 3: Percentage of Time Changes-------");
 		if(PUTR > 0){
-			B = TcrC+1;
-			-+timeCRCounter(B); //timeChangeRequestCounter
-			.print("Percentage of Time Changes = ", B/3);
+			setTimeCRCounter(TcrC+1);
+			getTimeCRCounter(Aux_B);
 			
-			.println("-------METRIC 4: Percentage of Time Reserve-------");
-			POTR = ATCR/ITCR;
-			.print("Percentage of Time Reserve = ", POTR);
+			-+timeCRCounter(Aux_B); //timeChangeRequestCounter
+			.print("Percentage of Time Changes = ", Aux_B/TEMP);
+		}else{
+			getTimeCRCounter(Aux_B);
+			.print("Percentage of Time Changes = ", Aux_B/TEMP);	
+		}
+		
+		.println("-------METRIC 4: Percentage of Time Reserve-------");
+		POTR = ATCR/ITCR;
+		.print("Percentage of Time Reserve = ", POTR);
 			
-			if(POTR > 0.30 & POTR < 0.60){
-			 	.print("Manager, the Project's Time Reserve is low! Percentage of Time Reserve = ", POTR);
-			 	
-			 	if(POTR < 0.31){
-					.println("Manager, I have detected a new risk in this project due to the percentage of time reserve!");
-					.println("Advice: You should check the team members' and activities schedule.");
-					.concat("Insufficient Time Reserve to apply changes/handle threats in the project", Msg2);
-					calculateMetrics(Msg2, POTR, 3,X2);
-					P = X2;
-				}
+		if(POTR > 0.30 & POTR < 0.60){
+			.print("Manager, the Project's Time Reserve is low! Percentage of Time Reserve = ", POTR);
+		 	
+		 	if(POTR < 0.31){
+		 		.println("Manager, I have detected a new risk in this project due to the percentage of time reserve!");
+				.println("Advice: You should check the team members' and activities schedule.");
+				.concat("Insufficient Time Reserve to apply changes/handle threats in the project", Msg2);
+				calculateMetrics(Msg2, POTR, 3,X2);
+				P = X2;
 			}
 		}
 		
 		.println("-------METRIC 5: Percentage of Scope Changes-------");
 		if(PUCR > 0){
-			.print("Percentage of Scope Changes = ", 0); 
+			setScopeCRCounter(ScrC+1);
+			getScopeCRCounter(Aux_C);
 			
+			-+scopeCRCounter(Aux_C); //timeChangeRequestCounter
+			.print("Percentage of Time Changes = ", Aux_C/TEMP);
+		}else{
+			getScopeCRCounter(Aux_C);
+			.print("Percentage of Time Changes = ", Aux_C/TEMP);	
 		}
+		
 	}
+	-+totalChangeRequests(TEMP);	
 	-+project(P);
 	-+calculatingMetric(1).
 	

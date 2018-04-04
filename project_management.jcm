@@ -19,7 +19,7 @@ mas project_management {
     agent aMud
     agent aRis
     agent manager
-    agent stakeholder
+   // agent stakeholder
     
     // agent source path
     asl-path: src/agt
