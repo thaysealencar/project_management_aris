@@ -55,7 +55,7 @@
 			cartago.invoke_obj("models.StateOfChange", getRequested, State);
 			
 			cartago.new_obj("models.Change", [1,"Changes in cost and time", K, TaskI, State], Ci);		
-			cartago.invoke_obj(Ci, addRequest(Cost, 50));
+			cartago.invoke_obj(Ci, addRequest(Cost, 11.9));
 			cartago.invoke_obj(Ci, addRequest(Time, 11.8));
 			cartago.invoke_obj(TaskI, getLabel, LabelI);
 			println("Ordering instantly ", K, " an increase of 11.9% in cost and 11.8% in time for the activity ", LabelI);		

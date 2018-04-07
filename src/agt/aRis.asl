@@ -118,13 +118,14 @@ calculatingMetric(1).
 			
 		}
 		
-	ActualTimeContingencyReserve = ICCR - DeltaTimeActivity; // Atualizando o valor da Reserva de Tempo (esses valores nao sao de fato descontados do projeto)
-	ActualCostContingencyReserve = ITCR - DeltaCostActivity;
+	ActualTimeContingencyReserve = ITCR - DeltaTimeActivity; // Atualizando o valor da Reserva de Tempo (esses valores nao sao de fato descontados do projeto)
+	ActualCostContingencyReserve = ICCR - DeltaCostActivity;
 	
 	.print("Activity ", Label, " Cost variation= ", DeltaCostActivity, " New Cost= ", NewCostActivity);
 	.print("Activity ", Label, " Time variation= ", DeltaTimeActivity, " New Time= ", NewTimeActivity);
 	.print("Amount of cost reserve after change= ", ActualCostContingencyReserve);
 	.print("Amount of time reserve after change= ", ActualTimeContingencyReserve);
+	
 	.print("Dear manager, if you apply this change to the project, the following riks will be affected:");
 	
 	PUCR = UseCostContingencyReserve/ICCR;
@@ -181,8 +182,9 @@ calculatingMetric(1).
 	-+actualTimeContingencyReserve(ActualTimeContingencyReserve); //quantidade de reserva de tempo disponivel no projeto
 	-+actualCostContingencyReserve(ActualCostContingencyReserve); //quantidade de reserva de custo disponivel no projeto
 	-+useTimeContingencyReserve(0); //percentual de uso da reserva de tempo que esta mudanca utiliza
-	-+useCostContingencyReserve(0). //percentual de uso da reserva de custo que esta mudanca utiliza
-	
+	-+useCostContingencyReserve(0); //percentual de uso da reserva de custo que esta mudanca utiliza
+	-+initialCostContingencyReserve(ActualCostContingencyReserve);
+	-+initialTimeContingencyReserve(ActualTimeContingencyReserve).
 
 +!monitoringRisks : instant(K) & project(P) & calculatingMetric(CM) <- 
 	

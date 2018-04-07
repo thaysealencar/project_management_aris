@@ -41,7 +41,7 @@ public class Scenario3 extends Simulate
 				C = new Activity(3, "C", 5, 350.0f);	D = new Activity(4, "D", 15, 1050.0f);
 				E = new Activity(5, "E", 25, 1750.0f);	F = new Activity(6, "F", 5, 350.0f);
 				G = new Activity(7, "G", 5, 350.0f);	H = new Activity(8, "H", 10, 700.0f);
-				I = new Activity(9, "I", 5, 3500.0f);	J = new Activity(10, "J", 15, 1050.0f);
+				I = new Activity(9, "I", 5, 350.0f);	J = new Activity(10, "J", 15, 1050.0f);
 				K = new Activity(11, "K", 20, 1400.0f);	L = new Activity(12, "L", 10, 700.0f);
 				M = new Activity(13, "M", 25, 1750.0f);	N = new Activity(14, "N", 5, 350.0f);
 				
