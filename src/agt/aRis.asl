@@ -47,7 +47,7 @@ calculatingMetric(1).
 		!create.	
 /*Message */
 +!kqml_received(Sender, tell, Variables, Response) : instant(K)  & project(P) & initialTimeContingencyReserve(ITCR) & initialCostContingencyReserve(ICCR) & useTimeContingencyReserve(UTCR) & useCostContingencyReserve(UCCR) & changeRequest(CR) <-
-
+	
 	-+changeRequest(true);
 	.print("I will evaluate the impact of this change request on the project!");
 
@@ -236,7 +236,10 @@ calculatingMetric(1).
 +!updateEnvironment(accepted) : instant(K) & project(P) & initialTimeContingencyReserve(ITCR) & initialCostContingencyReserve(ICCR) & actualTimeContingencyReserve (ATCR) & actualCostContingencyReserve(ACCR) 
 & costCRCounter(CcrC) & timeCRCounter(TcrC) & scopeCRCounter(ScrC) & pucr(PUCR) & putr(PUTR) & costCRCounter(A) & timeCRCounter(B) <- 
 
+	-+costReserveAfterLastAcceptedChange(ATCR); // valor da reserva de custo ao final da ultima mudança aceita
+	-+timeReserseAfterLastAcceptedChange(ACCR); // valor da reserva de tempo ao final da ultima mudanca aceita
 	-+calculatingMetric(0);
+	
 	setPucr(PUCR);
 	setPutr(PUTR);
 	
@@ -331,9 +334,13 @@ calculatingMetric(1).
 	-+calculatingMetric(1).
 	
 	
-+!updateEnvironment(rejectecd) : instant(K) & project(P) & initialTimeContingencyReserve(ITCR) & initialCostContingencyReserve(ICCR) & actualTimeContingencyReserve (ATCR) & actualCostContingencyReserve(ACCR) <-
++!updateEnvironment(rejectecd) : instant(K) & project(P) & initialTimeContingencyReserve(ITCR) & initialCostContingencyReserve(ICCR) 
+& actualTimeContingencyReserve (ATCR) & actualCostContingencyReserve(ACCR) & costReserveAfterLastAcceptedChange(CALAC)
+& timeReserseAfterLastAcceptedChange(TALAC)  <-
 	
-	-+actualTimeContingencyReserve (0);
+	-+initialTimeContingencyReserve(CALAC);
+	-+initialCostContingencyReserve(TALAC);
+	-+actualTimeContingencyReserve(0);
 	-+actualCostContingencyReserve(0);
 	
 	.print("SIMULATION DISCARDED!").
