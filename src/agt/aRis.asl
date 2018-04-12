@@ -76,10 +76,11 @@ calculatingMetric(1).
 	
 	
 	TimeAdd  = DAddTime/100;
+	TimeRem  = RemTime/100;
 	CostAdd  = DAddCost/100;
 	CostRem  = RemCost/100;
-	TimeRem  = RemTime/100;
 	
+	//.print("TIPO DA MUDANCA = ", TimeAdd, TimeRem, CostAdd, CostRem);
 	
 		if(TimeAdd>0){ //se mudanca aumenta o tempo de uma atividade
 			DeltaTimeActivity = ETimeAP*TimeAdd; //percentual de variação
@@ -88,6 +89,12 @@ calculatingMetric(1).
 			
 			UseTimeContingencyReserve = UTCR  + DeltaTimeActivity;
 			
+			ActualTimeContingencyReserve = ITCR - DeltaTimeActivity;
+			
+			PUTR = UseTimeContingencyReserve/ITCR;
+			
+			-+putr(PUTR);
+			
 		}else{
 			if(TimeRem>0){ 
 				DeltaTimeActivity = ETimeAP*TimeRem;
@@ -95,6 +102,12 @@ calculatingMetric(1).
 				NewTimeActivity = ETimeAP - DeltaTimeActivity;
 				
 				UseTimeContingencyReserve = UTCR - DeltaTimeActivity;
+				
+				ActualTimeContingencyReserve = ITCR - DeltaTimeActivity;
+				
+				PUTR = UseTimeContingencyReserve/ITCR;
+				
+				-+putr(PUTR);
 			}
 			
 		}	
@@ -105,6 +118,12 @@ calculatingMetric(1).
 				NewCostActivity = DeltaCostActivity + ECostAP;
 				
 				UseCostContingencyReserve = UCCR + DeltaCostActivity;
+				
+				ActualCostContingencyReserve = ICCR - DeltaCostActivity;
+				
+				PUCR = UseCostContingencyReserve/ICCR;
+				
+				-+pucr(PUCR);
 
 		}else{
 				
@@ -114,31 +133,34 @@ calculatingMetric(1).
 				NewCostActivity =  ECostA - DeltaCostActivity;
 				
 				UseCostContingencyReserve = UCCR - DeltaCostActivity;
+				
+				ActualCostContingencyReserve = ICCR - DeltaCostActivity;
+				
+				PUCR = UseCostContingencyReserve/ICCR;
+				
+				-+pucr(PUCR);
 			}
 			
 		}
+	
+	if(DeltaCostActivity \==0 & NewCostActivity\==0 ){
+		.print("Activity ", Label, " Cost variation= ", DeltaCostActivity, " New Cost= ", NewCostActivity);	
+		.print("Amount of cost reserve after change= ", ActualCostContingencyReserve);
 		
-	ActualTimeContingencyReserve = ITCR - DeltaTimeActivity; // Atualizando o valor da Reserva de Tempo (esses valores nao sao de fato descontados do projeto)
-	ActualCostContingencyReserve = ICCR - DeltaCostActivity;
+	}
 	
-	.print("Activity ", Label, " Cost variation= ", DeltaCostActivity, " New Cost= ", NewCostActivity);
-	.print("Activity ", Label, " Time variation= ", DeltaTimeActivity, " New Time= ", NewTimeActivity);
-	.print("Amount of cost reserve after change= ", ActualCostContingencyReserve);
-	.print("Amount of time reserve after change= ", ActualTimeContingencyReserve);
-	
+	if(DeltaTimeActivity \==0 & NewTimeActivity\==0 ){
+		.print("Activity ", Label, " Time variation= ", DeltaTimeActivity, " New Time= ", NewTimeActivity);	
+		.print("Amount of time reserve after change= ", ActualTimeContingencyReserve);
+	}
+		
 	.print("Dear manager, if you apply this change to the project, the following riks will be affected:");
-	
-	PUCR = UseCostContingencyReserve/ICCR;
-	PUTR = UseTimeContingencyReserve/ITCR;
-	-+pucr(PUCR);
-	-+putr(PUTR);
 
 	cartago.invoke_obj(P, getRisks, RiskList);
 	if (RiskList \== null){
 		cartago.invoke_obj(RiskList, size, Size);
 		
 		// PUTR E PUCR Porcentagem de uso das reservas de tempo e custo.
-		
 		.print("Percentage of Use of Cost Reserve!", PUCR);
 		.print("Percentage of Use of Time Reserve!", PUTR);
 	
@@ -151,7 +173,7 @@ calculatingMetric(1).
 			cartago.invoke_obj(Risk, getTimeP, TimeP);
 			cartago.invoke_obj(Risk, getTimeI, TimeI);
 			
-			if((CostAdd\==0 | CostRem\==0) & CostP \== 0 & CostI \== 0){
+			if(CostAdd\==0 & CostP \== 0 & CostI \== 0){
 				setNewCostP(PUCR*(1-CostP) + CostP);
 				getNewCostP(NewCostP);
 				
@@ -161,7 +183,7 @@ calculatingMetric(1).
 				setNewCostP(0.0);
 				
 			}
-			if((TimeAdd\== 0 | TimeRem\==0) & TimeP \== 0 & TimeI \==0){
+			if(TimeAdd\== 0 & TimeP \== 0 & TimeI \==0){
 				setNewTimeP(PUTR*(1-TimeP) + TimeP);
 				getNewTimeP(NewTimeP);
 				
@@ -342,6 +364,8 @@ calculatingMetric(1).
 	-+initialCostContingencyReserve(TALAC);
 	-+actualTimeContingencyReserve(0);
 	-+actualCostContingencyReserve(0);
+	-+pucr(0);
+	-+putr(0);
 	
 	.print("SIMULATION DISCARDED!").
 	

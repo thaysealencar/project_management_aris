@@ -197,7 +197,7 @@
 	
 	.concat("I noticed a new request for ", Title, " at the instant ", K, " for the task: ", Label, Str);	
 	println(Str);
-	iActions.dataPackageAMud(Title, Id, State, AddCost, AddTime, RemCost, RemTime, DAddCost, DAddTime, DRemCost, DRemTime, K, ActivityId, DataPackage);
+	iActions.dataPackageAMud(Title, Id, State, AddCost, AddTime, 0, 0, DAddCost, DAddTime, DRemCost, DRemTime, K, ActivityId, DataPackage);
 	
 	.wait(1000);
 	.send(aRis, tell, DataPackage);
