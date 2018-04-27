@@ -34,7 +34,7 @@ public class Scenario1 extends Simulate
 		// Atividades do Projeto.
 		Activity A, B, C, D, E, F, G, H, I, J, K, L, M, N;
 		// Riscos do Projeto
-		Risk R1,R2,R3;
+		Risk R1,R2,R3,R4,R5;
 		// Funcionários do Projeto
 		Employee E1, E2, E3, E4, E5, E6, E7;
 		
@@ -87,7 +87,11 @@ public class Scenario1 extends Simulate
 		p.addRisk(R2);
 		R3 = new Risk(3, "Incorporation of a new technology", 0.7, 5, 0, 0, 0, 0, 0, RiskArea.COST, 1,1);
 		p.addRisk(R3);
-		
+//		R4 = new Risk(4, "Unrealistic schedule", 0, 0, 0.9, 3, 0.4, 1, 0, RiskArea.SCHEDULE, 1,1);
+//		p.addRisk(R4);
+//		R5 = new Risk(5, "Unrealistic budget", 0.3, 4, 0, 0, 0.5, 1, 0, RiskArea.COST, 1,1);
+//		p.addRisk(R5);
+//		
 		
 		// Funcion�rios
 		E1 = new Employee(1, "Carlos", "Tempo", true);

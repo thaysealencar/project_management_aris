@@ -38,11 +38,11 @@
 		
 
 +tick : instant(K) & activities(A) & cenario(Cenario) & requests(R) & actualRequest(AR) <- 
-	if(Cenario == "Cenario_1" | Cenario == "Cenario_3"){
+	if(Cenario == "Cenario_1"){
 		if(K == 20){
 			.print("-------------The manager has detected a new Risk!-----------------");
-			.print("The Risk is : ", "The requirements are out of scope !!!");
-			.concat("Unrealistic Scope", Name);
+			.print("The Risk is : ", "Unrealistic schedule!");
+			.concat("Unrealistic schedule", Name);
 			//(1, "Definition of scope", 0, 0, 0, 0, 0.3, 4, 0, RiskArea.SCOPE); 
 			createRisk(Name, 0, 0, 0, 0, 0.3, 4, 0, 1, X3);
 		}
