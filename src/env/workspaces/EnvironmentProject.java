@@ -58,7 +58,7 @@ public class EnvironmentProject extends Artifact
 		Simulate s3 = new Scenario3(p, "Cenario_3");
 		Simulate s1_sbqs = new Scenario1_SBQS(p, "SBQS_Cenario_1"); //Cenário Atual Pronto
 		//Simulate s2_sbqs= new Scenario2_SBQS(p, "SBQS_Cenario_2");
-		scenarios.add(s1);	
+		scenarios.add(s2);	
 		//scenarios.add(s1_sbqs);		
 		
 		for (Simulate sl: scenarios)

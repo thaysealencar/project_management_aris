@@ -174,23 +174,23 @@ calculatingMetric(1).
 			cartago.invoke_obj(Risk, getTimeI, TimeI);
 			
 			if(CostAdd\==0 & CostP \== 0 & CostI \== 0){
-				setNewCostP(PUCR*(1-CostP) + CostP);
-				getNewCostP(NewCostP);
+				AuxNewCostP = (PUCR*(1-CostP) + CostP);
+				//getNewCostP(NewCostP);
 				
-				.print("Risk ",RiskId,", initial PC = ", CostP,", PC after change =", NewCostP);
+				.print("Risk ",RiskId,", initial PC = ", CostP,", PC after change =", AuxNewCostP);
 				
-				cartago.invoke_obj(Risk, setCostP(NewCostP));
-				setNewCostP(0.0);
+//				cartago.invoke_obj(Risk, setCostP(NewCostP));
+//				setNewCostP(0.0);
 				
 			}
 			if(TimeAdd\== 0 & TimeP \== 0 & TimeI \==0){
-				setNewTimeP(PUTR*(1-TimeP) + TimeP);
-				getNewTimeP(NewTimeP);
+				AuxNewTimeP = (PUTR*(1-TimeP) + TimeP);
+				//getNewTimeP(NewTimeP);
 				
-				.print("Risk ",RiskId,", initial PT = ", TimeP,", PT after change =", NewTimeP);
+				.print("Risk ",RiskId,", initial PT = ", TimeP,", PT after change =", AuxNewTimeP);
 				
-				cartago.invoke_obj(Risk, setTimeP(NewTimeP));
-				setNewTimeP(0.0);
+//				cartago.invoke_obj(Risk, setTimeP(NewTimeP));
+//				setNewTimeP(0.0);
 			}
 		}
 		
@@ -256,21 +256,54 @@ calculatingMetric(1).
 	.print("Observing Project", IdProject).
 	
 +!updateEnvironment(accepted) : instant(K) & project(P) & initialTimeContingencyReserve(ITCR) & initialCostContingencyReserve(ICCR) & actualTimeContingencyReserve (ATCR) & actualCostContingencyReserve(ACCR) 
-& costCRCounter(CcrC) & timeCRCounter(TcrC) & scopeCRCounter(ScrC) & pucr(PUCR) & putr(PUTR) & costCRCounter(A) & timeCRCounter(B) <- 
+& costCRCounter(CcrC) & timeCRCounter(TcrC) & scopeCRCounter(ScrC) & pucr(PUCR) & putr(PUTR) & costCRCounter(A) & timeCRCounter(B) & totalChangeRequests(TCR) <- 
 
 	-+costReserveAfterLastAcceptedChange(ATCR); // valor da reserva de custo ao final da ultima mudança aceita
 	-+timeReserseAfterLastAcceptedChange(ACCR); // valor da reserva de tempo ao final da ultima mudanca aceita
 	-+calculatingMetric(0);
-	
+	cartago.invoke_obj(P, getRisks, RiskList);
+	cartago.invoke_obj(RiskList, size, RlSize);
 	setPucr(PUCR);
 	setPutr(PUTR);
-	
+	for(.range(I, 0, RlSize-1)){
+			
+			cartago.invoke_obj(RiskList, get(I), Risk);
+			cartago.invoke_obj(Risk, getId, RiskId);
+			cartago.invoke_obj(Risk, getCostP, CostP);
+			cartago.invoke_obj(Risk, getCostI, CostI);
+			cartago.invoke_obj(Risk, getTimeP, TimeP);
+			cartago.invoke_obj(Risk, getTimeI, TimeI);
+			
+			if(CostAdd\==0 & CostP \== 0 & CostI \== 0){
+				setNewCostP(PUCR*(1-CostP) + CostP);
+				getNewCostP(NewCostP);
+				
+				.print("Risk ",RiskId,", initial PC = ", CostP,", PC after change =", NewCostP);
+				
+				cartago.invoke_obj(Risk, setCostP(NewCostP));
+				//setNewCostP(0.0);
+				
+			}
+			if(TimeAdd\== 0 & TimeP \== 0 & TimeI \==0){
+				setNewTimeP(PUTR*(1-TimeP) + TimeP);
+				getNewTimeP(NewTimeP);
+				
+				.print("Risk ",RiskId,", initial PT = ", TimeP,", PT after change =", NewTimeP);
+				
+				cartago.invoke_obj(Risk, setTimeP(NewTimeP));
+				//setNewTimeP(0.0);
+			}
+		}
 	.print("ENVIRONMENT SUCCESSFULLY UPDATED!");
 	
 	if(K==64){
-			TEMP = 1 + CcrC + TcrC + ScrC;
+			
+			TEMP = 1 + TCR;
+			.print("Temp 1 = ", TEMP);
 	}else{
-			TEMP = 2 + CcrC + TcrC + ScrC;
+			
+			TEMP = 2 + TCR;
+			.print("Temp 2 = ", TEMP);
 		
 	}
 	

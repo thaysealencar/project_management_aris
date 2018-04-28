@@ -258,6 +258,13 @@ public class EnvironmentRiskControl extends Artifact {
 		        	 r.setScopeI(impact);
     	}
 
+    	System.out.println("Cost P = "+ r.getCostP());
+    	System.out.println("Cost I = "+ r.getCostI());
+    	System.out.println("Time P = "+ r.getTimeP());
+    	System.out.println("Time I = "+ r.getTimeI());
+    	System.out.println("Scope P = "+ r.getScopeP());
+    	System.out.println("Scope I = "+ r.getScopeI());
+    	
     	
     	if(risks != null){
 			ListIterator<Risk> litr = risks.listIterator();
