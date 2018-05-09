@@ -29,6 +29,7 @@ public class internalStateARis extends DefaultInternalAction {
     public Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception {
     	Project p  = Scenario1_SBQS.getProject();
 		String id = args[0].toString();
+		double timeRiskExposure = 0, costRiskExposure = 0, scopeRiskExposure = 0;
 		
         if(id.equals("exit")) {
         	ListTerm result = new ListTermImpl();
@@ -37,10 +38,18 @@ public class internalStateARis extends DefaultInternalAction {
         	p.clearRisk();
     		for (Risk r : risks) {
     			p.addRisk(r);
+    			
+    			timeRiskExposure = timeRiskExposure + (r.getTimeP()*r.getTimeI());
+            	costRiskExposure = costRiskExposure + (r.getCostP()*r.getCostI());
+            	scopeRiskExposure = scopeRiskExposure + (r.getScopeP()*r.getScopeI());
+            	
     			System.out.println("Risk ID "+ r.getId()+"- "+r.getName()+" - RE= "+r.getTotalRiskExposure());
     			Term t = new NumberTermImpl(r.getId());
     			result.add(t);
     		}
+    		System.out.println("Total Risk Exposure by Area:");
+    		System.out.println("Cost = "+ costRiskExposure+ " |Time = "+ timeRiskExposure+ " |Scope = "+ scopeRiskExposure);
+    		
     		risks.clear();
     		return un.unifies(result, args[1]); //mandando a lista de id's de riscos ordenada de volta para o Aris 
     		

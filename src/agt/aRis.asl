@@ -205,7 +205,7 @@ calculatingMetric(1).
 	-+actualCostContingencyReserve(ActualCostContingencyReserve); //quantidade de reserva de custo disponivel no projeto
 	-+useTimeContingencyReserve(0); //percentual de uso da reserva de tempo que esta mudanca utiliza
 	-+useCostContingencyReserve(0); //percentual de uso da reserva de custo que esta mudanca utiliza
-	-+initialCostContingencyReserve(ActualCostContingencyReserve);
+	-+initialCostContingencyReserve(3360);
 	-+initialTimeContingencyReserve(ActualTimeContingencyReserve).
 
 +!monitoringRisks : instant(K) & project(P) & calculatingMetric(CM) <- 
@@ -253,7 +253,7 @@ calculatingMetric(1).
 +project(P) <- 
 	cartago.invoke_obj(P, getId, IdProject);
 	setProject(P); //setando a propriedade observavel novamente (atualizando)
-	.print("Observing Project", IdProject).
+	.print("Observing Project ", IdProject).
 	
 +!updateEnvironment(accepted) : instant(K) & project(P) & initialTimeContingencyReserve(ITCR) & initialCostContingencyReserve(ICCR) & actualTimeContingencyReserve (ATCR) & actualCostContingencyReserve(ACCR) 
 & costCRCounter(CcrC) & timeCRCounter(TcrC) & scopeCRCounter(ScrC) & pucr(PUCR) & putr(PUTR) & costCRCounter(A) & timeCRCounter(B) & totalChangeRequests(TCR) <- 
@@ -331,14 +331,14 @@ calculatingMetric(1).
 		POCR = ACCR/ICCR;
 		.print("Percentage of Cost Reserve = ", POCR);
 			
-		if(POCR > 0.60 & POCR < 1.00){
+		if(POCR > 0.50 & POCR < 1.00){
 			 .print("Manager, the Project's Cost Reserve is low! Percentage of Cost Reserve = ", POCR);
 			 	
 		}
-		if(POCR < 0.61){
+		if(POCR < 0.51){
 				.println("Manager, I have detected a new risk in this project due to the percentage of cost reserve!");
 				.println("Advice: You should talk to the project sponsor about the project budget.");
-				.concat("Insufficient Cost Reserve to apply changes/handle threats in the project", Msg1);
+				.concat("Insufficient Cost Reserve to apply changes or handle threats in the project", Msg1);
 				calculateMetrics(Msg1, POCR, 2,X1);
 				P = X1;
 		}
@@ -365,7 +365,7 @@ calculatingMetric(1).
 		 	if(POTR < 0.31){
 		 		.println("Manager, I have detected a new risk in this project due to the percentage of time reserve!");
 				.println("Advice: You should check the team members' and activities schedule.");
-				.concat("Insufficient Time Reserve to apply changes/handle threats in the project", Msg2);
+				.concat("Insufficient Time Reserve to apply changes or handle threats in the project", Msg2);
 				calculateMetrics(Msg2, POTR, 3,X2);
 				P = X2;
 			}

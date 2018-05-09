@@ -24,8 +24,8 @@ internalStateACon(null).
 	
 +?artifactSetup(AuxId) : true <-
 	makeArtifact("AuxControl", "workspaces.AuxControlArtifact", [], AuxId);
-	focus(AuxId);
-	.println("Auxiliary artifact created!").
+	focus(AuxId).
+	//.println("Auxiliary artifact created!").
 
 -?myArtifact(ArtifactId) : true <-
 	.wait(10);
@@ -220,7 +220,11 @@ internalStateACon(null).
 		.println("Controle Concluido - analise o log do ACon.");
 	}.
 
-+project(P) <- setProject(P).
++project(P) <- 
+	cartago.invoke_obj(P, getId, IdProject);
+	setProject(P); //setando a propriedade observavel novamente (atualizando)
+	.print("Observing Project ", IdProject).
+
 
 +statusOutCP(S) : S == "newActivOutCP" & activityOutCP(ActivOutCP)/* <-	
 	cartago.invoke_obj(ActivOutCP, getLabel, Label);
